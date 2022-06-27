@@ -6,6 +6,7 @@ import com.plateer.ec1.promotion.controller.PromotionController;
 import com.plateer.ec1.promotion.enums.PromotionType;
 import com.plateer.ec1.promotion.factory.CalculationFactory;
 import com.plateer.ec1.promotion.vo.RequestPromotionVo;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +22,9 @@ public class PromotionTest {
 
     // 회원번호(테스트를 위해 고정값 사용)
     private final String mbrNo = "test01";
+    
     @Test
+    @DisplayName("사용가능한 쿠폰목록 조회")
     void getAvailableCouponList(){
         RequestPromotionVo requestPromotionVo = new RequestPromotionVo();
         requestPromotionVo.setMbrNo(mbrNo);
@@ -29,6 +32,7 @@ public class PromotionTest {
     }
 
     @Test
+    @DisplayName("쿠폰 다운로드")
     void saveCouponDownload(){
         // 회원정보
         RequestPromotionVo requestPromotionVo = new RequestPromotionVo();
