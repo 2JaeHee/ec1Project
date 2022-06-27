@@ -1,6 +1,7 @@
-package com.plateer.ec1.claim.creator;
+package com.plateer.ec1.claim.factory.creator.impl;
 
 import com.plateer.ec1.claim.enums.ClaimType;
+import com.plateer.ec1.claim.factory.creator.ClaimDataCreator;
 import com.plateer.ec1.claim.vo.ClaimDto;
 import com.plateer.ec1.claim.vo.ClaimModel;
 import lombok.extern.slf4j.Slf4j;

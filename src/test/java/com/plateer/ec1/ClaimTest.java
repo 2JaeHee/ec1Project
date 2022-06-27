@@ -2,6 +2,7 @@ package com.plateer.ec1;
 
 import com.plateer.ec1.claim.enums.ClaimType;
 import com.plateer.ec1.claim.enums.ClaimProcessorType;
+import com.plateer.ec1.claim.factory.processor.ClaimProcessor;
 import com.plateer.ec1.claim.service.ClaimService;
 import com.plateer.ec1.claim.vo.ClaimDto;
 import org.junit.jupiter.api.DisplayName;
@@ -19,18 +20,20 @@ public class ClaimTest {
     @DisplayName("일반주문취소완료")
     void generalCancel(){
         ClaimDto claimDto = new ClaimDto();
-        claimDto.setType(ClaimType.GCC);
-        claimDto.setClaimType(ClaimProcessorType.COMPLETE);
+        claimDto.setClaimType(ClaimType.GCC);
+        claimDto.setClaimProcessorType(ClaimProcessorType.COMPLETE);
         claimService.getClaim(claimDto);
     }
-//
-//    @Test
-//    @DisplayName("모바일쿠폰 취소접수")
-//    void mobileCancelAccept(){
-//        ClaimProcessor claimProcessor = ClaimType.MCA.getClaimProcessor().get();
-//        claimProcessor.doProcess(new ClaimDto());
-//    }
-//
+
+    @Test
+    @DisplayName("모바일쿠폰 취소접수")
+    void mobileCancelAccept(){
+        ClaimDto claimDto = new ClaimDto();
+        claimDto.setClaimType(ClaimType.MCA);
+        claimDto.setClaimProcessorType(ClaimProcessorType.ACCEPT_WITHDRAWAL);
+        claimService.getClaim(claimDto);
+    }
+
 //    @Test
 //    @DisplayName("모바일쿠폰 취소완료")
 //    void mobileCancelComplate(){

@@ -1,4 +1,4 @@
-package com.plateer.ec1.claim.factory;
+package com.plateer.ec1.claim.factory.processor;
 
 import com.plateer.ec1.claim.enums.ClaimProcessorType;
 import com.plateer.ec1.claim.vo.ClaimDto;
@@ -11,21 +11,15 @@ import java.util.Map;
 
 @Slf4j
 @Component
-
 public class ProcessorFactory {
-
     private final Map<ClaimProcessorType, ClaimProcessor> processorMap = new HashMap<>();
-    private final List<ClaimProcessor> processors;
 
     public ProcessorFactory(List<ClaimProcessor> processors) {
-        this.processors = processors;
-        this.processors.forEach(c -> this.processorMap.put(c.getType(), c));
-        System.out.println("processors = " + processors);
-        System.out.println("processorMap = " + processorMap);
+        processors.forEach(c -> this.processorMap.put(c.getType(), c));
 
     }
     public ClaimProcessor getClaimProcessor(ClaimDto claimDto) {
-        log.info("----------- Claim : " + processorMap.get(claimDto.getClaimType()));
-        return processorMap.get(claimDto.getClaimType());
+        log.info("----------- Claim Processor : " + processorMap.get(claimDto.getClaimProcessorType()));
+        return processorMap.get(claimDto.getClaimProcessorType());
     }
 }

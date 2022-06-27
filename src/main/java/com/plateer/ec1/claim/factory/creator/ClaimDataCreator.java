@@ -1,4 +1,4 @@
-package com.plateer.ec1.claim.creator;
+package com.plateer.ec1.claim.factory.creator;
 
 import com.plateer.ec1.claim.enums.ClaimType;
 import com.plateer.ec1.claim.vo.ClaimDto;

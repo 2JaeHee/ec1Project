@@ -8,6 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ClaimDto {
-    private ClaimType type;
-    private ClaimProcessorType claimType;
+    private ClaimType claimType;
+    private ClaimProcessorType claimProcessorType;
 }

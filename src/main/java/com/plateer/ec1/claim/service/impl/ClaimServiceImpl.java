@@ -1,6 +1,6 @@
 package com.plateer.ec1.claim.service.impl;
-import com.plateer.ec1.claim.factory.ClaimProcessor;
-import com.plateer.ec1.claim.factory.ProcessorFactory;
+import com.plateer.ec1.claim.factory.processor.ClaimProcessor;
+import com.plateer.ec1.claim.factory.processor.ProcessorFactory;
 import com.plateer.ec1.claim.service.ClaimService;
 import com.plateer.ec1.claim.vo.ClaimDto;
 import lombok.RequiredArgsConstructor;

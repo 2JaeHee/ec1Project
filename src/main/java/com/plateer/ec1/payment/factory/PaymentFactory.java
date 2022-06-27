@@ -15,17 +15,14 @@ import java.util.Map;
 @Component
 public class PaymentFactory {
 
-    private Map<PaymentType, Payment> paymentMap = new HashMap<>();
-    private final List<Payment> payments;
-
+    private final Map<PaymentType, Payment> paymentMap = new HashMap<>();
 
     public PaymentFactory(List<Payment> payments) {
-        this.payments = payments;
-        this.payments.forEach(c -> paymentMap.put(c.getType(), c));
+        payments.forEach(c -> paymentMap.put(c.getType(), c));
     }
 
-    public Payment getPaymentFactory(PaymentType paymentType) {
-        log.info("----------- Payment : " + paymentMap.get(paymentType));
-        return paymentMap.get(paymentType);
+    public Payment getPaymentFactory(PaymentType type) {
+        log.info("----------- Payment : " + paymentMap.get(type));
+        return paymentMap.get(type);
     }
 }

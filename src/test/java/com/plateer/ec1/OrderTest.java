@@ -16,10 +16,6 @@ public class OrderTest {
     @Autowired
     private OrderController orderController;
 
-    @BeforeEach
-    public void beforeEach(){
-    }
-
     @Test
     @DisplayName("BO general order")
     void generalOrderBo(){

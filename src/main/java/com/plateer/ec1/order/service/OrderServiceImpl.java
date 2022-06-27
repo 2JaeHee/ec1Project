@@ -19,19 +19,11 @@ import java.util.Map;
 @Service
 public class OrderServiceImpl implements OrderService {
     private final OrderContext orderContext;
-    private Map<OrderType, DataStrategy> dataStrategyMap = new HashMap<>();
-    private Map<SystemType, AfterStrategy> afterStrategyMap = new HashMap<>();
-    private final List<DataStrategy> dataStrategies;
-    private final List<AfterStrategy> afterStrategies;
+    private final Map<OrderType, DataStrategy> dataStrategyMap = new HashMap<>();
+    private final Map<SystemType, AfterStrategy> afterStrategyMap = new HashMap<>();
 
     public OrderServiceImpl(OrderContext orderContext, List<DataStrategy> dataStrategies, List<AfterStrategy> afterStrategies) {
         this.orderContext = orderContext;
-        this.dataStrategies = dataStrategies;
-        this.afterStrategies = afterStrategies;
-    }
-
-    @PostConstruct
-    public void init() {
         dataStrategies.forEach(c -> dataStrategyMap.put(c.getType(), c));
         afterStrategies.forEach(c -> afterStrategyMap.put(c.getType(), c));
     }
