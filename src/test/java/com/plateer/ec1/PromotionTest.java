@@ -1,5 +1,7 @@
 package com.plateer.ec1;
 
+import com.plateer.ec1.common.model.promotion.CcCpnBaseModel;
+import com.plateer.ec1.common.model.promotion.CcCpnIssueModel;
 import com.plateer.ec1.promotion.controller.PromotionController;
 import com.plateer.ec1.promotion.enums.PromotionType;
 import com.plateer.ec1.promotion.factory.CalculationFactory;
@@ -8,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 @SpringBootTest
 public class PromotionTest {
     @Autowired
@@ -15,6 +19,30 @@ public class PromotionTest {
     @Autowired
     private CalculationFactory calculationFactory;
 
+    // 회원번호(테스트를 위해 고정값 사용)
+    private final String mbrNo = "test01";
+    @Test
+    void getAvailableCouponList(){
+        RequestPromotionVo requestPromotionVo = new RequestPromotionVo();
+        requestPromotionVo.setMbrNo(mbrNo);
+        promotionController.getAvailableCouponList(requestPromotionVo);
+    }
+
+    @Test
+    void saveCouponDownload(){
+        // 회원정보
+        RequestPromotionVo requestPromotionVo = new RequestPromotionVo();
+        requestPromotionVo.setMbrNo(mbrNo);
+        List<CcCpnBaseModel> getAvailableCouponList = promotionController.getAvailableCouponList(requestPromotionVo);
+        // 선택한 쿠폰 (테스트를 위해 0번째꺼 선택해놈)
+        CcCpnBaseModel ccCpnBaseModel = getAvailableCouponList.get(0);
+
+        CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.builder().build();
+        ccCpnIssueModel.setMbrNo(mbrNo);
+        ccCpnIssueModel.setPrmNo(ccCpnBaseModel.getPrmNo());
+
+        promotionController.saveCouponDownload(ccCpnIssueModel);
+    }
     @Test
     void priceDiscount(){
         RequestPromotionVo reqVo = new RequestPromotionVo();
