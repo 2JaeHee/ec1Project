@@ -24,23 +24,6 @@
           FROM cc_prm_base cpb
          INNER JOIN cc_cpn_base ccb
             ON cpb.prm_no = ccb.prm_no
-<!--        -->
-<!--        <if test="@org.springframework.util.ObjectUtils@isEmpty(mbrNo)">-->
-<!--         RIGHT OUTER JOIN (SELECT prm_no, COUNT(prm_no) as cnt-->
-<!--                       FROM cc_cpn_issue-->
-<!--                      GROUP BY prm_no) cci-->
-<!--            ON ccb.prm_no = cci.prm_no-->
-<!--         WHERE ccb.dwl_psb_cnt > cci.cnt-->
-<!--        </if>-->
-<!--        -->
-        <if test="!@org.springframework.util.ObjectUtils@isEmpty(mbrNo)">
-         INNER JOIN (SELECT prm_no, COUNT(prm_no) as cnt
-                       FROM cc_cpn_issue
-                      WHERE mbr_no = #{mbrNo}
-                      GROUP BY prm_no) cci
-            ON ccb.prm_no = cci.prm_no
-          WHERE ccb.psn_dwl_psb_cnt > cci.cnt
-        </if>
     <![CDATA[
            AND ((ccb.dwl_priod_ccd = '10'
                     AND NOW() >= ccb.dwl_avl_strt_dd::date AND NOW() < ccb.dwl_avl_end_dd::date + interval '1 day')
