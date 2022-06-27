@@ -24,13 +24,15 @@
           FROM cc_prm_base cpb
          INNER JOIN cc_cpn_base ccb
             ON cpb.prm_no = ccb.prm_no
-        <if test="@org.springframework.util.ObjectUtils@isEmpty(mbrNo)">
-         INNER JOIN (SELECT prm_no, COUNT(prm_no) as cnt
-                       FROM cc_cpn_issue
-                      GROUP BY prm_no) cci
-            ON ccb.prm_no = cci.prm_no
-         WHERE ccb.dwl_psb_cnt > cci.cnt
-        </if>
+<!--        -->
+<!--        <if test="@org.springframework.util.ObjectUtils@isEmpty(mbrNo)">-->
+<!--         RIGHT OUTER JOIN (SELECT prm_no, COUNT(prm_no) as cnt-->
+<!--                       FROM cc_cpn_issue-->
+<!--                      GROUP BY prm_no) cci-->
+<!--            ON ccb.prm_no = cci.prm_no-->
+<!--         WHERE ccb.dwl_psb_cnt > cci.cnt-->
+<!--        </if>-->
+<!--        -->
         <if test="!@org.springframework.util.ObjectUtils@isEmpty(mbrNo)">
          INNER JOIN (SELECT prm_no, COUNT(prm_no) as cnt
                        FROM cc_cpn_issue
