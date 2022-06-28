@@ -11,6 +11,9 @@
             , sys_regr_id
             , sys_mod_dtime
             , sys_modr_id
+        <if test="!@org.springframework.util.ObjectUtils@isEmpty(orgCpnIssNo)">
+            , org_cpn_iss_no
+        </if>
         ) VALUES (
             #{mbrNo}
             , #{prmNo}
@@ -18,6 +21,44 @@
             , #{sysRegrId}
             , NOW()
             , #{sysModrId}
+        <if test="!@org.springframework.util.ObjectUtils@isEmpty(orgCpnIssNo)">
+            , #{orgCpnIssNo}
+        </if>
         )
+    </insert>
+
+    <!-- 쿠폰 사용 처리 -->
+    <update id="modifyCouponUseInfo" parameterType="com.plateer.ec1.common.model.promotion.CcCpnIssueModel">
+        UPDATE cc_cpn_issue
+           SET cpn_use_dt = NOW()
+                , ord_no = #{ordNo}
+         WHERE prm_no = #{prmNo}
+           AND cpn_iss_no = #{cpnIssNo}
+           AND mbr_no = #{mbrNo}
+    </update>
+
+    <!-- 취소 시 쿠폰 복원 처리 -->
+    <insert id="saveCouponRestore" parameterType="com.plateer.ec1.common.model.promotion.CcCpnIssueModel">
+        INSERT INTO cc_cpn_issue (
+            mbr_no
+            , prm_no
+            , org_cpn_iss_no
+            , sys_reg_dtime
+            , sys_regr_id
+            , sys_mod_dtime
+            , sys_modr_id
+        )
+        SELECT mbr_no
+            , prm_no
+            , cpn_iss_no as org_cpn_iss_no
+            , NOW()
+            , #{sysRegrId}
+            , NOW()
+            , #{sysModrId}
+          FROM cc_cpn_issue
+         WHERE prm_no = #{prmNo}
+           AND cpn_iss_no = #{cpnIssNo}
+           AND mbr_no = #{mbrNo}
+
     </insert>
 </mapper>

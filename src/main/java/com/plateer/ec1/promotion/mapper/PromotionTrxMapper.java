@@ -5,7 +5,21 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface PromotionTrxMapper {
-
+    /**
+     * 쿠폰 다운로드
+     * @param ccCpnIssueModel
+     */
     void saveCouponDownload(CcCpnIssueModel ccCpnIssueModel);
 
+    /**
+     * 쿠폰 사용 처리
+     * @param ccCpnIssueModel
+     */
+    void modifyCouponUseInfo(CcCpnIssueModel ccCpnIssueModel);
+
+    /**
+     * 취소 시 쿠폰 복원 처리
+     * @param ccCpnIssueModel
+     */
+    void saveCouponRestore(CcCpnIssueModel ccCpnIssueModel);
 }

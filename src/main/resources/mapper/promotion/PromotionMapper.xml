@@ -3,48 +3,29 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.plateer.ec1.promotion.mapper.PromotionMapper">
-    <select id="getAvailableCouponList" parameterType="com.plateer.ec1.promotion.vo.RequestPromotionVo" resultType="com.plateer.ec1.common.model.promotion.CcCpnBaseModel">
-        SELECT ccb.prm_no
-                 , ccb.cpn_kind_cd
-                 , ccb.degr_ccd
-                 , ccb.dc_sv_ccd
-                 , ccb.mda_gb
-                 , ccb.ent_chn_gb
-                 , ccb.dwl_priod_ccd
-                 , ccb.dwl_avl_strt_dd
-                 , ccb.dwl_avl_end_dd
-                 , ccb.dwl_std_dd
-                 , ccb.dwl_psb_cnt
-                 , ccb.psn_dwl_psb_cnt
-                 , ccb.dwl_avl_plc
-                 , ccb.iss_way_ccd
-                 , ccb.cert_cd
-                 , ccb.our_chrg_rt
-                 , ccb.entr_chrg_rt
-          FROM cc_prm_base cpb
-         INNER JOIN cc_cpn_base ccb
-            ON cpb.prm_no = ccb.prm_no
-          LEFT OUTER JOIN (
-              SELECT prm_no, COUNT(prm_no) as cnt
-                FROM cc_cpn_issue
-               GROUP BY prm_no) cciA
-            ON ccb.prm_no = cciA.prm_no
-        <if test="!@org.springframework.util.ObjectUtils@isEmpty(mbrNo)">
-          LEFT OUTER JOIN (
-              SELECT prm_no, COUNT(prm_no) as cnt
-                FROM cc_cpn_issue
-               WHERE mbr_no = #{mbrNo}
-               GROUP BY prm_no) cciM
-            ON ccb.prm_no = cciM.prm_no
-        </if>
-         WHERE 1=1
-           AND ccb.dwl_psb_cnt > coalesce(cciA.cnt, 0)
-        <if test="!@org.springframework.util.ObjectUtils@isEmpty(mbrNo)">
-           AND ccb.psn_dwl_psb_cnt > coalesce(cciM.cnt, 0)
-        </if>
-           AND ((ccb.dwl_priod_ccd = '10'
-                    AND NOW() <![CDATA[>=]]> ccb.dwl_avl_strt_dd::date AND NOW() <![CDATA[<]]>  ccb.dwl_avl_end_dd::date + interval '1 day')
-                OR (ccb.dwl_priod_ccd = '20'
-                    AND NOW() <![CDATA[>=]]> ccb.dwl_avl_strt_dd::date AND NOW() <![CDATA[<]]> ccb.dwl_avl_strt_dd::date + (interval '1 day' * ccb.dwl_std_dd) + interval '1 day'))
+    <!-- 다운로드 가능 쿠폰 검증 -->
+    <select id="getAvailableCouponValidate" parameterType="com.plateer.ec1.promotion.vo.RequestPromotionVo"  resultType="boolean">
+        SELECT EXISTS(
+            SELECT prm_no
+              FROM cc_cpn_base ccb
+             WHERE prm_no = '1'
+               AND ccb.dwl_psb_cnt > ( SELECT COUNT(1) as cnt
+                                         FROM cc_cpn_issue cntA
+                                        WHERE cntA.prm_no = ccb.prm_no )
+               AND ccb.psn_dwl_psb_cnt > ( SELECT COUNT(1) as cnt
+                                             FROM cc_cpn_issue cntM
+                                            WHERE cntM.prm_no = ccb.prm_no
+                                              AND cntM.mbr_no = 'test01' )
+               AND NOW() <![CDATA[>=]]> ccb.dwl_avl_strt_dd::date AND NOW() <![CDATA[<]]> ccb.dwl_avl_end_dd::date + interval '1 day'
+        )
+    </select>
+
+    <!-- 사용취소를 위해 프로모션 기간 검증 -->
+    <select id="getPromotionValidate" parameterType="long"  resultType="boolean">
+        SELECT EXISTS (
+            SELECT prm_no
+              FROM cc_prm_base
+             WHERE prm_no = #{prmNo}
+               AND NOW() <![CDATA[<]]> cc_prm_base.prm_end_dt + interval '1 day')
     </select>
 </mapper>
