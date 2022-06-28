@@ -8,14 +8,18 @@
         SELECT EXISTS(
             SELECT prm_no
               FROM cc_cpn_base ccb
-             WHERE prm_no = '1'
+             WHERE prm_no = #{prmNo}
                AND ccb.dwl_psb_cnt > ( SELECT COUNT(1) as cnt
                                          FROM cc_cpn_issue cntA
-                                        WHERE cntA.prm_no = ccb.prm_no )
+                                        WHERE cntA.prm_no = ccb.prm_no
+                                          AND NOT EXISTS(
+                                                SELECT 1 FROM cc_cpn_issue issue WHERE cntA.cpn_iss_no = issue.org_cpn_iss_no))
                AND ccb.psn_dwl_psb_cnt > ( SELECT COUNT(1) as cnt
                                              FROM cc_cpn_issue cntM
                                             WHERE cntM.prm_no = ccb.prm_no
-                                              AND cntM.mbr_no = 'test01' )
+                                              AND cntM.mbr_no = #{mbrNo}
+                                              AND NOT EXISTS(
+                                                SELECT 1 FROM cc_cpn_issue issue WHERE cntM.cpn_iss_no = issue.org_cpn_iss_no))
                AND NOW() <![CDATA[>=]]> ccb.dwl_avl_strt_dd::date AND NOW() <![CDATA[<]]> ccb.dwl_avl_end_dd::date + interval '1 day'
         )
     </select>

@@ -3,6 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.plateer.ec1.promotion.mapper.PromotionTrxMapper">
+    <!-- 쿠폰 다운로드 처리 -->
     <insert id="saveCouponDownload" parameterType="com.plateer.ec1.common.model.promotion.CcCpnIssueModel">
         INSERT INTO cc_cpn_issue (
             mbr_no
@@ -11,9 +12,6 @@
             , sys_regr_id
             , sys_mod_dtime
             , sys_modr_id
-        <if test="!@org.springframework.util.ObjectUtils@isEmpty(orgCpnIssNo)">
-            , org_cpn_iss_no
-        </if>
         ) VALUES (
             #{mbrNo}
             , #{prmNo}
@@ -21,9 +19,6 @@
             , #{sysRegrId}
             , NOW()
             , #{sysModrId}
-        <if test="!@org.springframework.util.ObjectUtils@isEmpty(orgCpnIssNo)">
-            , #{orgCpnIssNo}
-        </if>
         )
     </insert>
 
@@ -59,6 +54,5 @@
          WHERE prm_no = #{prmNo}
            AND cpn_iss_no = #{cpnIssNo}
            AND mbr_no = #{mbrNo}
-
     </insert>
 </mapper>

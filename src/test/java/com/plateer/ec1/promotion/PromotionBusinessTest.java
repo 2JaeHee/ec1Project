@@ -21,7 +21,7 @@ public class PromotionBusinessTest {
     PromotionExternalService promotionExternalService;
 
     // 회원번호(테스트를 위해 고정값 사용)
-    private final String mbrNo = "test01";
+    private final String mbrNo = "test02";
 
     @Test
     @DisplayName("쿠폰 다운로드")
@@ -40,10 +40,10 @@ public class PromotionBusinessTest {
     @DisplayName("쿠폰 사용")
     void couponUse() {
         CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.builder().build();
-        ccCpnIssueModel.setCpnIssNo(Long.valueOf(1));
+        ccCpnIssueModel.setCpnIssNo(Long.valueOf(7));
         ccCpnIssueModel.setPrmNo(Long.valueOf(1));
         ccCpnIssueModel.setMbrNo(mbrNo);
-        ccCpnIssueModel.setOrdNo("O22062800001");
+        ccCpnIssueModel.setOrdNo("O22062800002");
         promotionExternalService.couponUse(ccCpnIssueModel);
     }
 
@@ -51,7 +51,7 @@ public class PromotionBusinessTest {
     @DisplayName("쿠폰 사용 취소")
     void couponUseCancel() {
         CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.builder().build();
-        ccCpnIssueModel.setCpnIssNo(Long.valueOf(1));
+        ccCpnIssueModel.setCpnIssNo(Long.valueOf(7));
         ccCpnIssueModel.setPrmNo(Long.valueOf(1));
         ccCpnIssueModel.setMbrNo(mbrNo);
         promotionExternalService.couponUseCancel(ccCpnIssueModel);
