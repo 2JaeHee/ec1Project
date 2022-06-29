@@ -5,6 +5,7 @@ import com.plateer.ec1.common.model.promotion.CcCpnIssueModel;
 import com.plateer.ec1.promotion.enums.PromotionType;
 import com.plateer.ec1.promotion.factory.CalculationFactory;
 import com.plateer.ec1.promotion.service.PromotionService;
+import com.plateer.ec1.promotion.vo.CcCpnIssueReqVo;
 import com.plateer.ec1.promotion.vo.RequestPromotionVo;
 import com.plateer.ec1.promotion.vo.ResponseProductCouponVo;
 import lombok.RequiredArgsConstructor;
@@ -30,11 +31,11 @@ public class PromotionController {
 
     /**
      * 쿠폰 다운로드
-     * @param ccCpnIssueModel
+     * @param ccCpnIssueReqVo
      */
     @PutMapping("/couponDownload")
-    public void couponDownload(CcCpnIssueModel ccCpnIssueModel){
-        promotionService.couponDownload(ccCpnIssueModel);
+    public void couponDownload(CcCpnIssueReqVo ccCpnIssueReqVo){
+        promotionService.couponDownload(ccCpnIssueReqVo);
     }
 
     //회원 별 포인트 조회 (주문서 - 포인트 영역에 노출)

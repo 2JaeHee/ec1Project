@@ -5,6 +5,7 @@ import com.plateer.ec1.common.model.promotion.CcCpnIssueModel;
 import com.plateer.ec1.promotion.controller.PromotionController;
 import com.plateer.ec1.promotion.factory.CalculationFactory;
 import com.plateer.ec1.promotion.service.PromotionExternalService;
+import com.plateer.ec1.promotion.vo.CcCpnIssueReqVo;
 import com.plateer.ec1.promotion.vo.RequestPromotionVo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,23 +28,22 @@ public class PromotionBusinessTest {
     @DisplayName("쿠폰 다운로드")
     void couponDownload() {
         // 회원정보
-        RequestPromotionVo requestPromotionVo = new RequestPromotionVo();
+        CcCpnIssueReqVo ccCpnIssueReqVo = CcCpnIssueReqVo.builder()
+                .prmNo(Long.valueOf(1))
+                .mbrNo(mbrNo)
+                .build();
 
-        CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.builder().build();
-        ccCpnIssueModel.setPrmNo(Long.valueOf(1));
-        ccCpnIssueModel.setMbrNo(mbrNo);
-
-        promotionController.couponDownload(ccCpnIssueModel);
+        promotionController.couponDownload(ccCpnIssueReqVo);
     }
 
     @Test
     @DisplayName("쿠폰 사용")
     void couponUse() {
         CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.builder().build();
-        ccCpnIssueModel.setCpnIssNo(Long.valueOf(7));
+        ccCpnIssueModel.setCpnIssNo(Long.valueOf(8));
         ccCpnIssueModel.setPrmNo(Long.valueOf(1));
         ccCpnIssueModel.setMbrNo(mbrNo);
-        ccCpnIssueModel.setOrdNo("O22062800002");
+        ccCpnIssueModel.setOrdNo("O22062800003");
         promotionExternalService.couponUse(ccCpnIssueModel);
     }
 
@@ -51,7 +51,7 @@ public class PromotionBusinessTest {
     @DisplayName("쿠폰 사용 취소")
     void couponUseCancel() {
         CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.builder().build();
-        ccCpnIssueModel.setCpnIssNo(Long.valueOf(7));
+        ccCpnIssueModel.setCpnIssNo(Long.valueOf(8));
         ccCpnIssueModel.setPrmNo(Long.valueOf(1));
         ccCpnIssueModel.setMbrNo(mbrNo);
         promotionExternalService.couponUseCancel(ccCpnIssueModel);

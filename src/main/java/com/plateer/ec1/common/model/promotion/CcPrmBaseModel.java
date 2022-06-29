@@ -26,4 +26,8 @@ public class CcPrmBaseModel {
     private String sysRegrId;
     private LocalDateTime sysModDtime;
     private String sysModrId;
+
+    public boolean periodValidate() {
+        return LocalDateTime.now().isBefore(this.prmEndDt);
+    }
 }

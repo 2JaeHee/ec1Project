@@ -24,12 +24,74 @@
         )
     </select>
 
-    <!-- 사용취소를 위해 프로모션 기간 검증 -->
-    <select id="getPromotionValidate" parameterType="long"  resultType="boolean">
-        SELECT EXISTS (
-            SELECT prm_no
-              FROM cc_prm_base
-             WHERE prm_no = #{prmNo}
-               AND NOW() <![CDATA[<]]> cc_prm_base.prm_end_dt + interval '1 day')
+
+    <!-- 프로모션 기본 정보 조회 -->
+    <select id="getPrmBaseInfo" parameterType="long" resultType="com.plateer.ec1.common.model.promotion.CcPrmBaseModel">
+        SELECT prm_no
+                , prm_nm
+                , prm_kind_cd
+                , prm_priod_ccd
+                , prm_strt_dt
+                , prm_end_dt
+                , prm_std_dd
+                , emp_yn
+                , dc_ccd
+                , dc_val
+                , min_pur_amt
+                , max_dc_amt
+                , use_yn
+                , rmk
+                , sys_reg_dtime
+                , sys_regr_id
+                , sys_mod_dtime
+                , sys_modr_id
+          FROM cc_prm_base
+         WHERE prm_no = #{prmNo}
+    </select>
+
+    <!-- 쿠폰 기본 정보 조회 -->
+    <select id="getCcCpnBaseInfo" parameterType="long" resultType="com.plateer.ec1.common.model.promotion.CcCpnBaseModel">
+        SELECT prm_no
+                , cpn_kind_cd
+                , degr_ccd
+                , dc_sv_ccd
+                , mda_gb
+                , ent_chn_gb
+                , dwl_priod_ccd
+                , dwl_avl_strt_dd
+                , dwl_avl_end_dd
+                , dwl_std_dd
+                , dwl_psb_cnt
+                , psn_dwl_psb_cnt
+                , dwl_avl_plc
+                , iss_way_ccd
+                , cert_cd
+                , our_chrg_rt
+                , entr_chrg_rt
+                , sys_reg_dtime
+                , sys_regr_id
+                , sys_mod_dtime
+                , sys_modr_id
+          FROM cc_cpn_base
+         WHERE prm_no = #{prmNo}
+    </select>
+
+    <!-- 쿠폰발급회원 정보 조회 -->
+    <select id="getCcCpnIssueList" parameterType="com.plateer.ec1.promotion.vo.CcCpnIssueReqVo" resultType="com.plateer.ec1.common.model.promotion.CcCpnIssueModel">
+        SELECT prm_no
+            , cpn_iss_no
+            , mbr_no
+            , cpn_use_dt
+            , org_cpn_iss_no
+            , cpn_cert_no
+            , ord_no
+            , sys_reg_dtime
+            , sys_regr_id
+            , sys_mod_dtime
+            , sys_modr_id
+          FROM cc_cpn_issue cci
+         WHERE prm_no = #{prmNo}
+           AND NOT EXISTS( SELECT 1 FROM cc_cpn_issue a
+                            WHERE a.cpn_iss_no = cci.org_cpn_iss_no)
     </select>
 </mapper>
