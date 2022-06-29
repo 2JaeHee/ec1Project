@@ -10,4 +10,6 @@ import java.util.List;
 @Setter
 public class RequestPromotionVo {
     private String mbrNo;
+    private Product product;
+    private List<Product> productList;
 }

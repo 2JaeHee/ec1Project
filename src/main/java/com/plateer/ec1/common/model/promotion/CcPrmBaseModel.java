@@ -27,7 +27,19 @@ public class CcPrmBaseModel {
     private LocalDateTime sysModDtime;
     private String sysModrId;
 
+    /**
+     * 기간체크 (취소일시  < 프로모션종료일시 )
+     * @return boolean
+     */
     public boolean periodValidate() {
         return LocalDateTime.now().isBefore(this.prmEndDt);
+    }
+
+    /**
+     * 기준일체크 (쿠폰발급 수정일 + 프로모션 기준일 < 프로모션종료일시 )
+     * @return boolean
+     */
+    public boolean referenceDateValidate(LocalDateTime paramDate) {
+        return paramDate.plusDays(this.prmStdDd).isBefore(this.prmEndDt);
     }
 }

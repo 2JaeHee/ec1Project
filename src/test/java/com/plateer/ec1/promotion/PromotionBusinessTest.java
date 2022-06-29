@@ -40,10 +40,10 @@ public class PromotionBusinessTest {
     @DisplayName("쿠폰 사용")
     void couponUse() {
         CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.builder().build();
-        ccCpnIssueModel.setCpnIssNo(Long.valueOf(8));
+        ccCpnIssueModel.setCpnIssNo(Long.valueOf(9));
         ccCpnIssueModel.setPrmNo(Long.valueOf(1));
         ccCpnIssueModel.setMbrNo(mbrNo);
-        ccCpnIssueModel.setOrdNo("O22062800003");
+        ccCpnIssueModel.setOrdNo("O22062800004");
         promotionExternalService.couponUse(ccCpnIssueModel);
     }
 
@@ -51,7 +51,7 @@ public class PromotionBusinessTest {
     @DisplayName("쿠폰 사용 취소")
     void couponUseCancel() {
         CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.builder().build();
-        ccCpnIssueModel.setCpnIssNo(Long.valueOf(8));
+        ccCpnIssueModel.setCpnIssNo(Long.valueOf(9));
         ccCpnIssueModel.setPrmNo(Long.valueOf(1));
         ccCpnIssueModel.setMbrNo(mbrNo);
         promotionExternalService.couponUseCancel(ccCpnIssueModel);

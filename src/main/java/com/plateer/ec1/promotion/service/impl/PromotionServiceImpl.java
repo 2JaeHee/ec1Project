@@ -30,12 +30,17 @@ public class PromotionServiceImpl implements PromotionService {
         if(ccCpnBaseInfo.periodValidate()) {
             downloadAvailableCountValidate(ccCpnIssueReqVo, ccCpnBaseInfo);
 
-            promotionTrxMapper.saveCouponDownload(ccCpnIssueReqVo);
+            CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.builder().build();
+            BeanUtils.copyProperties(ccCpnIssueReqVo, ccCpnIssueModel);
+            promotionTrxMapper.saveCouponDownload(ccCpnIssueModel);
         }
     }
 
     private void downloadAvailableCountValidate(CcCpnIssueReqVo ccCpnIssueReqVo, CcCpnBaseModel ccCpnBaseInfo) {
-        List<CcCpnIssueModel> ccCpnIssueList = promotionMapper.getCcCpnIssueList(ccCpnIssueReqVo);
+
+        CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.builder().prmNo(ccCpnIssueReqVo.getPrmNo()).build();
+
+        List<CcCpnIssueModel> ccCpnIssueList = promotionMapper.getCcCpnIssueList(ccCpnIssueModel);
 
         long mbrCnt = ccCpnIssueList.stream().filter(o -> o.getMbrNo().equals(ccCpnIssueReqVo.getMbrNo())).count();
         if(!ccCpnBaseInfo.dwlPsbCntValid.test(ccCpnIssueList.size())){

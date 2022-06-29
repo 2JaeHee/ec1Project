@@ -1,16 +1,15 @@
 package com.plateer.ec1.promotion.mapper;
 
 import com.plateer.ec1.common.model.promotion.CcCpnIssueModel;
-import com.plateer.ec1.promotion.vo.CcCpnIssueReqVo;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface PromotionTrxMapper {
     /**
      * 쿠폰 다운로드
-     * @param ccCpnIssueReqVo
+     * @param ccCpnIssueModel
      */
-    void saveCouponDownload(CcCpnIssueReqVo ccCpnIssueReqVo);
+    void saveCouponDownload(CcCpnIssueModel ccCpnIssueModel);
 
     /**
      * 쿠폰 사용 처리

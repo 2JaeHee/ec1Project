@@ -3,7 +3,6 @@ package com.plateer.ec1.promotion.mapper;
 import com.plateer.ec1.common.model.promotion.CcCpnBaseModel;
 import com.plateer.ec1.common.model.promotion.CcCpnIssueModel;
 import com.plateer.ec1.common.model.promotion.CcPrmBaseModel;
-import com.plateer.ec1.promotion.vo.CcCpnIssueReqVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -16,7 +15,6 @@ public interface PromotionMapper {
      * @return CcPrmBaseModel
      */
     CcPrmBaseModel getPrmBaseInfo(Long prmNo);
-
     /**
      * 쿠폰 기본 정보 조회
      * @param prmNo
@@ -25,17 +23,16 @@ public interface PromotionMapper {
     CcCpnBaseModel getCcCpnBaseInfo(Long prmNo);
 
     /**
-     * 쿠폰 발급회원 정보 조회
-     * @param ccCpnIssueReqVo
+     * 프로모션 별 쿠폰 발급회원 정보 목록 조회
+     * @param ccCpnIssueModel
      * @return List<CcCpnIssueModel>
      */
-    List<CcCpnIssueModel> getCcCpnIssueList(CcCpnIssueReqVo ccCpnIssueReqVo);
+    List<CcCpnIssueModel> getCcCpnIssueList(CcCpnIssueModel ccCpnIssueModel);
+
     /**
-     * 다운로드 가능 쿠폰 검증
+     * 쿠폰 발급회원 정보 조회
      * @param ccCpnIssueModel
-     * @return boolean
+     * @return CcCpnIssueModel
      */
-    boolean getAvailableCouponValidate(CcCpnIssueModel ccCpnIssueModel);
-
-
+    CcCpnIssueModel getCcCpnIssueInfo(CcCpnIssueModel ccCpnIssueModel);
 }

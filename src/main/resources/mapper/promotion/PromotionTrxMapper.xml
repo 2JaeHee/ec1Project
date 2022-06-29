@@ -33,7 +33,7 @@
     </update>
 
     <!-- 취소 시 쿠폰 복원 처리 -->
-    <insert id="saveCouponRestore" parameterType="com.plateer.ec1.promotion.vo.CcCpnIssueReqVo">
+    <insert id="saveCouponRestore" parameterType="com.plateer.ec1.common.model.promotion.CcCpnIssueModel">
         INSERT INTO cc_cpn_issue (
             mbr_no
             , prm_no

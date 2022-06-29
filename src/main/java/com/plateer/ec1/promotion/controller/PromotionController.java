@@ -1,20 +1,17 @@
 package com.plateer.ec1.promotion.controller;
 
-import com.plateer.ec1.common.model.promotion.CcCpnBaseModel;
-import com.plateer.ec1.common.model.promotion.CcCpnIssueModel;
 import com.plateer.ec1.promotion.enums.PromotionType;
+import com.plateer.ec1.promotion.factory.Calculation;
 import com.plateer.ec1.promotion.factory.CalculationFactory;
 import com.plateer.ec1.promotion.service.PromotionService;
 import com.plateer.ec1.promotion.vo.CcCpnIssueReqVo;
 import com.plateer.ec1.promotion.vo.RequestPromotionVo;
+import com.plateer.ec1.promotion.vo.ResponseBaseVo;
 import com.plateer.ec1.promotion.vo.ResponseProductCouponVo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,11 +35,17 @@ public class PromotionController {
         promotionService.couponDownload(ccCpnIssueReqVo);
     }
 
+    /**
+     * 상품쿠폰 적용 (상품상세화면에서 쿠폰적용 시 보이는 목록)
+     * @param requestPromotionVo
+     * @return
+     */
+    public ResponseBaseVo productCoupon(RequestPromotionVo requestPromotionVo) {
+        Calculation promotionCalculator = calculationFactory.getPromotionCalculator(PromotionType.PRODUCT_COUPON);
+        return promotionCalculator.getCalculationData(requestPromotionVo);
+    }
+
     //회원 별 포인트 조회 (주문서 - 포인트 영역에 노출)
-
-    //쿠폰다운로드 (쿠폰발급회원)
-
-    //상품쿠폰적용 (상품상세화면에서 쿠폰적용 시 보이는 목록)
 
     //장바구니쿠폰적용 (주문서에서 쿠폰적용 시 보이는 목록)
 

@@ -3,28 +3,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.plateer.ec1.promotion.mapper.PromotionMapper">
-    <!-- 다운로드 가능 쿠폰 검증 -->
-    <select id="getAvailableCouponValidate" parameterType="com.plateer.ec1.promotion.vo.RequestPromotionVo"  resultType="boolean">
-        SELECT EXISTS(
-            SELECT prm_no
-              FROM cc_cpn_base ccb
-             WHERE prm_no = #{prmNo}
-               AND ccb.dwl_psb_cnt > ( SELECT COUNT(1) as cnt
-                                         FROM cc_cpn_issue cntA
-                                        WHERE cntA.prm_no = ccb.prm_no
-                                          AND NOT EXISTS(
-                                                SELECT 1 FROM cc_cpn_issue issue WHERE cntA.cpn_iss_no = issue.org_cpn_iss_no))
-               AND ccb.psn_dwl_psb_cnt > ( SELECT COUNT(1) as cnt
-                                             FROM cc_cpn_issue cntM
-                                            WHERE cntM.prm_no = ccb.prm_no
-                                              AND cntM.mbr_no = #{mbrNo}
-                                              AND NOT EXISTS(
-                                                SELECT 1 FROM cc_cpn_issue issue WHERE cntM.cpn_iss_no = issue.org_cpn_iss_no))
-               AND NOW() <![CDATA[>=]]> ccb.dwl_avl_strt_dd::date AND NOW() <![CDATA[<]]> ccb.dwl_avl_end_dd::date + interval '1 day'
-        )
-    </select>
-
-
     <!-- 프로모션 기본 정보 조회 -->
     <select id="getPrmBaseInfo" parameterType="long" resultType="com.plateer.ec1.common.model.promotion.CcPrmBaseModel">
         SELECT prm_no
@@ -76,8 +54,8 @@
          WHERE prm_no = #{prmNo}
     </select>
 
-    <!-- 쿠폰발급회원 정보 조회 -->
-    <select id="getCcCpnIssueList" parameterType="com.plateer.ec1.promotion.vo.CcCpnIssueReqVo" resultType="com.plateer.ec1.common.model.promotion.CcCpnIssueModel">
+    <!-- 프로모션 별 쿠폰 발급회원 정보 목록 조회 -->
+    <select id="getCcCpnIssueList" parameterType="com.plateer.ec1.common.model.promotion.CcCpnIssueModel" resultType="com.plateer.ec1.common.model.promotion.CcCpnIssueModel">
         SELECT prm_no
             , cpn_iss_no
             , mbr_no
@@ -92,6 +70,26 @@
           FROM cc_cpn_issue cci
          WHERE prm_no = #{prmNo}
            AND NOT EXISTS( SELECT 1 FROM cc_cpn_issue a
-                            WHERE a.cpn_iss_no = cci.org_cpn_iss_no)
+                            WHERE a.org_cpn_iss_no = cci.cpn_iss_no))
+    </select>
+
+    <!-- 쿠폰발급회원 정보 조회 -->
+    <select id="getCcCpnIssueInfo" parameterType="com.plateer.ec1.common.model.promotion.CcCpnIssueModel" resultType="com.plateer.ec1.common.model.promotion.CcCpnIssueModel">
+        SELECT prm_no
+                , cpn_iss_no
+                , mbr_no
+                , cpn_use_dt
+                , org_cpn_iss_no
+                , cpn_cert_no
+                , ord_no
+                , sys_reg_dtime
+                , sys_regr_id
+                , sys_mod_dtime
+                , sys_modr_id
+          FROM cc_cpn_issue cci
+         WHERE prm_no = #{prmNo}
+           AND cpn_iss_no = #{cpnIssNo}
+           AND NOT EXISTS( SELECT 1 FROM cc_cpn_issue a
+                            WHERE a.org_cpn_iss_no = cci.cpn_iss_no))
     </select>
 </mapper>
