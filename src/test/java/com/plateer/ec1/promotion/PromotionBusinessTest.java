@@ -30,7 +30,7 @@ public class PromotionBusinessTest {
     void couponDownload() {
         // 회원정보
         CcCpnIssueReqVo ccCpnIssueReqVo = CcCpnIssueReqVo.builder()
-                .prmNo(Long.valueOf(3))
+                .prmNo(3L)
                 .mbrNo(mbrNo)
                 .build();
 
@@ -40,38 +40,47 @@ public class PromotionBusinessTest {
     @Test
     @DisplayName("쿠폰 사용")
     void couponUse() {
-        CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.builder().build();
-        ccCpnIssueModel.setCpnIssNo(Long.valueOf(9));
-        ccCpnIssueModel.setPrmNo(Long.valueOf(1));
-        ccCpnIssueModel.setMbrNo(mbrNo);
-        ccCpnIssueModel.setOrdNo("O22062800004");
+        CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.builder()
+                .cpnIssNo(9L)
+                .prmNo(1L)
+                .mbrNo(mbrNo)
+                .ordNo("O22062800004")
+                .build();
+
         promotionExternalService.couponUse(ccCpnIssueModel);
     }
 
     @Test
     @DisplayName("쿠폰 사용 취소")
     void couponUseCancel() {
-        CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.builder().build();
-        ccCpnIssueModel.setCpnIssNo(Long.valueOf(9));
-        ccCpnIssueModel.setPrmNo(Long.valueOf(1));
-        ccCpnIssueModel.setMbrNo(mbrNo);
+        CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.builder()
+                .cpnIssNo(9L)
+                .prmNo(1L)
+                .mbrNo(mbrNo)
+                .build();
         promotionExternalService.couponUseCancel(ccCpnIssueModel);
     }
 
     @Test
     @DisplayName("쿠폰 적용")
-    void productConpon() {
-        RequestPromotionVo requestPromotionVo = new RequestPromotionVo();
-        requestPromotionVo.setMbrNo(mbrNo);
+    void productCoupon() {
         List<Product> productList = new ArrayList<>();
-        Product product1 = new Product();
-        product1.setGoodsNo("P001");
+        Product product1 = Product.builder()
+                .goodsNo("P001")
+                .build();
+
+        Product product2 = Product.builder()
+                .goodsNo("P002")
+                .build();
+
         productList.add(product1);
-        Product product2 = new Product();
-        product2.setGoodsNo("P002");
         productList.add(product2);
 
-        requestPromotionVo.setProductList(productList);
+        RequestPromotionVo requestPromotionVo = RequestPromotionVo.builder()
+                .mbrNo(mbrNo)
+                .productList(productList)
+                .build();
+
         promotionController.productCoupon(requestPromotionVo);
     }
 }

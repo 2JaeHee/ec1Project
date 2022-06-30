@@ -22,7 +22,7 @@ public class PromotionTest {
 
     @Test
     void priceDiscount(){
-        RequestPromotionVo reqVo = new RequestPromotionVo();
+        RequestPromotionVo reqVo = RequestPromotionVo.builder().build();
 
         calculationFactory.getPromotionCalculator(PromotionType.PRICE_DISCOUNT)
                 .getCalculationData(reqVo);
@@ -30,7 +30,7 @@ public class PromotionTest {
 
     @Test
     void productCoupon(){
-        RequestPromotionVo reqVo = new RequestPromotionVo();
+        RequestPromotionVo reqVo = RequestPromotionVo.builder().build();
 
         calculationFactory.getPromotionCalculator(PromotionType.PRODUCT_COUPON)
                 .getCalculationData(reqVo);
@@ -38,7 +38,7 @@ public class PromotionTest {
 
     @Test
     void cartCoupon(){
-        RequestPromotionVo reqVo = new RequestPromotionVo();
+        RequestPromotionVo reqVo = RequestPromotionVo.builder().build();
 
         calculationFactory.getPromotionCalculator(PromotionType.CART_COUPON)
                 .getCalculationData(reqVo);
@@ -46,7 +46,7 @@ public class PromotionTest {
     @Test
     void test(){
         //상품쿠폰
-        RequestPromotionVo requestPromotionVo = new RequestPromotionVo();
+        RequestPromotionVo requestPromotionVo = RequestPromotionVo.builder().build();
         promotionController.getPromotionApplyData(requestPromotionVo, PromotionType.PRODUCT_COUPON);
     }
 
