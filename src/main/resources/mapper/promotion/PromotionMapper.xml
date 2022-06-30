@@ -107,7 +107,6 @@
          WHERE 1=1
            AND cpb.use_yn = 'Y'
            AND cpat.use_yn = 'Y'
-           AND cpat.aply_tgt_no IN ('P001','P002')
         <if test="!@org.springframework.util.CollectionUtils@isEmpty(productList)">
            AND cpat.aply_tgt_no IN
                 <foreach collection="productList" item="item" open="(" separator="," close=")">
