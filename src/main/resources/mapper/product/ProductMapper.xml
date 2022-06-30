@@ -3,7 +3,24 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.plateer.ec1.product.mapper.ProductMapper">
-    <select id="getTest" resultType="int">
-        SELECT 1
+    <select id="getGoodsBaseInfo" parameterType="java.util.List" resultType="com.plateer.ec1.promotion.vo.Product">
+    SELECT goods_no
+            , goods_nm
+            , goods_dlv_tp_cd
+            , goods_tp_cd
+            , case when prm_prc <![CDATA[<=]]> sale_prc
+                    then prm_prc
+                    when prm_prc <![CDATA[>]]> sale_prc
+                    then sale_prc
+                    end prc
+            , prgs_stat_cd
+    FROM pr_goods_base
+    WHERE prgs_stat_cd = '20'
+        <if test="!@org.springframework.util.CollectionUtils@isEmpty(productList)">
+            AND goods_no IN
+            <foreach collection="list" item="item" open="(" separator="," close=")">
+                #{item.productNo}
+            </foreach>
+        </if>
     </select>
 </mapper>

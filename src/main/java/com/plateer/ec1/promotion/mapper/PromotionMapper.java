@@ -3,6 +3,8 @@ package com.plateer.ec1.promotion.mapper;
 import com.plateer.ec1.common.model.promotion.CcCpnBaseModel;
 import com.plateer.ec1.common.model.promotion.CcCpnIssueModel;
 import com.plateer.ec1.common.model.promotion.CcPrmBaseModel;
+import com.plateer.ec1.promotion.vo.AvailablePromotionResVo;
+import com.plateer.ec1.promotion.vo.RequestPromotionVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -35,4 +37,11 @@ public interface PromotionMapper {
      * @return CcCpnIssueModel
      */
     CcCpnIssueModel getCcCpnIssueInfo(CcCpnIssueModel ccCpnIssueModel);
+
+    /**
+     * 상품 별 프로모션 적용 대상 조회
+     * @param requestPromotionVo
+     * @return List<AvailablePromotionResVo>
+     */
+    List<AvailablePromotionResVo> getPrmAplyTgtList(RequestPromotionVo requestPromotionVo);
 }

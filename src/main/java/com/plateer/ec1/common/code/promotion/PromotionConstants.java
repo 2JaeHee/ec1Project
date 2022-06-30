@@ -9,4 +9,7 @@ public class PromotionConstants {
     public static final String ADMIN = "admin";
 
     public static final DateTimeFormatter YYYYMMDD = DateTimeFormatter.ofPattern("yyyyMMdd");
+    public static final String Y = "Y";
+    public static final String N = "N";
+
 }

@@ -1,16 +1,13 @@
 package com.plateer.ec1.promotion.vo;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
-public class Promotion {
-    private Long couponIssueNo;
-    private Long dcAmt;
+public class AvailablePromotionResVo {
+    private String aplyTgtNo;
 
     private Integer prmNo;
     private String prmNm;
@@ -26,5 +23,23 @@ public class Promotion {
     private int maxDcAmt;
     private String useYn;
     private String rmk;
+
+    private String goodsNo;
+    private String goodsNm;
+    private String goodsDlvTpCd;
+    private String goodsTpCd;
+    private Long prc;
+
+    private double calculateDcAmt;
+
+    private String maxBenefitYn;
+
+    public void setMaxDcAmt(Long prc){
+        this.calculateDcAmt = prc - this.dcVal;
+    }
+
+    public void setMaxBenefitYn(String maxBenefitYn){
+        this.maxBenefitYn = maxBenefitYn;
+    }
 
 }

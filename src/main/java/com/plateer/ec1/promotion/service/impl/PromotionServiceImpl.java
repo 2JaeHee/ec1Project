@@ -32,6 +32,7 @@ public class PromotionServiceImpl implements PromotionService {
 
             CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.builder().build();
             BeanUtils.copyProperties(ccCpnIssueReqVo, ccCpnIssueModel);
+
             promotionTrxMapper.saveCouponDownload(ccCpnIssueModel);
         }
     }

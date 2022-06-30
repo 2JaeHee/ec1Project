@@ -19,12 +19,9 @@
                 , max_dc_amt
                 , use_yn
                 , rmk
-                , sys_reg_dtime
-                , sys_regr_id
-                , sys_mod_dtime
-                , sys_modr_id
           FROM cc_prm_base
          WHERE prm_no = #{prmNo}
+           AND use_yn = 'Y'
     </select>
 
     <!-- 쿠폰 기본 정보 조회 -->
@@ -46,10 +43,6 @@
                 , cert_cd
                 , our_chrg_rt
                 , entr_chrg_rt
-                , sys_reg_dtime
-                , sys_regr_id
-                , sys_mod_dtime
-                , sys_modr_id
           FROM cc_cpn_base
          WHERE prm_no = #{prmNo}
     </select>
@@ -63,14 +56,10 @@
             , org_cpn_iss_no
             , cpn_cert_no
             , ord_no
-            , sys_reg_dtime
-            , sys_regr_id
-            , sys_mod_dtime
-            , sys_modr_id
           FROM cc_cpn_issue cci
          WHERE prm_no = #{prmNo}
            AND NOT EXISTS( SELECT 1 FROM cc_cpn_issue a
-                            WHERE a.org_cpn_iss_no = cci.cpn_iss_no))
+                            WHERE a.org_cpn_iss_no = cci.cpn_iss_no)
     </select>
 
     <!-- 쿠폰발급회원 정보 조회 -->
@@ -82,8 +71,6 @@
                 , org_cpn_iss_no
                 , cpn_cert_no
                 , ord_no
-                , sys_reg_dtime
-                , sys_regr_id
                 , sys_mod_dtime
                 , sys_modr_id
           FROM cc_cpn_issue cci
@@ -92,4 +79,53 @@
            AND NOT EXISTS( SELECT 1 FROM cc_cpn_issue a
                             WHERE a.org_cpn_iss_no = cci.cpn_iss_no))
     </select>
+
+    <select id="getPrmAplyTgtList" parameterType="com.plateer.ec1.promotion.vo.RequestPromotionVo" resultType="com.plateer.ec1.promotion.vo.AvailablePromotionResVo">
+        /* 상품 별 프로모션 적용 대상 조회 */
+        SELECT distinct ccb.prm_no
+                , cpb.prm_nm
+                , cpb.prm_kind_cd
+                , cpb.prm_priod_ccd
+                , cpb.prm_strt_dt
+                , cpb.prm_end_dt
+                , cpb.prm_std_dd
+                , cpb.emp_yn
+                , cpb.dc_ccd
+                , cpb.dc_val
+                , cpb.min_pur_amt
+                , cpb.max_dc_amt
+                , cpb.use_yn
+                , cpb.rmk
+                , cpat.aply_tgt_no
+          FROM cc_prm_base cpb
+         INNER JOIN cc_prm_aply_tgt cpat
+            ON cpb.prm_no = cpat.prm_no
+         INNER JOIN cc_cpn_base ccb
+            ON cpb.prm_no = ccb.prm_no
+         INNER JOIN cc_cpn_issue cci
+            ON ccb.prm_no = cci.prm_no
+         WHERE 1=1
+           AND cpb.use_yn = 'Y'
+           AND cpat.use_yn = 'Y'
+           AND cpat.aply_tgt_no IN ('P001','P002')
+        <!--
+        <if test="!@org.springframework.util.CollectionUtils@isEmpty(productList)">
+           AND cpat.aply_tgt_no IN
+                <foreach collection="productList" item="item" open="(" separator="," close=")">
+                    #{item.goodsNo}
+                </foreach>
+        </if>
+        -->
+           AND cci.mbr_no = #{mbrNo}
+           AND cci.cpn_use_dt ISNULL
+           AND NOT EXISTS( SELECT 1 FROM cc_cpn_issue a
+                            WHERE a.org_cpn_iss_no = cci.cpn_iss_no)
+    </select>
+
+
 </mapper>
+
+
+
+
+
