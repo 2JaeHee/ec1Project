@@ -16,11 +16,9 @@
             , prgs_stat_cd
     FROM pr_goods_base
     WHERE prgs_stat_cd = '20'
-        <if test="!@org.springframework.util.CollectionUtils@isEmpty(productList)">
             AND goods_no IN
             <foreach collection="list" item="item" open="(" separator="," close=")">
-                #{item.productNo}
+                #{item.goodsNo}
             </foreach>
-        </if>
     </select>
 </mapper>
