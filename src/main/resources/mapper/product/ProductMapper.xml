@@ -4,21 +4,25 @@
 
 <mapper namespace="com.plateer.ec1.product.mapper.ProductMapper">
     <select id="getGoodsBaseInfo" parameterType="java.util.List" resultType="com.plateer.ec1.promotion.vo.Product">
-    SELECT goods_no
-            , goods_nm
-            , goods_dlv_tp_cd
-            , goods_tp_cd
-            , case when prm_prc <![CDATA[<=]]> sale_prc
-                    then prm_prc
-                    when prm_prc <![CDATA[>]]> sale_prc
-                    then sale_prc
+        SELECT pgb.goods_no
+                , pgb.goods_nm
+                , pgb.goods_tp_cd
+                , case when prm_prc <![CDATA[<=]]> sale_prc
+                        then prm_prc
+                        when prm_prc <![CDATA[>]]> sale_prc
+                        then sale_prc
                     end prc
-            , prgs_stat_cd
-    FROM pr_goods_base
-    WHERE prgs_stat_cd = '20'
-            AND goods_no IN
-            <foreach collection="list" item="item" open="(" separator="," close=")">
-                #{item.goodsNo}
-            </foreach>
+                , pgb.prm_prc
+                , pgb.prgs_stat_cd
+                , cpat.prm_no
+          FROM pr_goods_base pgb
+         INNER JOIN cc_prm_aply_tgt cpat
+            ON pgb.goods_no = cpat.aply_tgt_no
+         WHERE 1=1
+           AND prgs_stat_cd = '20'
+           AND pgb.goods_no IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.goodsNo}
+        </foreach>
     </select>
 </mapper>

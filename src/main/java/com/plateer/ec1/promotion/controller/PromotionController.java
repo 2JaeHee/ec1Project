@@ -4,10 +4,7 @@ import com.plateer.ec1.promotion.enums.PromotionType;
 import com.plateer.ec1.promotion.factory.Calculation;
 import com.plateer.ec1.promotion.factory.CalculationFactory;
 import com.plateer.ec1.promotion.service.PromotionService;
-import com.plateer.ec1.promotion.vo.CcCpnIssueReqVo;
-import com.plateer.ec1.promotion.vo.RequestPromotionVo;
-import com.plateer.ec1.promotion.vo.ResponseBaseVo;
-import com.plateer.ec1.promotion.vo.ResponseProductCouponVo;
+import com.plateer.ec1.promotion.vo.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,14 +39,18 @@ public class PromotionController {
      * @param requestPromotionVo
      * @return
      */
-    public ResponseBaseVo productCoupon(RequestPromotionVo requestPromotionVo) {
+    public ResponseProductCouponVo productCoupon(RequestPromotionVo requestPromotionVo) {
         Calculation promotionCalculator = calculationFactory.getPromotionCalculator(PromotionType.PRODUCT_COUPON);
-        return promotionCalculator.getCalculationData(requestPromotionVo);
+        return (ResponseProductCouponVo) promotionCalculator.getCalculationData(requestPromotionVo);
     }
 
+    //장바구니쿠폰적용 (주문서에서 쿠폰적용 시 보이는 목록)
+    public ResponseCartCouponVo cartCoupon(RequestPromotionVo requestPromotionVo) {
+        Calculation promotionCalculator = calculationFactory.getPromotionCalculator(PromotionType.CART_COUPON);
+        return (ResponseCartCouponVo) promotionCalculator.getCalculationData(requestPromotionVo);
+    }
     //회원 별 포인트 조회 (주문서 - 포인트 영역에 노출)
 
-    //장바구니쿠폰적용 (주문서에서 쿠폰적용 시 보이는 목록)
 
     // PromotionExternalService
 

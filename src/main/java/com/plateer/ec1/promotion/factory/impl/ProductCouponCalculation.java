@@ -39,14 +39,13 @@ public class ProductCouponCalculation implements Calculation {
         // 상품 목록 조회
         List<Product> productList = productMapper.getGoodsBaseInfo(reqVo.getProductList());
         // 프로모션 목록
-        List<AvailablePromotionResVo> promotionList = getAvailablePromotionData(reqVo);
+        List<Promotion> promotionList = getAvailablePromotionData(reqVo);
 
         // 상품별 프로모션 가격설정
         List<ProductCouponVo> calculateDcAmtList = calculateDcAmt(productList, promotionList);
         //최대할인값 셋팅
-        ResponseProductCouponVo calculateMaxBenefitList = calculateMaxBenefit(calculateDcAmtList);
 
-        return calculateMaxBenefitList;
+        return calculateMaxBenefit(calculateDcAmtList);
     }
     /**
      * 조회 된 프로모션 정보 계산 적용
@@ -54,12 +53,12 @@ public class ProductCouponCalculation implements Calculation {
      * @param promotionList
      * @return List<ProductCouponVo>
      */
-    private List<ProductCouponVo> calculateDcAmt(List<Product> productList, List<AvailablePromotionResVo> promotionList) {
+    private List<ProductCouponVo> calculateDcAmt(List<Product> productList, List<Promotion> promotionList) {
         //상품번호 - 상품정보 map 생성
         Map<String, Product> productMap = getProductMap(productList);
 
         //조회 한 프로모션 목록에 상품가격 - 할인금액 샛팅
-        List<AvailablePromotionResVo> collect = promotionList.stream().map(vo -> {
+        List<Promotion> collect = promotionList.stream().map(vo -> {
             Product product = productMap.get(vo.getAplyTgtNo());
             if (PRM0003Enum.DISCOUNT.getCode() == vo.getDcCcd()) {
                 vo.setMaxDcAmtDiscount(product.getPrc());
@@ -71,13 +70,16 @@ public class ProductCouponCalculation implements Calculation {
 
         //ProductCouponVo 셋팅작업
         //상품번호 기준으로 프로모션 그룹핑
-        Map<String, List<AvailablePromotionResVo>> promotionMap = collect.stream().collect(Collectors.groupingBy(AvailablePromotionResVo::getAplyTgtNo));
+        Map<String, List<Promotion>> promotionMap = collect.stream().collect(Collectors.groupingBy(Promotion::getAplyTgtNo));
 
         //상품번호 기준으로 상품정보-프로모션정보 맵핑
-        return promotionMap.entrySet().stream().map(vo -> {
+        //product , promotionList
+        List<ProductCouponVo> test = promotionMap.entrySet().stream().map(vo -> {
             Product product = productMap.get(vo.getKey());
             return ProductCouponVo.of(product, vo.getValue());
         }).collect(Collectors.toList());
+
+        return test;
     }
     /**
      * 최대할인계산
@@ -93,12 +95,12 @@ public class ProductCouponCalculation implements Calculation {
 
     /**
      * 최대할인값 셋팅
-     * @param availablePromotionResVoList
+     * @param promotionList
      */
-    private void calculate(List<AvailablePromotionResVo> availablePromotionResVoList){
-        Optional<AvailablePromotionResVo> minPromotionResVo = availablePromotionResVoList.stream().min(Comparator.comparing(AvailablePromotionResVo::getCalculateDcAmt));
+    private void calculate(List<Promotion> promotionList){
+        Optional<Promotion> minPromotionResVo = promotionList.stream().min(Comparator.comparing(Promotion::getCalculateDcAmt));
 
-        minPromotionResVo.ifPresent(availablePromotionResVo -> availablePromotionResVoList.stream().map(vo -> {
+        minPromotionResVo.ifPresent(availablePromotionResVo -> promotionList.stream().map(vo -> {
             String maxBenefitYn = PromotionConstants.N;
             if (minPromotionResVo.get().getPrmNo().equals(vo.getPrmNo())) {
                 maxBenefitYn = PromotionConstants.Y;
@@ -113,7 +115,7 @@ public class ProductCouponCalculation implements Calculation {
      * @param requestPromotionVo
      * @return Promotion
      */
-    private List<AvailablePromotionResVo> getAvailablePromotionData(RequestPromotionVo requestPromotionVo){
+    private List<Promotion> getAvailablePromotionData(RequestPromotionVo requestPromotionVo){
         //적용 가능한 프로모션 정보 조회 (필수 : 상품번호 목록, 회원번호)
         return promotionMapper.getPrmAplyTgtList(requestPromotionVo);
     }

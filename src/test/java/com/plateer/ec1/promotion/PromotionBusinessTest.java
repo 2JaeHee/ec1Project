@@ -30,7 +30,7 @@ public class PromotionBusinessTest {
     void couponDownload() {
         // 회원정보
         CcCpnIssueReqVo ccCpnIssueReqVo = CcCpnIssueReqVo.builder()
-                .prmNo(3L)
+                .prmNo(1L)
                 .mbrNo(mbrNo)
                 .build();
 
@@ -62,7 +62,7 @@ public class PromotionBusinessTest {
     }
 
     @Test
-    @DisplayName("쿠폰 적용")
+    @DisplayName("상품 쿠폰 적용")
     void productCoupon() {
         List<Product> productList = new ArrayList<>();
         Product product1 = Product.builder()
@@ -82,5 +82,28 @@ public class PromotionBusinessTest {
                 .build();
 
         promotionController.productCoupon(requestPromotionVo);
+    }
+
+    @Test
+    @DisplayName("장바구니 쿠폰 적용")
+    void cartCoupon() {
+        List<Product> productList = new ArrayList<>();
+        Product product1 = Product.builder()
+                .goodsNo("P001")
+                .build();
+
+        Product product2 = Product.builder()
+                .goodsNo("P002")
+                .build();
+
+        productList.add(product1);
+        productList.add(product2);
+
+        RequestPromotionVo requestPromotionVo = RequestPromotionVo.builder()
+                .mbrNo(mbrNo)
+                .productList(productList)
+                .build();
+
+        promotionController.cartCoupon(requestPromotionVo);
     }
 }

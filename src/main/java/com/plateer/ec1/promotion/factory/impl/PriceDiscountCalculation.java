@@ -1,6 +1,6 @@
 package com.plateer.ec1.promotion.factory.impl;
 
-import com.plateer.ec1.promotion.vo.Promotion;
+import com.plateer.ec1.promotion.vo.PromotionTemp;
 import com.plateer.ec1.promotion.vo.RequestPromotionVo;
 import com.plateer.ec1.promotion.vo.ResponsePriceDcVo;
 import com.plateer.ec1.promotion.enums.PromotionType;
@@ -18,7 +18,7 @@ public class PriceDiscountCalculation implements Calculation {
      */
     @Override
     public ResponsePriceDcVo getCalculationData(RequestPromotionVo requestPromotionVo) {
-        Promotion promotion = getAvailablePromotionData(requestPromotionVo);
+        PromotionTemp promotion = getAvailablePromotionData(requestPromotionVo);
 
         ResponsePriceDcVo responsePriceDcVo = calculateDcAmt(promotion);
         return responsePriceDcVo;
@@ -34,7 +34,7 @@ public class PriceDiscountCalculation implements Calculation {
      * @param promotion
      * @return ResponseBaseVo
      */
-    private ResponsePriceDcVo calculateDcAmt(Promotion promotion) {
+    private ResponsePriceDcVo calculateDcAmt(PromotionTemp promotion) {
         log.info("[PriceDiscountCalculation.calculateDcAmt]");
         //조회 한 프로모션 정보로 상품 즉시할인 가격 계산
         log.info("조회 한 프로모션 정보로 상품 즉시할인 가격 계산");
@@ -45,10 +45,10 @@ public class PriceDiscountCalculation implements Calculation {
      * @param requestPromotionVo
      * @return Promotion
      */
-    private Promotion getAvailablePromotionData(RequestPromotionVo requestPromotionVo){
+    private PromotionTemp getAvailablePromotionData(RequestPromotionVo requestPromotionVo){
         log.info("[PriceDiscountCalculation.getAvailablePromotionData]");
         //즉시할인 프로모션 정보 조회
         log.info("가격즉시할인 프로모션 정보 조회");
-        return new Promotion();
+        return new PromotionTemp();
     }
 }
