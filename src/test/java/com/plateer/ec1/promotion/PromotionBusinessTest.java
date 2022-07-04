@@ -118,11 +118,4 @@ public class PromotionBusinessTest {
 
         promotionController.cartCoupon(requestPromotionVo);
     }
-//
-//    @Test
-//    void test() throws Exception {
-//        mockMvc.perform(post("/promotion/productCoupon"))
-//                .andExpect(status().isOk())
-//                .andReturn();
-//    }
 }

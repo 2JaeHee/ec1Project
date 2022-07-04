@@ -1,8 +1,8 @@
-package com.plateer.ec1.promotion.vo;
+package com.plateer.ec1.promotion.vo.res;
 
+import com.plateer.ec1.promotion.vo.CartCouponVo;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 

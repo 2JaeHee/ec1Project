@@ -7,6 +7,7 @@ import com.plateer.ec1.promotion.vo.*;
 import com.plateer.ec1.promotion.enums.PromotionType;
 import com.plateer.ec1.promotion.factory.Calculation;
 import com.plateer.ec1.promotion.vo.req.RequestPromotionVo;
+import com.plateer.ec1.promotion.vo.res.ResponseCartCouponVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

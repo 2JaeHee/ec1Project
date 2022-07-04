@@ -6,6 +6,8 @@ import com.plateer.ec1.promotion.factory.CalculationFactory;
 import com.plateer.ec1.promotion.service.PromotionService;
 import com.plateer.ec1.promotion.vo.*;
 import com.plateer.ec1.promotion.vo.req.RequestPromotionVo;
+import com.plateer.ec1.promotion.vo.res.ResponseBaseVo;
+import com.plateer.ec1.promotion.vo.res.ResponseCartCouponVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

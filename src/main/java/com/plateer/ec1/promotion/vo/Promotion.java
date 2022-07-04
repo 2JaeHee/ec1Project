@@ -39,21 +39,21 @@ public class Promotion {
         }
     }
 
+    public void setMaxDcAmtDiscountRate(Long prc){
+        this.calculateDcAmt = prc  * (this.dcVal / 100);
+    }
+
+    public void setMaxBenefitYn(Long prmNo){
+        this.maxBenefitYn = PromotionConstants.N;
+        if (Objects.equals(prmNo, this.prmNo)) {
+            this.maxBenefitYn = PromotionConstants.Y;
+        }
+    }
+
     public void setApplyPrmYn(Long prmNo) {
         this.applyPrmYn = PromotionConstants.N;
         if (Objects.equals(prmNo, this.prmNo)) {
             this.applyPrmYn = PromotionConstants.Y;
         }
     }
-
-    public void setMaxDcAmtDiscountRate(Long prc){
-        this.calculateDcAmt = prc  * (this.dcVal / 100);
-    }
-
-    public void setMaxBenefitYn(String maxBenefitYn){
-        this.maxBenefitYn = maxBenefitYn;
-    }
-
-
-
 }
