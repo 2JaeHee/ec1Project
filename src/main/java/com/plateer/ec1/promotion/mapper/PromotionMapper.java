@@ -4,7 +4,7 @@ import com.plateer.ec1.common.model.promotion.CcCpnBaseModel;
 import com.plateer.ec1.common.model.promotion.CcCpnIssueModel;
 import com.plateer.ec1.common.model.promotion.CcPrmBaseModel;
 import com.plateer.ec1.promotion.vo.Promotion;
-import com.plateer.ec1.promotion.vo.RequestPromotionVo;
+import com.plateer.ec1.promotion.vo.req.RequestPromotionVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

@@ -1,17 +1,12 @@
 package com.plateer.ec1.promotion;
 
-import com.plateer.ec1.common.model.promotion.CcCpnBaseModel;
-import com.plateer.ec1.common.model.promotion.CcCpnIssueModel;
 import com.plateer.ec1.promotion.controller.PromotionController;
 import com.plateer.ec1.promotion.enums.PromotionType;
 import com.plateer.ec1.promotion.factory.CalculationFactory;
-import com.plateer.ec1.promotion.vo.RequestPromotionVo;
-import org.junit.jupiter.api.DisplayName;
+import com.plateer.ec1.promotion.vo.req.RequestPromotionVo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
 
 @SpringBootTest
 public class PromotionTest {
@@ -19,14 +14,6 @@ public class PromotionTest {
     private PromotionController promotionController;
     @Autowired
     private CalculationFactory calculationFactory;
-
-    @Test
-    void priceDiscount(){
-        RequestPromotionVo reqVo = RequestPromotionVo.builder().build();
-
-        calculationFactory.getPromotionCalculator(PromotionType.PRICE_DISCOUNT)
-                .getCalculationData(reqVo);
-    }
 
     @Test
     void productCoupon(){
@@ -43,11 +30,4 @@ public class PromotionTest {
         calculationFactory.getPromotionCalculator(PromotionType.CART_COUPON)
                 .getCalculationData(reqVo);
     }
-    @Test
-    void test(){
-        //상품쿠폰
-        RequestPromotionVo requestPromotionVo = RequestPromotionVo.builder().build();
-        promotionController.getPromotionApplyData(requestPromotionVo, PromotionType.PRODUCT_COUPON);
-    }
-
 }

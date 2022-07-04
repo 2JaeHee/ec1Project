@@ -1,17 +1,22 @@
 package com.plateer.ec1.promotion.vo;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
+
+import javax.validation.constraints.NotNull;
 
 @Builder
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
+    @NotNull
     private String goodsNo;
-    private String goodsNm;
-    private String goodsDlvTpCd;
-    private String goodsTpCd;
+    @NotNull
+    private String itemNo;
+    @NotNull
     private Long prc;
-    private Integer prmNo;
+    private Long prmNo;
+    private Long cpnIssNo;
 
     private double calculateDcAmt;
 

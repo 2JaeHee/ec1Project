@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class CalculationFactory<T extends ResponseBaseVo> {
+public class CalculationFactory {
 
     private final Map<PromotionType, Calculation> calculatorMap = new HashMap<>();
 

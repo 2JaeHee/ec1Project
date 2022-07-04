@@ -80,7 +80,7 @@
                             WHERE a.org_cpn_iss_no = cci.cpn_iss_no))
     </select>
 
-    <select id="getPrmAplyTgtList" parameterType="com.plateer.ec1.promotion.vo.RequestPromotionVo" resultType="com.plateer.ec1.promotion.vo.Promotion">
+    <select id="getPrmAplyTgtList" parameterType="com.plateer.ec1.promotion.vo.req.RequestPromotionVo" resultType="com.plateer.ec1.promotion.vo.Promotion">
         /* 상품 별 프로모션 적용 대상 조회 */
         SELECT distinct ccb.prm_no
                 , cpb.prm_nm
@@ -119,7 +119,7 @@
                             WHERE a.org_cpn_iss_no = cci.cpn_iss_no)
     </select>
 <!-- 통합예정 -->
-    <select id="getPrmAplyTgtListTemp" parameterType="com.plateer.ec1.promotion.vo.RequestPromotionVo" resultType="com.plateer.ec1.promotion.vo.Promotion">
+    <select id="getPrmAplyTgtListTemp" parameterType="com.plateer.ec1.promotion.vo.req.RequestPromotionVo" resultType="com.plateer.ec1.promotion.vo.Promotion">
         /* 상품 별 프로모션 적용 대상 조회 */
         SELECT distinct ccb.prm_no
                 , cpb.prm_nm

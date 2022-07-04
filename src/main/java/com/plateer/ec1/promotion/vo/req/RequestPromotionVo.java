@@ -1,16 +1,19 @@
-package com.plateer.ec1.promotion.vo;
+package com.plateer.ec1.promotion.vo.req;
 
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.plateer.ec1.promotion.vo.Product;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Builder
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class RequestPromotionVo {
+    @NotNull
     private String mbrNo;
+    @NotNull
     private List<Product> productList;
 }

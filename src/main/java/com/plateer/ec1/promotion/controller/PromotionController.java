@@ -5,13 +5,13 @@ import com.plateer.ec1.promotion.factory.Calculation;
 import com.plateer.ec1.promotion.factory.CalculationFactory;
 import com.plateer.ec1.promotion.service.PromotionService;
 import com.plateer.ec1.promotion.vo.*;
+import com.plateer.ec1.promotion.vo.req.RequestPromotionVo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/promotion")
@@ -20,32 +20,33 @@ public class PromotionController {
     private final CalculationFactory calculationFactory;
     private final PromotionService promotionService;
 
-    public ResponseProductCouponVo getPromotionApplyData(RequestPromotionVo requestPromotionVo, PromotionType promotionType){
-        return (ResponseProductCouponVo) calculationFactory.getPromotionCalculator(promotionType)
-                .getCalculationData(requestPromotionVo);
-    }
-
     /**
      * 쿠폰 다운로드
      * @param ccCpnIssueReqVo
      */
-    @PutMapping("/couponDownload")
-    public void couponDownload(CcCpnIssueReqVo ccCpnIssueReqVo){
+    @RequestMapping(value = "/couponDownload", method = RequestMethod.PUT)
+    public void couponDownload(@Valid @RequestBody CcCpnIssueReqVo ccCpnIssueReqVo){
         promotionService.couponDownload(ccCpnIssueReqVo);
     }
 
     /**
      * 상품쿠폰 적용 (상품상세화면에서 쿠폰적용 시 보이는 목록)
+     * @param  requestPromotionVo
+     * @return ResponseBaseVo
+     */
+    @RequestMapping(value = "/productCouponApply", method = RequestMethod.POST)
+    public ResponseBaseVo productCouponApply(@Valid @RequestBody RequestPromotionVo requestPromotionVo) {
+        Calculation promotionCalculator = calculationFactory.getPromotionCalculator(PromotionType.PRODUCT_COUPON);
+        return promotionCalculator.getCalculationData(requestPromotionVo);
+    }
+
+    /**
+     *  장바구니쿠폰적용 (주문서에서 쿠폰적용 시 보이는 목록)
      * @param requestPromotionVo
      * @return
      */
-    public ResponseProductCouponVo productCoupon(RequestPromotionVo requestPromotionVo) {
-        Calculation promotionCalculator = calculationFactory.getPromotionCalculator(PromotionType.PRODUCT_COUPON);
-        return (ResponseProductCouponVo) promotionCalculator.getCalculationData(requestPromotionVo);
-    }
-
-    //장바구니쿠폰적용 (주문서에서 쿠폰적용 시 보이는 목록)
-    public ResponseCartCouponVo cartCoupon(RequestPromotionVo requestPromotionVo) {
+    @RequestMapping(value = "/cartCouponApply", method = RequestMethod.POST)
+    public ResponseCartCouponVo cartCoupon(@RequestBody RequestPromotionVo requestPromotionVo) {
         Calculation promotionCalculator = calculationFactory.getPromotionCalculator(PromotionType.CART_COUPON);
         return (ResponseCartCouponVo) promotionCalculator.getCalculationData(requestPromotionVo);
     }

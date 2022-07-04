@@ -6,6 +6,7 @@ import com.plateer.ec1.promotion.mapper.PromotionMapper;
 import com.plateer.ec1.promotion.vo.*;
 import com.plateer.ec1.promotion.enums.PromotionType;
 import com.plateer.ec1.promotion.factory.Calculation;
+import com.plateer.ec1.promotion.vo.req.RequestPromotionVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,7 @@ public class CartCouponCalculation implements Calculation {
      * @return ResponseCartCouponVo
      */
     private List<CartCouponVo> calculateDcAmt(List<Product> productList, List<Promotion> promotionList) {
-        Map<Integer, List<Product>> productMap = productList.stream().collect(Collectors.groupingBy(Product::getPrmNo));
+        Map<Long, List<Product>> productMap = productList.stream().collect(Collectors.groupingBy(Product::getPrmNo));
 
         List<CartCouponVo> collect = promotionList.stream().map(vo -> {
             List<Product> products = productMap.get(vo.getPrmNo());

@@ -5,18 +5,24 @@ import com.plateer.ec1.promotion.controller.PromotionController;
 import com.plateer.ec1.promotion.service.PromotionExternalService;
 import com.plateer.ec1.promotion.vo.CcCpnIssueReqVo;
 import com.plateer.ec1.promotion.vo.Product;
-import com.plateer.ec1.promotion.vo.RequestPromotionVo;
+import com.plateer.ec1.promotion.vo.req.RequestPromotionVo;
+import com.plateer.ec1.promotion.vo.req.ProductReq;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
+//@ExtendWith(SpringExtension.class)
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+//@AutoConfigureMockMvc
 public class PromotionBusinessTest {
+//    @Autowired
+//    private MockMvc mockMvc;
+
     @Autowired
     PromotionController promotionController;
     @Autowired
@@ -64,13 +70,20 @@ public class PromotionBusinessTest {
     @Test
     @DisplayName("상품 쿠폰 적용")
     void productCoupon() {
+
         List<Product> productList = new ArrayList<>();
         Product product1 = Product.builder()
                 .goodsNo("P001")
+                .itemNo("1")
+                .prc(29000L)
+                .prmNo(1L)
+                .cpnIssNo(1L)
                 .build();
 
         Product product2 = Product.builder()
                 .goodsNo("P002")
+                .itemNo("1")
+                .prc(10250L)
                 .build();
 
         productList.add(product1);
@@ -80,8 +93,7 @@ public class PromotionBusinessTest {
                 .mbrNo(mbrNo)
                 .productList(productList)
                 .build();
-
-        promotionController.productCoupon(requestPromotionVo);
+        promotionController.productCouponApply(requestPromotionVo);
     }
 
     @Test
@@ -101,9 +113,16 @@ public class PromotionBusinessTest {
 
         RequestPromotionVo requestPromotionVo = RequestPromotionVo.builder()
                 .mbrNo(mbrNo)
-                .productList(productList)
+//                .productList(productList)
                 .build();
 
         promotionController.cartCoupon(requestPromotionVo);
     }
+//
+//    @Test
+//    void test() throws Exception {
+//        mockMvc.perform(post("/promotion/productCoupon"))
+//                .andExpect(status().isOk())
+//                .andReturn();
+//    }
 }
