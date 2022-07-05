@@ -1,5 +1,6 @@
 package com.plateer.ec1.promotion.factory.impl;
 
+import com.plateer.ec1.common.code.promotion.PRM0003Enum;
 import com.plateer.ec1.common.code.promotion.PromotionConstants;
 import com.plateer.ec1.promotion.enums.PromotionType;
 import com.plateer.ec1.promotion.factory.Calculation;
@@ -55,7 +56,6 @@ public class ProductCouponCalculation implements Calculation {
 
         return promotionMapping(productList, promotionList);
     }
-
     /**
      * 상품번호 기준으로 프로모션 그룹핑
      * @param productList

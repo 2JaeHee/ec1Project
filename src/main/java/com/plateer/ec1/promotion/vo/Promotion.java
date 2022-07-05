@@ -2,6 +2,7 @@ package com.plateer.ec1.promotion.vo;
 
 import com.plateer.ec1.common.code.promotion.PRM0003Enum;
 import com.plateer.ec1.common.code.promotion.PromotionConstants;
+import com.plateer.ec1.common.validator.Validator;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -33,28 +34,15 @@ public class Promotion {
     private String maxBenefitYn;
     private String applyPrmYn;
 
+    //TODO 개선고민
     public void calculateAmtDiscount(Product product){
+        double paramDcVal = 0;
         if (PRM0003Enum.DISCOUNT.getCode().equals(this.getDcCcd())) {
-            setMaxDcAmtDiscount();
+            paramDcVal = this.dcVal;
         } else if (PRM0003Enum.DISCOUNT_RATE.getCode().equals(this.getDcCcd())){
-            setMaxDcAmtDiscountRate(product.getPrc());
+            paramDcVal = product.getPrc() * (this.dcVal / 100);
         }
-    }
-    private void setMaxDcAmtDiscount() {
-        if(this.maxDcAmt > this.dcVal){
-            this.calculateDcAmt = this.dcVal;
-        }else{
-            this.calculateDcAmt = this.maxDcAmt;
-        }
-    }
-
-    public void setMaxDcAmtDiscountRate(Long prc){
-        double calculateAmt = prc * (this.dcVal / 100);
-        if(this.maxDcAmt > calculateAmt){
-            this.calculateDcAmt = calculateAmt;
-        }else{
-            this.calculateDcAmt = this.maxDcAmt;
-        }
+        this.calculateDcAmt = Validator.isCompareValid.apply(this.maxDcAmt, paramDcVal);
     }
 
     public void setMaxBenefitYn(Long prmNo){

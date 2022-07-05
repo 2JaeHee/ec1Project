@@ -55,7 +55,7 @@
            AND ((cpb.prm_priod_ccd = '10'
                       AND NOW() <![CDATA[>=]]> cpb.prm_strt_dt AND NOW() <![CDATA[<]]> cpb.prm_end_dt + interval '1 day')
                 OR (cpb.prm_priod_ccd = '20'
-                         AND NOW() <![CDATA[>=]]> cpb.prm_strt_dt AND NOW() <![CDATA[<]]> cpb.prm_end_dt + (interval '1 day' * cpb.prm_std_dd) + interval '1 day'))
+                         AND NOW() <![CDATA[>=]]> cci.sys_mod_dtime AND NOW() <![CDATA[<]]> cci.sys_mod_dtime + (interval '1 day' * cpb.prm_std_dd) + interval '1 day'))
            AND cpat.use_yn = 'Y'
            -- 구분코드 케이스문 넣기 !!
         <if test="!@org.springframework.util.CollectionUtils@isEmpty(productList)">
@@ -64,14 +64,11 @@
                     #{item.goodsNo}
                 </foreach>
             AND cpat.aply_tgt_ccd = '10'
-            --            구분코드
         </if>
            AND ccb.cpn_kind_cd = #{cpnKindCd}
            AND ccb.degr_ccd = #{degrCcd}
            AND cci.mbr_no = #{mbrNo}
            AND cci.cpn_use_dt ISNULL
-           AND NOT EXISTS( SELECT 1 FROM cc_cpn_issue a
-                            WHERE a.org_cpn_iss_no = cci.cpn_iss_no)
     </select>
 <!-- 통합예정 -->
     <select id="getPrmAplyTgtListTemp" parameterType="com.plateer.ec1.promotion.vo.req.RequestPromotionVo" resultType="com.plateer.ec1.promotion.vo.Promotion">
