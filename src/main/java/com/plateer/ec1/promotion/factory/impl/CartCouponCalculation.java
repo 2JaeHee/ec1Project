@@ -33,12 +33,11 @@ public class CartCouponCalculation implements Calculation {
      */
     @Override
     public ResponseCartCouponVo getCalculationData(RequestPromotionVo reqVo) {
-        // 상품 목록 조회
-        List<Product> productList = productMapper.getGoodsBaseInfo(reqVo.getProductList());
-        // 프로모션 목록
+        List<Product> productList = reqVo.getProductList();
+        // 적용 가능한 프로모션 목록 (3차쿠폰만 조회)
         List<Promotion> promotionList = getAvailablePromotionData(reqVo);
-        List<CartCouponVo> calculateDcAmtList = calculateDcAmt(productList, promotionList);
 
+        List<CartCouponVo> calculateDcAmtList = calculateDcAmt(productList, promotionList);
         return calculateMaxBenefit(calculateDcAmtList);
     }
     /**
@@ -90,7 +89,6 @@ public class CartCouponCalculation implements Calculation {
      * @return Promotion
      */
     private List<Promotion> getAvailablePromotionData(RequestPromotionVo requestPromotionVo){
-        //적용 가능한 프로모션 정보 조회 (필수 : 상품번호 목록, 회원번호)
         return promotionMapper.getPrmAplyTgtListTemp(requestPromotionVo);
     }
 }

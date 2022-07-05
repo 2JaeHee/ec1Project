@@ -17,6 +17,7 @@ public class Product {
     private Long prc;
     private Long prmNo;
     private Long cpnIssNo;
+    private int ordCnt;
 
     private double calculateDcAmt;
 

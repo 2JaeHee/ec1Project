@@ -1,11 +1,11 @@
 package com.plateer.ec1.promotion.service;
 
-import com.plateer.ec1.promotion.vo.CcCpnIssueReqVo;
+import com.plateer.ec1.promotion.vo.req.RequestCouponIssueVo;
 
 public interface PromotionService {
     /**
      * 쿠폰 다운로드
-     * @param ccCpnIssueReqVo
+     * @param requestCouponIssueVo
      */
-    void couponDownload(CcCpnIssueReqVo ccCpnIssueReqVo);
+    void couponDownload(RequestCouponIssueVo requestCouponIssueVo);
 }

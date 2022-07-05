@@ -26,6 +26,8 @@ public class Promotion {
     private String useYn;
     private String rmk;
 
+    private Long cpnIssNo;
+
     private double calculateDcAmt;
 
     private String maxBenefitYn;
@@ -33,14 +35,26 @@ public class Promotion {
 
     public void calculateAmtDiscount(Product product){
         if (PRM0003Enum.DISCOUNT.getCode().equals(this.getDcCcd())) {
-            this.calculateDcAmt = this.dcVal;
+            setMaxDcAmtDiscount();
         } else if (PRM0003Enum.DISCOUNT_RATE.getCode().equals(this.getDcCcd())){
             setMaxDcAmtDiscountRate(product.getPrc());
         }
     }
+    private void setMaxDcAmtDiscount() {
+        if(this.maxDcAmt > this.dcVal){
+            this.calculateDcAmt = this.dcVal;
+        }else{
+            this.calculateDcAmt = this.maxDcAmt;
+        }
+    }
 
     public void setMaxDcAmtDiscountRate(Long prc){
-        this.calculateDcAmt = prc  * (this.dcVal / 100);
+        double calculateAmt = prc * (this.dcVal / 100);
+        if(this.maxDcAmt > calculateAmt){
+            this.calculateDcAmt = calculateAmt;
+        }else{
+            this.calculateDcAmt = this.maxDcAmt;
+        }
     }
 
     public void setMaxBenefitYn(Long prmNo){
@@ -50,9 +64,9 @@ public class Promotion {
         }
     }
 
-    public void setApplyPrmYn(Long prmNo) {
+    public void setApplyPrmYn(Long prmNo, Long cpnIssNo) {
         this.applyPrmYn = PromotionConstants.N;
-        if (Objects.equals(prmNo, this.prmNo)) {
+        if (Objects.equals(this.prmNo, prmNo) && Objects.equals(this.cpnIssNo, cpnIssNo)) {
             this.applyPrmYn = PromotionConstants.Y;
         }
     }

@@ -4,13 +4,16 @@ import com.plateer.ec1.promotion.enums.PromotionType;
 import com.plateer.ec1.promotion.factory.Calculation;
 import com.plateer.ec1.promotion.factory.CalculationFactory;
 import com.plateer.ec1.promotion.service.PromotionService;
-import com.plateer.ec1.promotion.vo.*;
+import com.plateer.ec1.promotion.vo.req.RequestCouponIssueVo;
 import com.plateer.ec1.promotion.vo.req.RequestPromotionVo;
 import com.plateer.ec1.promotion.vo.res.ResponseBaseVo;
 import com.plateer.ec1.promotion.vo.res.ResponseCartCouponVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 @Validated
@@ -24,11 +27,11 @@ public class PromotionController {
 
     /**
      * 쿠폰 다운로드
-     * @param ccCpnIssueReqVo
+     * @param requestCouponIssueVo
      */
     @RequestMapping(value = "/couponDownload", method = RequestMethod.PUT)
-    public void couponDownload(@Valid @RequestBody CcCpnIssueReqVo ccCpnIssueReqVo){
-        promotionService.couponDownload(ccCpnIssueReqVo);
+    public void couponDownload(@Valid @RequestBody RequestCouponIssueVo requestCouponIssueVo){
+        promotionService.couponDownload(requestCouponIssueVo);
     }
 
     /**
@@ -39,7 +42,11 @@ public class PromotionController {
     @RequestMapping(value = "/productCouponApply", method = RequestMethod.POST)
     public ResponseBaseVo productCouponApply(@Valid @RequestBody RequestPromotionVo requestPromotionVo) {
         Calculation promotionCalculator = calculationFactory.getPromotionCalculator(PromotionType.PRODUCT_COUPON);
-        return promotionCalculator.getCalculationData(requestPromotionVo);
+
+        ResponseBaseVo calculationData = promotionCalculator.getCalculationData(requestPromotionVo);
+        calculationData.setMemberNo(requestPromotionVo.getMbrNo());
+
+        return calculationData;
     }
 
     /**
@@ -48,16 +55,8 @@ public class PromotionController {
      * @return
      */
     @RequestMapping(value = "/cartCouponApply", method = RequestMethod.POST)
-    public ResponseCartCouponVo cartCoupon(@RequestBody RequestPromotionVo requestPromotionVo) {
+    public ResponseBaseVo cartCoupon(@RequestBody RequestPromotionVo requestPromotionVo) {
         Calculation promotionCalculator = calculationFactory.getPromotionCalculator(PromotionType.CART_COUPON);
-        return (ResponseCartCouponVo) promotionCalculator.getCalculationData(requestPromotionVo);
+        return promotionCalculator.getCalculationData(requestPromotionVo);
     }
-    //회원 별 포인트 조회 (주문서 - 포인트 영역에 노출)
-
-
-    // PromotionExternalService
-
-    //포인트사용 (결제 프로세스에서 서비스 호출)
-
-    //포인트사용취소 (결제 프로세스에서 서비스 호출)
 }

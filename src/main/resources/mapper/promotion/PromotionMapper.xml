@@ -24,63 +24,7 @@
            AND use_yn = 'Y'
     </select>
 
-    <!-- 쿠폰 기본 정보 조회 -->
-    <select id="getCcCpnBaseInfo" parameterType="long" resultType="com.plateer.ec1.common.model.promotion.CcCpnBaseModel">
-        SELECT prm_no
-                , cpn_kind_cd
-                , degr_ccd
-                , dc_sv_ccd
-                , mda_gb
-                , ent_chn_gb
-                , dwl_priod_ccd
-                , dwl_avl_strt_dd
-                , dwl_avl_end_dd
-                , dwl_std_dd
-                , dwl_psb_cnt
-                , psn_dwl_psb_cnt
-                , dwl_avl_plc
-                , iss_way_ccd
-                , cert_cd
-                , our_chrg_rt
-                , entr_chrg_rt
-          FROM cc_cpn_base
-         WHERE prm_no = #{prmNo}
-    </select>
-
-    <!-- 프로모션 별 쿠폰 발급회원 정보 목록 조회 -->
-    <select id="getCcCpnIssueList" parameterType="com.plateer.ec1.common.model.promotion.CcCpnIssueModel" resultType="com.plateer.ec1.common.model.promotion.CcCpnIssueModel">
-        SELECT prm_no
-            , cpn_iss_no
-            , mbr_no
-            , cpn_use_dt
-            , org_cpn_iss_no
-            , cpn_cert_no
-            , ord_no
-          FROM cc_cpn_issue cci
-         WHERE prm_no = #{prmNo}
-           AND NOT EXISTS( SELECT 1 FROM cc_cpn_issue a
-                            WHERE a.org_cpn_iss_no = cci.cpn_iss_no)
-    </select>
-
-    <!-- 쿠폰발급회원 정보 조회 -->
-    <select id="getCcCpnIssueInfo" parameterType="com.plateer.ec1.common.model.promotion.CcCpnIssueModel" resultType="com.plateer.ec1.common.model.promotion.CcCpnIssueModel">
-        SELECT prm_no
-                , cpn_iss_no
-                , mbr_no
-                , cpn_use_dt
-                , org_cpn_iss_no
-                , cpn_cert_no
-                , ord_no
-                , sys_mod_dtime
-                , sys_modr_id
-          FROM cc_cpn_issue cci
-         WHERE prm_no = #{prmNo}
-           AND cpn_iss_no = #{cpnIssNo}
-           AND NOT EXISTS( SELECT 1 FROM cc_cpn_issue a
-                            WHERE a.org_cpn_iss_no = cci.cpn_iss_no))
-    </select>
-
-    <select id="getPrmAplyTgtList" parameterType="com.plateer.ec1.promotion.vo.req.RequestPromotionVo" resultType="com.plateer.ec1.promotion.vo.Promotion">
+    <select id="getPrmAplyTgtList" parameterType="com.plateer.ec1.promotion.vo.req.PromotionApplyTargetVo" resultType="com.plateer.ec1.promotion.vo.Promotion">
         /* 상품 별 프로모션 적용 대상 조회 */
         SELECT distinct ccb.prm_no
                 , cpb.prm_nm
@@ -97,6 +41,7 @@
                 , cpb.use_yn
                 , cpb.rmk
                 , cpat.aply_tgt_no
+                , cci.cpn_iss_no
           FROM cc_prm_base cpb
          INNER JOIN cc_prm_aply_tgt cpat
             ON cpb.prm_no = cpat.prm_no
@@ -106,13 +51,23 @@
             ON ccb.prm_no = cci.prm_no
          WHERE 1=1
            AND cpb.use_yn = 'Y'
+           AND cpb.prm_kind_cd = #{prmKindCd}
+           AND ((cpb.prm_priod_ccd = '10'
+                      AND NOW() <![CDATA[>=]]> cpb.prm_strt_dt AND NOW() <![CDATA[<]]> cpb.prm_end_dt + interval '1 day')
+                OR (cpb.prm_priod_ccd = '20'
+                         AND NOW() <![CDATA[>=]]> cpb.prm_strt_dt AND NOW() <![CDATA[<]]> cpb.prm_end_dt + (interval '1 day' * cpb.prm_std_dd) + interval '1 day'))
            AND cpat.use_yn = 'Y'
+           -- 구분코드 케이스문 넣기 !!
         <if test="!@org.springframework.util.CollectionUtils@isEmpty(productList)">
            AND cpat.aply_tgt_no IN
                 <foreach collection="productList" item="item" open="(" separator="," close=")">
                     #{item.goodsNo}
                 </foreach>
+            AND cpat.aply_tgt_ccd = '10'
+            --            구분코드
         </if>
+           AND ccb.cpn_kind_cd = #{cpnKindCd}
+           AND ccb.degr_ccd = #{degrCcd}
            AND cci.mbr_no = #{mbrNo}
            AND cci.cpn_use_dt ISNULL
            AND NOT EXISTS( SELECT 1 FROM cc_cpn_issue a

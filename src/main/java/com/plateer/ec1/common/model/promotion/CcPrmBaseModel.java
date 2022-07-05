@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
 public class CcPrmBaseModel {
     private Integer prmNo;
     private String prmNm;
-    private String prmKindCd;
-    private String prmPriodCcd;
+    private String prmKindCd;               //PRM0001 프로모션 종류코드 (가격조정, 쿠폰)
+    private String prmPriodCcd;             //PRM0002 프로모션 기간코드( 기간, 기준일)
     private LocalDateTime prmStrtDt;
     private LocalDateTime prmEndDt;
     private int prmStdDd;
     private String empYn;
-    private String dcCcd;
+    private String dcCcd;                   //PRM0003 할인코드 (할인금액, 할인율)
     private double dcVal;
     private int minPurAmt;
     private int maxDcAmt;

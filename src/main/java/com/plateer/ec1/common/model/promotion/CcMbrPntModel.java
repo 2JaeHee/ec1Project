@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class CcMbrPntModel {
     private Long pntHstSeq;
     private String mbrNo;
-    private String svUseCcd;
+    private String svUseCcd;    //PRM0011 적립사용구분코드 (적립, 사용)
     private double svUseAmt;
     private double pntBlc;
     private String ordNo;

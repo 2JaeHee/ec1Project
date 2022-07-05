@@ -1,4 +1,4 @@
-package com.plateer.ec1.promotion.vo;
+package com.plateer.ec1.promotion.vo.req;
 
 import com.plateer.ec1.common.code.promotion.PromotionConstants;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Builder
-public class CcCpnIssueReqVo {
+public class RequestCouponIssueVo {
     @NotNull
     private Long cpnIssNo;
     @NotNull

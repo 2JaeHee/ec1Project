@@ -3,6 +3,7 @@ package com.plateer.ec1.promotion.service.impl;
 import com.plateer.ec1.common.code.promotion.PRM0002Enum;
 import com.plateer.ec1.common.model.promotion.CcCpnIssueModel;
 import com.plateer.ec1.common.model.promotion.CcPrmBaseModel;
+import com.plateer.ec1.promotion.mapper.CouponMapper;
 import com.plateer.ec1.promotion.mapper.PromotionMapper;
 import com.plateer.ec1.promotion.mapper.PromotionTrxMapper;
 import com.plateer.ec1.promotion.service.PromotionExternalService;
@@ -17,6 +18,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class PromotionExternalServiceImpl implements PromotionExternalService {
+    private final CouponMapper couponMapper;
     private final PromotionMapper promotionMapper;
     private final PromotionTrxMapper promotionTrxMapper;
 
@@ -43,7 +45,7 @@ public class PromotionExternalServiceImpl implements PromotionExternalService {
             }
         }
         if (PRM0002Enum.REFERENCE_DATE.getCode() == prmBaseInfo.getPrmPriodCcd()) {
-            CcCpnIssueModel ccCpnIssueInfo = promotionMapper.getCcCpnIssueInfo(paramModel);
+            CcCpnIssueModel ccCpnIssueInfo = couponMapper.getCcCpnIssueInfo(paramModel);
             if (prmBaseInfo.referenceDateValidate(ccCpnIssueInfo.getSysModDtime())) {
                 throw new ValidationException("프로모션 기간 종료 (기준일)");
             }

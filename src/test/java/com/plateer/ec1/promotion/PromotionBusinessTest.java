@@ -3,10 +3,9 @@ package com.plateer.ec1.promotion;
 import com.plateer.ec1.common.model.promotion.CcCpnIssueModel;
 import com.plateer.ec1.promotion.controller.PromotionController;
 import com.plateer.ec1.promotion.service.PromotionExternalService;
-import com.plateer.ec1.promotion.vo.CcCpnIssueReqVo;
+import com.plateer.ec1.promotion.vo.req.RequestCouponIssueVo;
 import com.plateer.ec1.promotion.vo.Product;
 import com.plateer.ec1.promotion.vo.req.RequestPromotionVo;
-import com.plateer.ec1.promotion.vo.req.ProductReq;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class PromotionBusinessTest {
     @DisplayName("쿠폰 다운로드")
     void couponDownload() {
         // 회원정보
-        CcCpnIssueReqVo ccCpnIssueReqVo = CcCpnIssueReqVo.builder()
+        RequestCouponIssueVo ccCpnIssueReqVo = RequestCouponIssueVo.builder()
                 .prmNo(1L)
                 .mbrNo(mbrNo)
                 .build();

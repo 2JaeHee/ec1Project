@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.plateer.ec1.promotion.mapper.CouponMapper">
+    <!-- 쿠폰 기본 정보 조회 -->
+    <select id="getCcCpnBaseInfo" parameterType="long" resultType="com.plateer.ec1.common.model.promotion.CcCpnBaseModel">
+        SELECT prm_no
+                , cpn_kind_cd
+                , degr_ccd
+                , dc_sv_ccd
+                , mda_gb
+                , ent_chn_gb
+                , dwl_priod_ccd
+                , dwl_avl_strt_dd
+                , dwl_avl_end_dd
+                , dwl_std_dd
+                , dwl_psb_cnt
+                , psn_dwl_psb_cnt
+                , dwl_avl_plc
+                , iss_way_ccd
+                , cert_cd
+                , our_chrg_rt
+                , entr_chrg_rt
+          FROM cc_cpn_base
+         WHERE prm_no = #{prmNo}
+    </select>
+
+    <!-- 프로모션 별 쿠폰 발급회원 정보 목록 조회 -->
+    <select id="getCcCpnIssueList" parameterType="com.plateer.ec1.common.model.promotion.CcCpnIssueModel" resultType="com.plateer.ec1.common.model.promotion.CcCpnIssueModel">
+        SELECT prm_no
+            , cpn_iss_no
+            , mbr_no
+            , cpn_use_dt
+            , org_cpn_iss_no
+            , cpn_cert_no
+            , ord_no
+          FROM cc_cpn_issue cci
+         WHERE prm_no = #{prmNo}
+           AND NOT EXISTS( SELECT 1 FROM cc_cpn_issue a
+                            WHERE a.org_cpn_iss_no = cci.cpn_iss_no)
+    </select>
+
+    <!-- 쿠폰발급회원 정보 조회 -->
+    <select id="getCcCpnIssueInfo" parameterType="com.plateer.ec1.common.model.promotion.CcCpnIssueModel" resultType="com.plateer.ec1.common.model.promotion.CcCpnIssueModel">
+        SELECT prm_no
+                , cpn_iss_no
+                , mbr_no
+                , cpn_use_dt
+                , org_cpn_iss_no
+                , cpn_cert_no
+                , ord_no
+                , sys_mod_dtime
+                , sys_modr_id
+          FROM cc_cpn_issue cci
+         WHERE prm_no = #{prmNo}
+           AND cpn_iss_no = #{cpnIssNo}
+           AND NOT EXISTS( SELECT 1 FROM cc_cpn_issue a
+                            WHERE a.org_cpn_iss_no = cci.cpn_iss_no))
+    </select>
+</mapper>
+
+
+
+
+
