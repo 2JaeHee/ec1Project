@@ -12,11 +12,11 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class RequestCouponIssueVo {
     @NotNull
-    private Long cpnIssNo;
-    @NotNull
     private Long prmNo;
     @NotNull
     private String mbrNo;
+
+    private Long cpnIssNo;
 
     @Builder.Default
     private String sysRegrId = PromotionConstants.ADMIN;

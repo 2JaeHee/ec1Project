@@ -18,7 +18,7 @@ public class PromotionApplyTargetVo {
     private String mbrNo;
     private List<Product> productList;
 
-    public static PromotionApplyTargetVo of(RequestPromotionVo vo) {
+    public static PromotionApplyTargetVo ofCouponInfo(RequestPromotionVo vo) {
         return PromotionApplyTargetVo.builder()
                 .prmKindCd(PRM0001Enum.COUPON.getCode())
                 .cpnKindCd(PRM0004Enum.PRODUCT_COUPON.getCode())
@@ -27,5 +27,15 @@ public class PromotionApplyTargetVo {
                 .productList(vo.getProductList())
                 .build();
     }
+    public static PromotionApplyTargetVo ofCartInfo(RequestPromotionVo vo) {
+        return PromotionApplyTargetVo.builder()
+                .prmKindCd(PRM0001Enum.COUPON.getCode())
+                .cpnKindCd(PRM0004Enum.CART_COUPON.getCode())
+                .degrCcd(PRM0012Enum.THREE.getCode())
+                .mbrNo(vo.getMbrNo())
+                .productList(vo.getProductList())
+                .build();
+    }
+
 
 }

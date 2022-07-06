@@ -12,6 +12,7 @@ import com.plateer.ec1.promotion.vo.req.RequestPromotionVo;
 import com.plateer.ec1.promotion.vo.res.ResponseProductCouponVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -35,15 +36,16 @@ public class ProductCouponCalculation implements Calculation {
      * 상품쿠폰 조회 (상품에 적용되는 쿠폰 프로모션)
      */
     @Override
+    @Transactional(readOnly = true)
     public ResponseProductCouponVo getCalculationData(RequestPromotionVo reqVo) {
         // 적용 가능한 프로모션 목록 (1차쿠폰만 조회)
         List<Promotion> promotionList = getAvailablePromotionData(reqVo);
         // 조회 된 프로모션 정보 계산 적용
         List<ProductCouponVo> calculateDcAmtList = calculateDcAmt(reqVo.getProductList(), promotionList);
         //최대할인값 셋팅
-        List<ProductCouponVo> productCouponVoList = calculateMaxBenefit(calculateDcAmtList);
+        List<ProductCouponVo> benefitPromotionList = calculateMaxBenefit(calculateDcAmtList);
 
-        return ResponseProductCouponVo.of(productCouponVoList);
+        return ResponseProductCouponVo.of(benefitPromotionList);
     }
     /**
      * 조회 된 프로모션 정보 계산 적용
@@ -71,6 +73,7 @@ public class ProductCouponCalculation implements Calculation {
      */
     private List<ProductCouponVo> promotionMapping(List<Product> productList, List<Promotion> promotionList) {
         Map<String, List<Promotion>> promotionMap = promotionList.stream().collect(Collectors.groupingBy(Promotion::getAplyTgtNo));
+
         return productList.stream().map(vo -> {
             List<Promotion> filterPromotionList = filterPromotionList(vo, promotionMap.get(vo.getGoodsNo()));   // 상품 최소구입금액, 상품가격 체크
             return ProductCouponVo.of(vo, filterPromotionList);
@@ -116,7 +119,7 @@ public class ProductCouponCalculation implements Calculation {
      * 상품 쿠폰 정보 조회 (적용가능한 프로모션 조회)
      */
     private List<Promotion> getAvailablePromotionData(RequestPromotionVo requestPromotionVo){
-        return promotionMapper.getPrmAplyTgtList(PromotionApplyTargetVo.of(requestPromotionVo));
+        return promotionMapper.getPrmAplyTgtList(PromotionApplyTargetVo.ofCouponInfo(requestPromotionVo));
     }
 
     /**

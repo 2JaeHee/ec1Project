@@ -27,7 +27,7 @@ public class PromotionServiceImpl implements PromotionService {
         CcCpnBaseModel ccCpnBaseInfo = couponMapper.getCcCpnBaseInfo(requestCouponIssueVo.getPrmNo());
         //쿠폰 다운로드 가능 기간 체크
         if(ccCpnBaseInfo.periodValidate()) {
-            downloadAvailableCountValidate(requestCouponIssueVo, ccCpnBaseInfo);
+//            downloadAvailableCountValidate(requestCouponIssueVo, ccCpnBaseInfo);
 
             CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.builder().build();
             BeanUtils.copyProperties(requestCouponIssueVo, ccCpnIssueModel);

@@ -40,8 +40,10 @@
                 , cpb.max_dc_amt
                 , cpb.use_yn
                 , cpb.rmk
-                , cpat.aply_tgt_no
                 , cci.cpn_iss_no
+--           <if test="cpnKindCd == '10'">
+                , cpat.aply_tgt_no
+--           </if>
           FROM cc_prm_base cpb
          INNER JOIN cc_prm_aply_tgt cpat
             ON cpb.prm_no = cpat.prm_no

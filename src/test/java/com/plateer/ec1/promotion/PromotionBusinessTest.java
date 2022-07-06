@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +29,14 @@ public class PromotionBusinessTest {
     PromotionExternalService promotionExternalService;
 
     // 회원번호(테스트를 위해 고정값 사용)
-    private final String mbrNo = "test01";
+    private final String mbrNo = "test02";
 
     @Test
     @DisplayName("쿠폰 다운로드")
     void couponDownload() {
         // 회원정보
         RequestCouponIssueVo ccCpnIssueReqVo = RequestCouponIssueVo.builder()
-                .prmNo(1L)
+                .prmNo(2L)
                 .mbrNo(mbrNo)
                 .build();
 
@@ -110,18 +111,32 @@ public class PromotionBusinessTest {
         List<Product> productList = new ArrayList<>();
         Product product1 = Product.builder()
                 .goodsNo("P001")
+                .itemNo("1")
+                .ordCnt(1)
+                .prc(29000L)
                 .build();
 
         Product product2 = Product.builder()
+                .goodsNo("P001")
+                .itemNo("2")
+                .ordCnt(3)
+                .prc(29000L)
+                .build();
+
+        Product product3 = Product.builder()
                 .goodsNo("P002")
+                .itemNo("1")
+                .ordCnt(5)
+                .prc(29000L)
                 .build();
 
         productList.add(product1);
         productList.add(product2);
+        productList.add(product3);
 
         RequestPromotionVo requestPromotionVo = RequestPromotionVo.builder()
                 .mbrNo(mbrNo)
-//                .productList(productList)
+                .productList(productList)
                 .build();
 
         promotionController.cartCoupon(requestPromotionVo);
