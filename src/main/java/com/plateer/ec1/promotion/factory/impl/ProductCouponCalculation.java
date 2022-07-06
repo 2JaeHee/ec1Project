@@ -14,10 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -73,9 +70,9 @@ public class ProductCouponCalculation implements Calculation {
      */
     private List<ProductCouponVo> promotionMapping(List<Product> productList, List<Promotion> promotionList) {
         Map<String, List<Promotion>> promotionMap = promotionList.stream().collect(Collectors.groupingBy(Promotion::getAplyTgtNo));
-
         return productList.stream().map(vo -> {
-            List<Promotion> filterPromotionList = filterPromotionList(vo, promotionMap.get(vo.getGoodsNo()));   // 상품 최소구입금액, 상품가격 체크
+            // 상품 최소구입금액, 상품가격 체크
+            List<Promotion> filterPromotionList = promotionMap.containsKey(vo.getGoodsNo()) ? filterPromotionList(vo, promotionMap.get(vo.getGoodsNo())) : new ArrayList<>();
             return ProductCouponVo.of(vo, filterPromotionList);
         }).collect(Collectors.toList());
     }
