@@ -1,7 +1,6 @@
 package com.plateer.ec1.promotion.factory.impl;
 
-import com.plateer.ec1.common.code.promotion.PRM0003Enum;
-import com.plateer.ec1.common.code.promotion.PromotionConstants;
+import com.plateer.ec1.common.utils.CollectionUtil;
 import com.plateer.ec1.promotion.enums.PromotionType;
 import com.plateer.ec1.promotion.factory.Calculation;
 import com.plateer.ec1.promotion.mapper.PromotionMapper;
@@ -9,13 +8,18 @@ import com.plateer.ec1.promotion.vo.Product;
 import com.plateer.ec1.promotion.vo.ProductCouponVo;
 import com.plateer.ec1.promotion.vo.Promotion;
 import com.plateer.ec1.promotion.vo.req.PromotionApplyTargetVo;
-import com.plateer.ec1.promotion.vo.res.ResponseProductCouponVo;
 import com.plateer.ec1.promotion.vo.req.RequestPromotionVo;
+import com.plateer.ec1.promotion.vo.res.ResponseProductCouponVo;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,10 +38,12 @@ public class ProductCouponCalculation implements Calculation {
     public ResponseProductCouponVo getCalculationData(RequestPromotionVo reqVo) {
         // 적용 가능한 프로모션 목록 (1차쿠폰만 조회)
         List<Promotion> promotionList = getAvailablePromotionData(reqVo);
-        // 상품별 프로모션 가격설정
+        // 조회 된 프로모션 정보 계산 적용
         List<ProductCouponVo> calculateDcAmtList = calculateDcAmt(reqVo.getProductList(), promotionList);
         //최대할인값 셋팅
-        return calculateMaxBenefit(calculateDcAmtList);
+        List<ProductCouponVo> productCouponVoList = calculateMaxBenefit(calculateDcAmtList);
+
+        return ResponseProductCouponVo.of(productCouponVoList);
     }
     /**
      * 조회 된 프로모션 정보 계산 적용
@@ -56,6 +62,7 @@ public class ProductCouponCalculation implements Calculation {
 
         return promotionMapping(productList, promotionList);
     }
+
     /**
      * 상품번호 기준으로 프로모션 그룹핑
      * @param productList
@@ -64,33 +71,35 @@ public class ProductCouponCalculation implements Calculation {
      */
     private List<ProductCouponVo> promotionMapping(List<Product> productList, List<Promotion> promotionList) {
         Map<String, List<Promotion>> promotionMap = promotionList.stream().collect(Collectors.groupingBy(Promotion::getAplyTgtNo));
-
         return productList.stream().map(vo -> {
-            List<Promotion> promotions = checkMinPurAmt(vo, promotionMap.get(vo.getGoodsNo()));
-            return ProductCouponVo.of(vo, promotions);
+            List<Promotion> filterPromotionList = filterPromotionList(vo, promotionMap.get(vo.getGoodsNo()));   // 상품 최소구입금액, 상품가격 체크
+            return ProductCouponVo.of(vo, filterPromotionList);
         }).collect(Collectors.toList());
     }
 
     /**
-     * 상품별 프로모션 최소금액 충족 체크
-     * @param vo
-     * @param promotions
+     * 상품 별 프로모션 적용 시 최소구매금액체크
+     * @param promotionList
+     * @param product
      * @return
      */
-    private List<Promotion> checkMinPurAmt(Product vo, List<Promotion> promotions) {
-        return promotions.stream()
-                .filter(prmVo -> prmVo.getMinPurAmt() <= vo.getPrc())
-                .collect(Collectors.toList());
+    //TODO 변경예정
+    private List<Promotion> filterPromotionList(Product product, List<Promotion> promotionList){
+        return promotionList.stream().filter(vo -> {
+            return vo.getMinPurAmt() <= product.getPrc();
+        }).collect(Collectors.toList());
     }
+
     /**
      * 최대할인계산
      */
-    private ResponseProductCouponVo calculateMaxBenefit(List<ProductCouponVo> productCouponVoList) {
+    private List<ProductCouponVo> calculateMaxBenefit(List<ProductCouponVo> productCouponVoList) {
         for(ProductCouponVo vo: productCouponVoList){
             calculate(vo.getPromotionList());
         }
-        return ResponseProductCouponVo.of(productCouponVoList);
+        return productCouponVoList;
     }
+
     /**
      * 최대할인값 셋팅
      */
@@ -109,10 +118,13 @@ public class ProductCouponCalculation implements Calculation {
     private List<Promotion> getAvailablePromotionData(RequestPromotionVo requestPromotionVo){
         return promotionMapper.getPrmAplyTgtList(PromotionApplyTargetVo.of(requestPromotionVo));
     }
+
     /**
      * 상품 List -> 상품 번호 기준으로 Map으로 변환
      */
     private Map<String, Product> getProductMap(List<Product> productList){
-        return productList.stream().collect(Collectors.toMap(Product::getGoodsNo, vo -> vo));
+        return productList.stream()
+                .filter(CollectionUtil.distinctByKey(Product::getGoodsNo))
+                .collect(Collectors.toMap(Product::getGoodsNo, vo -> vo));
     }
 }

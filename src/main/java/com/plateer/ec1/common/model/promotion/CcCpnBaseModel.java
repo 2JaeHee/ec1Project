@@ -1,14 +1,11 @@
 package com.plateer.ec1.common.model.promotion;
 
 import com.plateer.ec1.common.code.promotion.PromotionConstants;
-import com.plateer.ec1.common.validator.Validator;
+import com.plateer.ec1.common.validator.DateValidator;
 import lombok.Getter;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 @Getter
@@ -37,7 +34,7 @@ public class CcCpnBaseModel {
 
 
     public boolean periodValidate() {
-        return Validator.isPeriodValid
+        return DateValidator.isPeriodValid
                 .test(LocalDate.parse(this.dwlAvlStrtDd, PromotionConstants.YYYYMMDD), LocalDate.parse(this.dwlAvlEndDd, PromotionConstants.YYYYMMDD));
     }
 

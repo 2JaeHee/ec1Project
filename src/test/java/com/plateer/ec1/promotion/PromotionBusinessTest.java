@@ -80,13 +80,22 @@ public class PromotionBusinessTest {
                 .build();
 
         Product product2 = Product.builder()
-                .goodsNo("P002")
+                .goodsNo("P001")
                 .itemNo("1")
+                .prc(29000L)
+                .prmNo(1L)
+                .cpnIssNo(1L)
+                .build();
+
+        Product product3 = Product.builder()
+                .goodsNo("P002")
+                .itemNo("2")
                 .prc(10250L)
                 .build();
 
         productList.add(product1);
         productList.add(product2);
+        productList.add(product3);
 
         RequestPromotionVo requestPromotionVo = RequestPromotionVo.builder()
                 .mbrNo(mbrNo)

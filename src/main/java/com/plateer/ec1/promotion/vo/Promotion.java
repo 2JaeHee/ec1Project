@@ -2,7 +2,6 @@ package com.plateer.ec1.promotion.vo;
 
 import com.plateer.ec1.common.code.promotion.PRM0003Enum;
 import com.plateer.ec1.common.code.promotion.PromotionConstants;
-import com.plateer.ec1.common.validator.Validator;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -36,13 +35,18 @@ public class Promotion {
 
     //TODO 개선고민
     public void calculateAmtDiscount(Product product){
+        double paramDcVal = getParamDcVal(product);
+        this.calculateDcAmt = this.maxDcAmt > paramDcVal ? paramDcVal : this.maxDcAmt;
+    }
+
+    private double getParamDcVal(Product product) {
         double paramDcVal = 0;
         if (PRM0003Enum.DISCOUNT.getCode().equals(this.getDcCcd())) {
             paramDcVal = this.dcVal;
         } else if (PRM0003Enum.DISCOUNT_RATE.getCode().equals(this.getDcCcd())){
             paramDcVal = product.getPrc() * (this.dcVal / 100);
         }
-        this.calculateDcAmt = Validator.isCompareValid.apply(this.maxDcAmt, paramDcVal);
+        return paramDcVal;
     }
 
     public void setMaxBenefitYn(Long prmNo){
