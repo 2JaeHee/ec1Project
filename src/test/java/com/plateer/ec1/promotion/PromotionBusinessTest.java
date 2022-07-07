@@ -131,7 +131,7 @@ public class PromotionBusinessTest {
                 .goodsNo("P006")
                 .itemNo("1")
                 .prc(140000L)
-                .ordCnt(3)
+                .ordCnt(10)
                 .build();
 
         productList.add(product1);

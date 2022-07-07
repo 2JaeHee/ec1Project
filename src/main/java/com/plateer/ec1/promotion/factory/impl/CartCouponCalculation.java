@@ -80,7 +80,7 @@ public class CartCouponCalculation implements Calculation {
      * @return ResponseCartCouponVo
      */
     private List<CartCouponVo> calculateDcAmt(List<CartCouponVo> productList) {
-
+        //수량 정보 필요 ?
         List<CartCouponVo> calculateList = productList.stream().map(prd -> {
             Promotion promotion = prd.getPromotion();
             prd.getProductList().stream().map(vo -> {
@@ -93,7 +93,8 @@ public class CartCouponCalculation implements Calculation {
         //프로모션 할인금액 계산
        return calculateList.stream().map(vo -> {
             double sum = vo.getProductList().stream().mapToDouble(Product::getCalculateDcAmt).sum();    //총 할인금액
-            vo.getPromotion().setCalculateDcAmt(sum);
+           Promotion promotion = vo.getPromotion();
+           promotion.setCalculateDcAmt(promotion.getCalculateDcAmt(sum));
             return vo;
         }).collect(Collectors.toList());
     }

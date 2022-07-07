@@ -35,7 +35,11 @@ public class Promotion {
     //TODO 개선고민
     public void calculateAmtDiscount(Product product){
         double paramDcVal = getParamDcVal(product);
-        this.calculateDcAmt = this.maxDcAmt > paramDcVal ? paramDcVal : this.maxDcAmt;
+        this.calculateDcAmt = getCalculateDcAmt(paramDcVal);
+    }
+
+    public double getCalculateDcAmt(double paramDcVal) {
+        return this.maxDcAmt > paramDcVal ? paramDcVal : this.maxDcAmt;
     }
 
     private double getParamDcVal(Product product) {

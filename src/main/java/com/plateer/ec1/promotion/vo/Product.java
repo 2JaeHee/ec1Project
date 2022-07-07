@@ -25,7 +25,7 @@ public class Product {
 
     public void calculateAmtDiscount(Promotion promotion){
         double paramDcVal = getParamDcVal(promotion);
-        this.calculateDcAmt = promotion.getMaxDcAmt() > paramDcVal ? paramDcVal : promotion.getMaxDcAmt();
+        this.calculateDcAmt = paramDcVal * ordCnt;
     }
 
     private double getParamDcVal(Promotion promotion) {
