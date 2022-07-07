@@ -7,4 +7,6 @@ import lombok.Setter;
 @Setter
 public class ResponseBaseVo {
     private String memberNo;
+
+
 }

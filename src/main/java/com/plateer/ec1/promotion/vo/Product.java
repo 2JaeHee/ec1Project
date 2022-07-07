@@ -22,6 +22,6 @@ public class Product {
     private double calculateDcAmt;
 
     public void setMaxDcAmtDiscount(double dcVal){
-        this.calculateDcAmt = this.prc - dcVal;
+        this.calculateDcAmt = dcVal;
     }
 }

@@ -3,25 +3,21 @@ package com.plateer.ec1.promotion;
 import com.plateer.ec1.common.model.promotion.CcCpnIssueModel;
 import com.plateer.ec1.promotion.controller.PromotionController;
 import com.plateer.ec1.promotion.service.PromotionExternalService;
-import com.plateer.ec1.promotion.vo.req.RequestCouponIssueVo;
 import com.plateer.ec1.promotion.vo.Product;
+import com.plateer.ec1.promotion.vo.req.RequestCouponIssueVo;
 import com.plateer.ec1.promotion.vo.req.RequestPromotionVo;
+import com.plateer.ec1.promotion.vo.res.ResponseBaseVo;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-//@ExtendWith(SpringExtension.class)
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-//@AutoConfigureMockMvc
 public class PromotionBusinessTest {
-//    @Autowired
-//    private MockMvc mockMvc;
 
     @Autowired
     PromotionController promotionController;
@@ -29,14 +25,14 @@ public class PromotionBusinessTest {
     PromotionExternalService promotionExternalService;
 
     // 회원번호(테스트를 위해 고정값 사용)
-    private final String mbrNo = "test02";
+    private final String mbrNo = "test01";
 
     @Test
     @DisplayName("쿠폰 다운로드")
     void couponDownload() {
         // 회원정보
         RequestCouponIssueVo ccCpnIssueReqVo = RequestCouponIssueVo.builder()
-                .prmNo(2L)
+                .prmNo(3L)
                 .mbrNo(mbrNo)
                 .build();
 
@@ -78,25 +74,19 @@ public class PromotionBusinessTest {
                 .prc(29000L)
                 .prmNo(1L)
                 .cpnIssNo(1L)
+                .ordCnt(2)
                 .build();
+
 
         Product product2 = Product.builder()
-                .goodsNo("P001")
-                .itemNo("1")
-                .prc(29000L)
-                .prmNo(1L)
-                .cpnIssNo(1L)
-                .build();
-
-        Product product3 = Product.builder()
                 .goodsNo("P002")
                 .itemNo("2")
                 .prc(10250L)
+                .ordCnt(3)
                 .build();
 
         productList.add(product1);
         productList.add(product2);
-        productList.add(product3);
 
         RequestPromotionVo requestPromotionVo = RequestPromotionVo.builder()
                 .mbrNo(mbrNo)
@@ -112,27 +102,22 @@ public class PromotionBusinessTest {
         Product product1 = Product.builder()
                 .goodsNo("P001")
                 .itemNo("1")
-                .ordCnt(1)
                 .prc(29000L)
+                .prmNo(1L)
+                .cpnIssNo(1L)
+                .ordCnt(2)
                 .build();
+
 
         Product product2 = Product.builder()
-                .goodsNo("P001")
-                .itemNo("2")
-                .ordCnt(3)
-                .prc(29000L)
-                .build();
-
-        Product product3 = Product.builder()
                 .goodsNo("P002")
-                .itemNo("1")
-                .ordCnt(5)
-                .prc(29000L)
+                .itemNo("2")
+                .prc(10250L)
+                .ordCnt(3)
                 .build();
 
         productList.add(product1);
         productList.add(product2);
-        productList.add(product3);
 
         RequestPromotionVo requestPromotionVo = RequestPromotionVo.builder()
                 .mbrNo(mbrNo)

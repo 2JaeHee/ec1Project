@@ -1,7 +1,5 @@
 package com.plateer.ec1.promotion.factory.impl;
 
-import com.plateer.ec1.common.code.promotion.PRM0004Enum;
-import com.plateer.ec1.common.code.promotion.PromotionConstants;
 import com.plateer.ec1.common.utils.CollectionUtil;
 import com.plateer.ec1.product.mapper.ProductMapper;
 import com.plateer.ec1.promotion.mapper.PromotionMapper;
@@ -42,74 +40,87 @@ public class CartCouponCalculation implements Calculation {
         // 적용 가능한 프로모션 목록 (3차쿠폰만 조회)
         List<Promotion> promotionList = getAvailablePromotionData(reqVo);
 
-
+        // 프로모션 기준으로 상품 그룹핑
+        List<CartCouponVo> productMappingList = productMapping(reqVo.getProductList(), promotionList);
         // 조회 된 프로모션 정보 계산 적용
-        List<CartCouponVo> calculateDcAmtList = calculateDcAmt(reqVo.getProductList(), promotionList);
+        List<CartCouponVo> calculateDcAmtList = calculateDcAmt(productMappingList);
         //최대할인값 셋팅
-        //List<CartCouponVo> benefitPromotionList = calculateMaxBenefit(calculateDcAmtList);
+        List<CartCouponVo> benefitPromotionList = calculateMaxBenefit(calculateDcAmtList);
 
-        return null;
-//        return ResponseCartCouponVo.of(benefitPromotionList);
+        return ResponseCartCouponVo.of(benefitPromotionList);
     }
+
+    private List<CartCouponVo> productMapping(List<Product> reqProductList, List<Promotion> promotionList) {
+        //parameter 상품번호별 상품 그룹핑
+        Map<String, List<Product>> reqProductGruping = reqProductList.stream().collect(Collectors.groupingBy(Product::getGoodsNo));
+
+        //프로모션별 그룹핑 (IssueNo별 상품번호 조회를 위해)
+        Map<Long, List<Promotion>> promotionGruping = promotionList.stream().collect(Collectors.groupingBy(Promotion::getCpnIssNo));
+
+        // 프로모션 List
+        List<Promotion> filterPromotionList = promotionList.stream().filter(CollectionUtil.distinctByKey(Promotion::getCpnIssNo)).collect(Collectors.toList());
+
+        List<CartCouponVo> collect = filterPromotionList.stream().map(vo -> {
+            List<Promotion> promotions = promotionGruping.get(vo.getCpnIssNo());
+            List<Product> productList = new ArrayList<>();
+            reqProductList.stream().map(reqVo -> {
+
+                for (Promotion promotion : promotions) {
+                    if (reqVo.getGoodsNo().equals(promotion.getAplyTgtNo())) {
+                        productList.add(reqVo);
+                    }
+                }
+                return productList;
+            }).collect(Collectors.toList());
+            return CartCouponVo.of(vo, productList);
+        }).collect(Collectors.toList());
+
+        return collect;
+    }
+
     /**
      * 조회 된 프로모션 정보 계산 적용
      *
      * @return ResponseCartCouponVo
      */
-    private List<CartCouponVo> calculateDcAmt(List<Product> productList, List<Promotion> promotionList) {
-        List<Promotion> filterPromotionList = promotionList.stream().filter(CollectionUtil.distinctByKey(Promotion::getCpnIssNo)).collect(Collectors.toList());
+    private List<CartCouponVo> calculateDcAmt(List<CartCouponVo> productList) {
 
-        Map<String, Product> collect1 = productList.stream().collect(Collectors.toMap(Product::getGoodsNo, vo -> vo));
-
-        Map<Long, List<Promotion>> collect2 = promotionList.stream().collect(Collectors.groupingBy(Promotion::getCpnIssNo, Collectors.toList()));
-
-//        collect2.entrySet().stream().map(vo -> {
-//
-//        })
-
-
-        filterPromotionList.stream().map(vo -> {
-            List<Product> prodctList = new ArrayList<>();
-
-            return CartCouponVo.of(vo, prodctList);
+        List<CartCouponVo> calculateList = productList.stream().map(prd -> {
+            Promotion promotion = prd.getPromotion();
+            prd.getProductList().stream().map(vo -> {
+                promotion.calculateAmtDiscount(vo);
+                vo.setMaxDcAmtDiscount(promotion.getCalculateDcAmt());
+                return vo;
+            }).collect(Collectors.toList());
+            return prd;
         }).collect(Collectors.toList());
 
-
-        Map<Long, List<Product>> productMap = productList.stream().collect(Collectors.groupingBy(Product::getPrmNo));
-
-
-        List<CartCouponVo> collect = filterPromotionList.stream().map(vo -> {
-            List<Product> products = productMap.get(vo.getPrmNo());
-            return CartCouponVo.of(vo, products);
+        //프로모션 할인금액 계산
+        //TODO 주문수량 곱해서 넣어주기
+       return calculateList.stream().map(vo -> {
+            double sum = vo.getProductList().stream().mapToDouble(Product::getCalculateDcAmt).sum();
+            vo.getPromotion().setSumCalculateDcAmt(sum);
+            return vo;
         }).collect(Collectors.toList());
-
-
-
-        // List<Product>
-        return collect;
     }
 
     /**
      * 최대할인계산
      * @param cartCouponVoList
+     * @return
      */
     private List<CartCouponVo> calculateMaxBenefit(List<CartCouponVo> cartCouponVoList) {
-        Map<Promotion, Double> calculateDcAmtMap = new HashMap<>();
+        Optional<CartCouponVo> maxPromotionResVo = cartCouponVoList.stream().max(Comparator.comparing(vo -> vo.getPromotion().getSumCalculateDcAmt()));
 
-        for (CartCouponVo vo : cartCouponVoList) {
-            double sum = vo.getProductList().stream().mapToDouble(Product::getCalculateDcAmt).sum();
-            calculateDcAmtMap.put(vo.getPromotion(), sum);
+        List<CartCouponVo> collect = new ArrayList<>();
+        if (maxPromotionResVo.isPresent()) {
+            collect = cartCouponVoList.stream().map(vo -> {
+                vo.getPromotion().setMaxBenefitYn(maxPromotionResVo.get().getPromotion().getPrmNo());
+                return vo;
+            }).collect(Collectors.toList());
         }
 
-        Promotion maxPromotion = Collections.max(calculateDcAmtMap.entrySet(), Comparator.comparingDouble(Map.Entry::getValue)).getKey();
-        //TODO 수정예정
-        return cartCouponVoList.stream()
-                .filter(vo -> vo.getPromotion().equals(maxPromotion))
-                .map(couponVo -> {
-                    couponVo.setMaxBenefitYn(PromotionConstants.Y);
-                    return couponVo;
-                }).collect(Collectors.toList());
-
+        return collect;
     }
 
     /**

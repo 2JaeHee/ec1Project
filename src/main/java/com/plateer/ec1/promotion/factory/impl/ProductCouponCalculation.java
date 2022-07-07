@@ -54,7 +54,7 @@ public class ProductCouponCalculation implements Calculation {
         //프로모션 할인가격, 기적용프로모션 setting
         promotionList.stream().map(vo -> {
             Product product = productMap.get(vo.getAplyTgtNo());
-            vo.setApplyPrmYn(product.getPrmNo(), product.getCpnIssNo());
+            //vo.setApplyPrmYn(product.getPrmNo(), product.getCpnIssNo());
             vo.calculateAmtDiscount(product);
             return vo;
         }).collect(Collectors.toList());

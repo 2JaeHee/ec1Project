@@ -1,14 +1,13 @@
 package com.plateer.ec1.common.model.promotion;
 
 import com.plateer.ec1.common.code.promotion.PromotionConstants;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 @Builder
 @Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CcCpnIssueModel {
     private Long cpnIssNo;
     private Long prmNo;

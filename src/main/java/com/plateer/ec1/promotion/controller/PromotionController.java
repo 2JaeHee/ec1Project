@@ -45,7 +45,6 @@ public class PromotionController {
 
         ResponseBaseVo calculationData = promotionCalculator.getCalculationData(requestPromotionVo);
         calculationData.setMemberNo(requestPromotionVo.getMbrNo());
-
         return calculationData;
     }
 

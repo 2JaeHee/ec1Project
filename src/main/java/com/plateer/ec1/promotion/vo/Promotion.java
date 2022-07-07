@@ -29,7 +29,7 @@ public class Promotion {
     private Long cpnIssNo;
 
     private double calculateDcAmt;
-
+    private double sumCalculateDcAmt;
     private String maxBenefitYn;
     private String applyPrmYn;
 
@@ -61,5 +61,8 @@ public class Promotion {
         if (Objects.equals(this.prmNo, prmNo) && Objects.equals(this.cpnIssNo, cpnIssNo)) {
             this.applyPrmYn = PromotionConstants.Y;
         }
+    }
+    public void setSumCalculateDcAmt(double amt) {
+        this.sumCalculateDcAmt = amt;
     }
 }
