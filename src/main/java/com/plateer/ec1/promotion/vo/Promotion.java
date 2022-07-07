@@ -28,8 +28,7 @@ public class Promotion {
 
     private Long cpnIssNo;
 
-    private double calculateDcAmt;
-    private double sumCalculateDcAmt;
+    private double calculateDcAmt;      //할인금액
     private String maxBenefitYn;
     private String applyPrmYn;
 
@@ -41,9 +40,9 @@ public class Promotion {
 
     private double getParamDcVal(Product product) {
         double paramDcVal = 0;
-        if (PRM0003Enum.DISCOUNT.getCode().equals(this.getDcCcd())) {
+        if (PRM0003Enum.DISCOUNT.getCode().equals(this.dcCcd)) {
             paramDcVal = this.dcVal;
-        } else if (PRM0003Enum.DISCOUNT_RATE.getCode().equals(this.getDcCcd())){
+        } else if (PRM0003Enum.DISCOUNT_RATE.getCode().equals(this.dcCcd)){
             paramDcVal = product.getPrc() * (this.dcVal / 100);
         }
         return paramDcVal;
@@ -62,7 +61,7 @@ public class Promotion {
             this.applyPrmYn = PromotionConstants.Y;
         }
     }
-    public void setSumCalculateDcAmt(double amt) {
-        this.sumCalculateDcAmt = amt;
+    public void setCalculateDcAmt(double amt) {
+        this.calculateDcAmt = amt;
     }
 }

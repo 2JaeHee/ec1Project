@@ -39,8 +39,7 @@ public class CartCouponCalculation implements Calculation {
     public ResponseCartCouponVo getCalculationData(RequestPromotionVo reqVo) {
         // 적용 가능한 프로모션 목록 (3차쿠폰만 조회)
         List<Promotion> promotionList = getAvailablePromotionData(reqVo);
-
-        // 프로모션 기준으로 상품 그룹핑
+        // 프로모션 기준으로 상품 맵핑
         List<CartCouponVo> productMappingList = productMapping(reqVo.getProductList(), promotionList);
         // 조회 된 프로모션 정보 계산 적용
         List<CartCouponVo> calculateDcAmtList = calculateDcAmt(productMappingList);
@@ -54,17 +53,17 @@ public class CartCouponCalculation implements Calculation {
         //parameter 상품번호별 상품 그룹핑
         Map<String, List<Product>> reqProductGruping = reqProductList.stream().collect(Collectors.groupingBy(Product::getGoodsNo));
 
-        //프로모션별 그룹핑 (IssueNo별 상품번호 조회를 위해)
+        //적용 가능한 프로모션별 그룹핑 (IssueNo별 상품번호 조회를 위해)
         Map<Long, List<Promotion>> promotionGruping = promotionList.stream().collect(Collectors.groupingBy(Promotion::getCpnIssNo));
 
         // 프로모션 List
         List<Promotion> filterPromotionList = promotionList.stream().filter(CollectionUtil.distinctByKey(Promotion::getCpnIssNo)).collect(Collectors.toList());
 
-        List<CartCouponVo> collect = filterPromotionList.stream().map(vo -> {
+        //TODO 개선필요
+        return filterPromotionList.stream().map(vo -> {
             List<Promotion> promotions = promotionGruping.get(vo.getCpnIssNo());
             List<Product> productList = new ArrayList<>();
             reqProductList.stream().map(reqVo -> {
-
                 for (Promotion promotion : promotions) {
                     if (reqVo.getGoodsNo().equals(promotion.getAplyTgtNo())) {
                         productList.add(reqVo);
@@ -74,10 +73,7 @@ public class CartCouponCalculation implements Calculation {
             }).collect(Collectors.toList());
             return CartCouponVo.of(vo, productList);
         }).collect(Collectors.toList());
-
-        return collect;
     }
-
     /**
      * 조회 된 프로모션 정보 계산 적용
      *
@@ -88,29 +84,26 @@ public class CartCouponCalculation implements Calculation {
         List<CartCouponVo> calculateList = productList.stream().map(prd -> {
             Promotion promotion = prd.getPromotion();
             prd.getProductList().stream().map(vo -> {
-                promotion.calculateAmtDiscount(vo);
-                vo.setMaxDcAmtDiscount(promotion.getCalculateDcAmt());
+                vo.calculateAmtDiscount(promotion);
                 return vo;
             }).collect(Collectors.toList());
             return prd;
         }).collect(Collectors.toList());
 
         //프로모션 할인금액 계산
-        //TODO 주문수량 곱해서 넣어주기
        return calculateList.stream().map(vo -> {
-            double sum = vo.getProductList().stream().mapToDouble(Product::getCalculateDcAmt).sum();
-            vo.getPromotion().setSumCalculateDcAmt(sum);
+            double sum = vo.getProductList().stream().mapToDouble(Product::getCalculateDcAmt).sum();    //총 할인금액
+            vo.getPromotion().setCalculateDcAmt(sum);
             return vo;
         }).collect(Collectors.toList());
     }
-
     /**
      * 최대할인계산
      * @param cartCouponVoList
      * @return
      */
     private List<CartCouponVo> calculateMaxBenefit(List<CartCouponVo> cartCouponVoList) {
-        Optional<CartCouponVo> maxPromotionResVo = cartCouponVoList.stream().max(Comparator.comparing(vo -> vo.getPromotion().getSumCalculateDcAmt()));
+        Optional<CartCouponVo> maxPromotionResVo = cartCouponVoList.stream().max(Comparator.comparing(vo -> vo.getPromotion().getCalculateDcAmt()));
 
         List<CartCouponVo> collect = new ArrayList<>();
         if (maxPromotionResVo.isPresent()) {
@@ -119,7 +112,6 @@ public class CartCouponCalculation implements Calculation {
                 return vo;
             }).collect(Collectors.toList());
         }
-
         return collect;
     }
 

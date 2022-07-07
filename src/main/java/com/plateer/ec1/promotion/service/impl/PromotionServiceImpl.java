@@ -25,12 +25,14 @@ public class PromotionServiceImpl implements PromotionService {
     @Override
     public void couponDownload(RequestCouponIssueVo requestCouponIssueVo) {
         CcCpnBaseModel ccCpnBaseInfo = couponMapper.getCcCpnBaseInfo(requestCouponIssueVo.getPrmNo());
-        //쿠폰 다운로드 가능 기간 체크
+        //쿠폰 다운로드 가능 기간 체크 (쿠폰 다운로드 시 다운로드 가능기간을 이용해 다운로드 여부판단)
         if(ccCpnBaseInfo.periodValidate()) {
             downloadAvailableCountValidate(requestCouponIssueVo, ccCpnBaseInfo);
 
-            CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.builder().build();
-            BeanUtils.copyProperties(requestCouponIssueVo, ccCpnIssueModel);
+            CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.builder()
+                    .mbrNo(requestCouponIssueVo.getMbrNo())
+                    .prmNo(requestCouponIssueVo.getPrmNo())
+                    .build();
 
             promotionTrxMapper.saveCouponDownload(ccCpnIssueModel);
         }

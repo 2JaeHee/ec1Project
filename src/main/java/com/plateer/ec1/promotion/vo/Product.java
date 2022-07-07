@@ -1,5 +1,6 @@
 package com.plateer.ec1.promotion.vo;
 
+import com.plateer.ec1.common.code.promotion.PRM0003Enum;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
@@ -21,7 +22,20 @@ public class Product {
 
     private double calculateDcAmt;
 
-    public void setMaxDcAmtDiscount(double dcVal){
-        this.calculateDcAmt = dcVal;
+
+    public void calculateAmtDiscount(Promotion promotion){
+        double paramDcVal = getParamDcVal(promotion);
+        this.calculateDcAmt = promotion.getMaxDcAmt() > paramDcVal ? paramDcVal : promotion.getMaxDcAmt();
     }
+
+    private double getParamDcVal(Promotion promotion) {
+        double paramDcVal = 0;
+        if (PRM0003Enum.DISCOUNT.getCode().equals(promotion.getDcCcd())) {
+            paramDcVal = promotion.getDcVal();
+        } else if (PRM0003Enum.DISCOUNT_RATE.getCode().equals(promotion.getDcCcd())){
+            paramDcVal = this.getPrc() * (promotion.getDcVal() / 100);
+        }
+        return paramDcVal;
+    }
+
 }
