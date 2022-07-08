@@ -37,16 +37,36 @@ public class ProductCouponCalculation implements Calculation {
     public ResponseProductCouponVo getCalculationData(RequestPromotionVo reqVo) {
         // 적용 가능한 프로모션 목록 (1차쿠폰만 조회)
         List<Promotion> promotionList = getAvailablePromotionData(reqVo);
+        //상품 별 프로모션 맵핑
+//        List<ProductCouponVo> promotionMaplingList = promotionMapping(reqVo.getProductList(), promotionList);
         // 조회 된 프로모션 정보 계산 적용
+//        List<ProductCouponVo> calculateDcAmtList = calculateDcAmt(reqVo.getProductList(), promotionMaplingList);
         List<ProductCouponVo> calculateDcAmtList = calculateDcAmt(reqVo.getProductList(), promotionList);
         //최대할인값 셋팅
         List<ProductCouponVo> benefitPromotionList = calculateMaxBenefit(calculateDcAmtList);
 
         return ResponseProductCouponVo.of(benefitPromotionList);
     }
+
     /**
      * 조회 된 프로모션 정보 계산 적용
      */
+    /*
+    private List<ProductCouponVo> calculateDcAmt(List<Product> productList, List<ProductCouponVo> promotionMaplingList) {
+        //상품번호 - 상품정보 map 생성
+        Map<String, Product> productMap = getProductMap(productList);
+
+        return promotionMaplingList.stream().map(prm -> {
+            prm.getPromotionList().stream().map(vo -> {
+                Product product = productMap.get(vo.getAplyTgtNo());
+                //vo.setApplyPrmYn(product.getPrmNo(), product.getCpnIssNo());
+                vo.calculateAmtDiscount(product);
+                return vo;
+            }).collect(Collectors.toList());
+            return prm;
+        }).collect(Collectors.toList());
+    }
+    */
     private List<ProductCouponVo> calculateDcAmt(List<Product> productList, List<Promotion> promotionList) {
         //상품번호 - 상품정보 map 생성
         Map<String, Product> productMap = getProductMap(productList);
@@ -61,7 +81,6 @@ public class ProductCouponCalculation implements Calculation {
 
         return promotionMapping(productList, promotionList);
     }
-
     /**
      * 상품번호 기준으로 프로모션 그룹핑
      * @param productList
@@ -76,14 +95,24 @@ public class ProductCouponCalculation implements Calculation {
             return ProductCouponVo.of(vo, filterPromotionList);
         }).collect(Collectors.toList());
     }
-
+    /*
+    private List<ProductCouponVo> promotionMapping(List<Product> productList, List<Promotion> promotionList) {
+        List<Promotion> promotionListTemp = promotionList;
+        List<ProductCouponVo> productCouponVoList = new ArrayList<>();
+        for (Product product : productList) {
+            List<Promotion> targetPromotion = promotionListTemp.stream().filter(o -> o.getAplyTgtNo().equals(product.getGoodsNo())).collect(Collectors.toList());
+            productCouponVoList.add(ProductCouponVo.of(product, targetPromotion));
+            promotionListTemp.removeIf(targetPromotion::contains);
+        }
+        return productCouponVoList;
+    }
+*/
     /**
      * 상품 별 프로모션 적용 시 최소구매금액체크
      * @param promotionList
      * @param product
      * @return
      */
-    //TODO 변경예정
     private List<Promotion> filterPromotionList(Product product, List<Promotion> promotionList){
         return promotionList.stream().filter(vo -> {
             return vo.getMinPurAmt() <= product.getPrc();

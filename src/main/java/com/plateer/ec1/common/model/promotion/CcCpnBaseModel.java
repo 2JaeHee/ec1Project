@@ -2,12 +2,14 @@ package com.plateer.ec1.common.model.promotion;
 
 import com.plateer.ec1.common.code.promotion.PromotionConstants;
 import com.plateer.ec1.common.validator.DateValidator;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.function.Predicate;
 
+@Builder
 @Getter
 public class CcCpnBaseModel {
     private Long prmNo;
@@ -38,8 +40,11 @@ public class CcCpnBaseModel {
                 .test(LocalDate.parse(this.dwlAvlStrtDd, PromotionConstants.YYYYMMDD), LocalDate.parse(this.dwlAvlEndDd, PromotionConstants.YYYYMMDD));
     }
 
-    public Predicate<Integer> dwlPsbCntValid = (cnt) -> this.getDwlPsbCnt() > cnt;
+    public boolean isDwlPsbCntValid(int cnt) {
+        return this.getDwlPsbCnt() > cnt;
+    }
 
-    public Predicate<Integer> psnDwlPsbCntValid = (cnt) -> this.getPsnDwlPsbCnt() > cnt;
-
+    public boolean isPsnDwlPsbCntValid(int cnt) {
+        return this.getPsnDwlPsbCnt() > cnt;
+    }
 }

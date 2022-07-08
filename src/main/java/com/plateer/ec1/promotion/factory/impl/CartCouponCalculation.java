@@ -61,7 +61,7 @@ public class CartCouponCalculation implements Calculation {
 
         //TODO 개선필요
         return filterPromotionList.stream().map(vo -> {
-            List<Promotion> promotions = promotionGruping.get(vo.getCpnIssNo());
+            List<Promotion> promotions = promotionGruping.get(vo.getCpnIssNo());    //IssueNo별 상품번호f리스트 (select data)
             List<Product> productList = new ArrayList<>();
             reqProductList.stream().map(reqVo -> {
                 for (Promotion promotion : promotions) {
@@ -80,7 +80,6 @@ public class CartCouponCalculation implements Calculation {
      * @return ResponseCartCouponVo
      */
     private List<CartCouponVo> calculateDcAmt(List<CartCouponVo> productList) {
-        //수량 정보 필요 ?
         List<CartCouponVo> calculateList = productList.stream().map(prd -> {
             Promotion promotion = prd.getPromotion();
             prd.getProductList().stream().map(vo -> {

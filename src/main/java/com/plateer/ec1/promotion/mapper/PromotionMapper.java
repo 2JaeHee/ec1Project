@@ -26,11 +26,4 @@ public interface PromotionMapper {
      */
     List<Promotion> getPrmAplyTgtList(PromotionApplyTargetVo vo);
 
-    /**
-     * 상품 별 프로모션 적용 대상 조회
-     * @param requestPromotionVo
-     * @return List<AvailablePromotionResVo>
-     */
-    List<Promotion> getPrmAplyTgtListTemp(RequestPromotionVo requestPromotionVo);
-
 }

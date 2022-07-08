@@ -2,18 +2,12 @@ package com.plateer.ec1.promotion;
 
 import com.plateer.ec1.common.model.promotion.CcCpnIssueModel;
 import com.plateer.ec1.promotion.controller.PromotionController;
-import com.plateer.ec1.promotion.enums.PromotionType;
-import com.plateer.ec1.promotion.factory.Calculation;
-import com.plateer.ec1.promotion.factory.CalculationFactory;
 import com.plateer.ec1.promotion.factory.impl.CartCouponCalculation;
 import com.plateer.ec1.promotion.service.PromotionExternalService;
-import com.plateer.ec1.promotion.service.PromotionService;
 import com.plateer.ec1.promotion.vo.Product;
 import com.plateer.ec1.promotion.vo.req.RequestCouponIssueVo;
 import com.plateer.ec1.promotion.vo.req.RequestPromotionVo;
-import com.plateer.ec1.promotion.vo.res.ResponseBaseVo;
 import com.plateer.ec1.promotion.vo.res.ResponseCartCouponVo;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,18 +28,22 @@ public class PromotionBusinessTest {
 
 
     // 회원번호(테스트를 위해 고정값 사용)
-    private final String mbrNo = "test03";
+    private final String mbrNo = "test02";
 
     @Test
     @DisplayName("쿠폰 다운로드")
     void couponDownload() {
         // 회원정보
         RequestCouponIssueVo ccCpnIssueReqVo = RequestCouponIssueVo.builder()
-                .prmNo(7L)
+                .prmNo(8L)
                 .mbrNo(mbrNo)
                 .build();
 
         promotionController.couponDownload(ccCpnIssueReqVo);
+        
+        //필수값
+        //경계값 vo 테스트 사용하면 좋다
+        //테스트케이스
     }
 
     @Test
@@ -75,40 +73,45 @@ public class PromotionBusinessTest {
     @Test
     @DisplayName("상품 쿠폰 적용")
     void productCoupon() {
-
-        List<Product> productList = new ArrayList<>();
-        Product product1 = Product.builder()
-                .goodsNo("P001")
-                .itemNo("1")
-                .prc(29000L)
-                .prmNo(1L)
-                .cpnIssNo(1L)
-                .ordCnt(2)
-                .build();
-
-
-        Product product2 = Product.builder()
-                .goodsNo("P002")
-                .itemNo("2")
-                .prc(10250L)
-                .ordCnt(3)
-                .build();
-
-        productList.add(product1);
-        productList.add(product2);
-
-        RequestPromotionVo requestPromotionVo = RequestPromotionVo.builder()
-                .mbrNo(mbrNo)
-                .productList(productList)
-                .build();
-
-        ResponseCartCouponVo res = cartCouponCalculation.getCalculationData(requestPromotionVo);
-        res.getCartCouponVoList().get(0).getPromotion().getCalculateDcAmt();
+        RequestPromotionVo requestPromotionVo = setParameter();
+        promotionController.productCouponApply(requestPromotionVo);
     }
 
     @Test
     @DisplayName("장바구니 쿠폰 적용")
     void cartCoupon() {
+        RequestPromotionVo requestPromotionVo = setParameter();
+        promotionController.cartCoupon(requestPromotionVo);
+    }
+
+    private RequestPromotionVo setParameter(){
+        List<Product> productList = new ArrayList<>();
+        Product product1 = Product.builder().goodsNo("P001").itemNo("1").prc(29000L).prmNo(1L).cpnIssNo(1L).ordCnt(2).build();
+        Product product2 = Product.builder().goodsNo("P001").itemNo("2").prc(29000L).ordCnt(2).build();
+        Product product3 = Product.builder().goodsNo("P002").itemNo("1").prc(10250L).ordCnt(1).build();
+        Product product4 = Product.builder().goodsNo("P002").itemNo("2").prc(10250L).ordCnt(1).build();
+        Product product5 = Product.builder().goodsNo("P005").itemNo("1").prc(9000L).ordCnt(1).build();
+        Product product6 = Product.builder().goodsNo("P005").itemNo("2").prc(9000L).ordCnt(1).build();
+        Product product7 = Product.builder().goodsNo("P005").itemNo("3").prc(9000L).ordCnt(1).build();
+        Product product8 = Product.builder().goodsNo("P007").itemNo("1").prc(24000L).ordCnt(1).build();
+        Product product9 = Product.builder().goodsNo("P007").itemNo("2").prc(24000L).ordCnt(1).build();
+        Product product10 = Product.builder().goodsNo("P007").itemNo("3").prc(24000L).ordCnt(1).build();
+
+        productList.add(product1);
+        productList.add(product2);
+        productList.add(product3);
+        productList.add(product4);
+        productList.add(product5);
+        productList.add(product6);
+        productList.add(product7);
+        productList.add(product8);
+        productList.add(product9);
+        productList.add(product10);
+
+        return RequestPromotionVo.builder().mbrNo(mbrNo).productList(productList).build();
+    }
+
+    private void temp(){
         List<Product> productList = new ArrayList<>();
         Product product1 = Product.builder()
                 .goodsNo("P001")
@@ -119,30 +122,34 @@ public class PromotionBusinessTest {
                 .ordCnt(2)
                 .build();
 
-
         Product product2 = Product.builder()
-                .goodsNo("P005")
-                .itemNo("1")
-                .prc(9000L)
-                .ordCnt(3)
+                .goodsNo("P001")
+                .itemNo("2")
+                .prc(29000L)
+                .ordCnt(2)
                 .build();
 
+
         Product product3 = Product.builder()
-                .goodsNo("P006")
+                .goodsNo("P002")
                 .itemNo("1")
-                .prc(140000L)
-                .ordCnt(10)
+                .prc(10250L)
+                .ordCnt(2)
+                .build();
+
+        Product produc4 = Product.builder()
+                .goodsNo("P002")
+                .itemNo("2")
+                .prc(10250L)
+                .ordCnt(1)
                 .build();
 
         productList.add(product1);
         productList.add(product2);
-        productList.add(product3);
 
         RequestPromotionVo requestPromotionVo = RequestPromotionVo.builder()
                 .mbrNo(mbrNo)
                 .productList(productList)
                 .build();
-
-        promotionController.cartCoupon(requestPromotionVo);
     }
 }

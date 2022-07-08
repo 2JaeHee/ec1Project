@@ -45,10 +45,10 @@ public class PromotionServiceImpl implements PromotionService {
         List<CcCpnIssueModel> ccCpnIssueList = couponMapper.getCcCpnIssueList(ccCpnIssueModel);
 
         long mbrCnt = ccCpnIssueList.stream().filter(o -> o.getMbrNo().equals(requestCouponIssueVo.getMbrNo())).count();
-        if(!ccCpnBaseInfo.dwlPsbCntValid.test(ccCpnIssueList.size())){
+        if(!ccCpnBaseInfo.isDwlPsbCntValid(ccCpnIssueList.size())){
             throw new ValidationException("쿠폰 다운로드 가능 수량 초과");
         }
-        if(!ccCpnBaseInfo.psnDwlPsbCntValid.test((int)mbrCnt)){
+        if(!ccCpnBaseInfo.isPsnDwlPsbCntValid((int)mbrCnt)){
             throw new ValidationException("개인별 쿠폰 다운로드 가능 수량 초과");
         }
     }
