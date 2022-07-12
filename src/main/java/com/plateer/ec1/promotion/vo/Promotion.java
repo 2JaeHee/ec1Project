@@ -59,11 +59,8 @@ public class Promotion {
         }
     }
 
-    public void setApplyPrmYn(Long prmNo, Long cpnIssNo) {
-        this.applyPrmYn = PromotionConstants.N;
-        if (Objects.equals(this.prmNo, prmNo) && Objects.equals(this.cpnIssNo, cpnIssNo)) {
-            this.applyPrmYn = PromotionConstants.Y;
-        }
+    public void setApplyPrmYn() {
+        this.applyPrmYn = PromotionConstants.Y;
     }
     public void setCalculateDcAmt(double amt) {
         this.calculateDcAmt = amt;
