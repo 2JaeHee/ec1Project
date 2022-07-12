@@ -5,25 +5,105 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Builder
 @Getter
 @Setter
 public class InicisApproveReq {
-    private static final String pay = "Pay";
-    private static final String vacct = "Vacct";
+    private static final String PAY_CODE = "Pay";
+    private static final String VACCT_CODE = "Vacct";
+    private static final int INPUT_HOUR = 24;
+    private static final String API_KEY = "INIAPIKey";
+    private static final String CURRENCY_CODE = "WON";
 
+    public static final DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+    @NotEmpty
     private String type;        //가상계좌채번 type : Pay 고정
+    @NotEmpty
     private String paymethod;   //가상계좌유형 : Vacct 고정
-    private String moid;        //가맹점 주문번호
-    private String goodName;    //상품명
+    @NotEmpty
+    private String timestamp;    //전문생성시간 [YYYYMMDDhhmmss]
+    @NotEmpty
+    private String clientIp;        //가맹점 요청 서버IP
+    @NotEmpty
+    private String mid;             //상점아이디
+    @NotEmpty
+    private String url;             //가맹점 URL
+    @NotEmpty
+    private String moid;            //가맹점주문번호
+    @NotEmpty
+    private String goodName;         //상품명
+    @NotEmpty
+    private String buyerName;       //구매자명
+    @NotEmpty
+    private String buyerEmail;      //* "@", "." 외 특수문자 입력불가
+    private String buyerTel;        //구매자 휴대폰번호
+    @NotNull
+    private Long price;             //거래금액
 
-    public static InicisApproveReq build(@NonNull PayInfo payInfo){
-        return InicisApproveReq.builder()
-                .type(pay)
-                .paymethod(vacct)
+    private String currency;    //통화코드 [WON,USD]
+
+    @NotEmpty
+    private String bankCode;    //은행코드
+    @NotEmpty
+    private String dtInput;     //입금예정일자 [YYYYMMDD]
+    @NotEmpty
+    private String tmInput;     //입금예정시간 [hhmm]
+    @NotEmpty
+    private String nmInput;     //입금자명
+
+    private String flgCash;     //현금영수증 발행여부 ["0":미발행, "1":소득공제 발행, "2":지출증빙]
+    private String cashRegNo;   //현금영수증 발행정보 (주민번호, 휴대폰번호, 사업장등록번호 등)
+    private String vacctType;   //타입 ["3" 과오납체크] (과오납체크의 경우만 세팅)
+    private String vacct;       //벌크가상계좌번호 (과오납체크의 경우만 세팅)
+
+    @NotEmpty
+    private String hashData;    //전문위변조 HASH (hash(INIAPIKey+type+paymethod+timestamp+clientIp+mid+moid+price)))
+
+
+    public static InicisApproveReq of(@NonNull PayInfo payInfo) {
+        InicisApproveReq inicisApproveReq = InicisApproveReq.builder()
+                .type(PAY_CODE)
+                .paymethod(VACCT_CODE)
+                .timestamp(LocalDateTime.now().format(df))
+                .clientIp(payInfo.getClientIp())
+                .mid(payInfo.getMid())
+                .url(payInfo.getUrl())
                 .moid(payInfo.getOrdNo())
-                .goodName(payInfo.getPrdNm())
+                .goodName(payInfo.getGoodsNm())
+                .buyerName(payInfo.getMbrNm())
+                .buyerEmail(payInfo.getMbrEmail())
+                .buyerTel(payInfo.getMbrPhoneNo())
+                .price(payInfo.getPrc())
+                .currency(CURRENCY_CODE)    //WON, USD
+                .bankCode(payInfo.getBankCode().getCode())
                 .build();
+        //입금시간 = 현재 + 24시간
+        inicisApproveReq.setInputTime();
+        //hash
+        inicisApproveReq.setHashData();
+        return inicisApproveReq;
     }
 
+    private void setInputTime() {
+
+        LocalDateTime getTimestamp = LocalDateTime.parse(this.timestamp, df);
+        LocalDateTime inputTime = getTimestamp.plusHours(INPUT_HOUR);
+        this.dtInput = inputTime.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        this.tmInput = inputTime.format(DateTimeFormatter.ofPattern("HHmmss"));
+    }
+
+    private void setHashData() {
+         this.hashData = API_KEY +
+                this.type +
+                this.paymethod +
+                this.timestamp +
+                this.clientIp +
+                this.mid +
+                this.moid;
+    }
 }

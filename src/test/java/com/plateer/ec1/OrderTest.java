@@ -5,7 +5,6 @@ import com.plateer.ec1.order.enums.SystemType;
 import com.plateer.ec1.order.vo.OrderRequest;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.vo.PayInfo;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ public class OrderTest {
         orderRequest.setOrderType(OrderType.GENERAL);
         orderRequest.setSystemType(SystemType.BO);
 
-        PayInfo payInfo = new PayInfo();
+        PayInfo payInfo = PayInfo.builder().build();
         payInfo.setPaymentType(PaymentType.INICIS);
         orderRequest.setPayInfo(payInfo);
 
@@ -37,7 +36,7 @@ public class OrderTest {
         orderRequest.setOrderType(OrderType.GENERAL);
         orderRequest.setSystemType(SystemType.FO);
 
-        PayInfo payInfo = new PayInfo();
+        PayInfo payInfo = PayInfo.builder().build();
         payInfo.setPaymentType(PaymentType.INICIS);
         orderRequest.setPayInfo(payInfo);
         orderController.order(orderRequest);
@@ -50,7 +49,7 @@ public class OrderTest {
         orderRequest.setOrderType(OrderType.ECOUPON);
         orderRequest.setSystemType(SystemType.BO);
 
-        PayInfo payInfo = new PayInfo();
+        PayInfo payInfo = PayInfo.builder().build();
         payInfo.setPaymentType(PaymentType.POINT);
         orderRequest.setPayInfo(payInfo);
 
@@ -64,7 +63,7 @@ public class OrderTest {
         orderRequest.setOrderType(OrderType.ECOUPON);
         orderRequest.setSystemType(SystemType.FO);
 
-        PayInfo payInfo = new PayInfo();
+        PayInfo payInfo = PayInfo.builder().build();
         payInfo.setPaymentType(PaymentType.POINT);
         orderRequest.setPayInfo(payInfo);
 

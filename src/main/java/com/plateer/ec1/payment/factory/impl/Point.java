@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class Point implements Payment {
     private final String Y = "Y";
     @Override
-    public ApproveResVO approve(PayInfo payInfo) {
+    public ApproveResVO approvePay(PayInfo payInfo) {
 
         //포인트사용
         log.info("[Point.approve] Point 사용");
@@ -23,7 +23,7 @@ public class Point implements Payment {
     }
 
     @Override
-    public void cancel(CancelReq cancelReq) {
+    public void cancelPay(CancelReq cancelReq) {
         //포인트취소
         log.info("[Point.cancel] Point 취소");
     }

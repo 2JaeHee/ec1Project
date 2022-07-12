@@ -86,27 +86,27 @@ public class PromotionBusinessTest {
 
     private RequestPromotionVo setParameter(){
         List<Product> productList = new ArrayList<>();
-        Product product1 = Product.builder().goodsNo("P001").itemNo("1").prc(29000L).prmNo(1L).cpnIssNo(1L).ordCnt(2).build();
-        Product product2 = Product.builder().goodsNo("P001").itemNo("2").prc(29000L).ordCnt(2).build();
+        Product product1 = Product.builder().goodsNo("P001").itemNo("1").prc(29000L).ordCnt(2).build();
+        Product product2 = Product.builder().goodsNo("P001").itemNo("2").prc(29000L).ordCnt(2).prmNo(1L).cpnIssNo(4L).build();
         Product product3 = Product.builder().goodsNo("P002").itemNo("1").prc(10250L).ordCnt(1).build();
-        Product product4 = Product.builder().goodsNo("P002").itemNo("2").prc(10250L).ordCnt(1).build();
-        Product product5 = Product.builder().goodsNo("P005").itemNo("1").prc(9000L).ordCnt(1).build();
-        Product product6 = Product.builder().goodsNo("P005").itemNo("2").prc(9000L).ordCnt(1).build();
-        Product product7 = Product.builder().goodsNo("P005").itemNo("3").prc(9000L).ordCnt(1).build();
-        Product product8 = Product.builder().goodsNo("P007").itemNo("1").prc(24000L).ordCnt(1).build();
-        Product product9 = Product.builder().goodsNo("P007").itemNo("2").prc(24000L).ordCnt(1).build();
-        Product product10 = Product.builder().goodsNo("P007").itemNo("3").prc(24000L).ordCnt(1).build();
+//        Product product4 = Product.builder().goodsNo("P002").itemNo("2").prc(10250L).ordCnt(1).build();
+//        Product product5 = Product.builder().goodsNo("P005").itemNo("1").prc(9000L).ordCnt(1).build();
+//        Product product6 = Product.builder().goodsNo("P005").itemNo("2").prc(9000L).ordCnt(1).build();
+//        Product product7 = Product.builder().goodsNo("P005").itemNo("3").prc(9000L).ordCnt(1).build();
+//        Product product8 = Product.builder().goodsNo("P007").itemNo("1").prc(24000L).ordCnt(1).build();
+//        Product product9 = Product.builder().goodsNo("P007").itemNo("2").prc(24000L).ordCnt(1).build();
+//        Product product10 = Product.builder().goodsNo("P007").itemNo("3").prc(24000L).ordCnt(1).build();
 
         productList.add(product1);
         productList.add(product2);
         productList.add(product3);
-        productList.add(product4);
-        productList.add(product5);
-        productList.add(product6);
-        productList.add(product7);
-        productList.add(product8);
-        productList.add(product9);
-        productList.add(product10);
+//        productList.add(product4);
+//        productList.add(product5);
+//        productList.add(product6);
+//        productList.add(product7);
+//        productList.add(product8);
+//        productList.add(product9);
+//        productList.add(product10);
 
         return RequestPromotionVo.builder().mbrNo(mbrNo).productList(productList).build();
     }

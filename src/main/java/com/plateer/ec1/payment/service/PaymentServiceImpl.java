@@ -21,7 +21,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public ApproveResVO approve(PayInfo payInfo) {
         Payment factory = paymentFactory.getPaymentFactory(payInfo.getPaymentType());
-        return factory.approve(payInfo);
+        return factory.approvePay(payInfo);
     }
 
     /**
@@ -31,7 +31,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public void cancel(CancelReq cancelReq) {
         Payment factory = paymentFactory.getPaymentFactory(cancelReq.getPaymentType());
-        factory.cancel(cancelReq);
+        factory.cancelPay(cancelReq);
     }
 
     /**

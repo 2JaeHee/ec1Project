@@ -1,24 +1,42 @@
 package com.plateer.ec1.payment.factory.impl;
 
+import com.plateer.ec1.common.model.order.OpPayInfo;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.factory.Payment;
+import com.plateer.ec1.payment.mapper.PaymentTrxMapper;
 import com.plateer.ec1.payment.vo.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class Inicis implements Payment {
+    private final PaymentTrxMapper paymentMapper;
     @Override
-    public ApproveResVO approve(PayInfo payInfo) {
+    @Transactional
+    public ApproveResVO approvePay(PayInfo payInfo) {
         log.info("[Inicis.approve] Inicis 승인");
         //가상계좌 채번
-        InicisApproveRes inicisApproveRes = inicisApproveCall(InicisApproveReq.build(payInfo));
-        return InicisApproveRes.build(inicisApproveRes);
+        InicisApproveReq inicisApproveReq = InicisApproveReq.of(payInfo);
+        InicisApproveRes inicisApproveRes = inicisApproveCall(inicisApproveReq);
+        //주문결제 insert
+        savePayInfo(payInfo, inicisApproveRes);
+        return ApproveResVO.builder().build();
+    }
+
+    @Transactional
+    public void savePayInfo(PayInfo payInfo, InicisApproveRes res) {
+        OpPayInfo basePayInfo = OpPayInfo.of(payInfo);
+        basePayInfo.setInicisRes(res);
+        //주문결제테이블 save
+        paymentMapper.savePayInfo(basePayInfo);
     }
 
     @Override
-    public void cancel(CancelReq cancelReq) {
+    public void cancelPay(CancelReq cancelReq) {
         //환불요청
         InicisCancelReq inicisCancelReq = new InicisCancelReq();
 
@@ -40,10 +58,8 @@ public class Inicis implements Payment {
     private InicisApproveRes inicisApproveCall(InicisApproveReq req){
         //외부인터페이스 사용 시 로그추가
         log.info("[Inicis.approve] 이니시스 승인 api call");
-
-        InicisApproveRes res = new InicisApproveRes();
         //외부인터페이스 사용 후 로그에 결과값 업데이트
-        return res;
+        return InicisApproveRes.builder().build();
     }
 
     private InicisCancelRes inicisCancelCall(InicisCancelReq inicisCancelReq){
