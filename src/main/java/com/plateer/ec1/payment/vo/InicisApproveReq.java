@@ -1,5 +1,6 @@
 package com.plateer.ec1.payment.vo;
 
+import com.plateer.ec1.common.utils.AesAnDesUtil;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -17,7 +18,7 @@ public class InicisApproveReq {
     private static final String PAY_CODE = "Pay";
     private static final String VACCT_CODE = "Vacct";
     private static final int INPUT_HOUR = 24;
-    private static final String API_KEY = "INIAPIKey";
+    private static final String API_KEY = "ItEQKi3rY7uvDS8l";
     private static final String CURRENCY_CODE = "WON";
 
     public static final DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
@@ -81,6 +82,7 @@ public class InicisApproveReq {
                 .price(payInfo.getPrc())
                 .currency(CURRENCY_CODE)    //WON, USD
                 .bankCode(payInfo.getBankCode().getCode())
+                .nmInput(payInfo.getMbrNm())
                 .build();
         //입금시간 = 현재 + 24시간
         inicisApproveReq.setInputTime();
@@ -90,20 +92,22 @@ public class InicisApproveReq {
     }
 
     private void setInputTime() {
-
         LocalDateTime getTimestamp = LocalDateTime.parse(this.timestamp, df);
         LocalDateTime inputTime = getTimestamp.plusHours(INPUT_HOUR);
         this.dtInput = inputTime.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        this.tmInput = inputTime.format(DateTimeFormatter.ofPattern("HHmmss"));
+        this.tmInput = inputTime.format(DateTimeFormatter.ofPattern("HHmm"));
     }
 
     private void setHashData() {
-         this.hashData = API_KEY +
+        String hashData = API_KEY +
                 this.type +
                 this.paymethod +
                 this.timestamp +
                 this.clientIp +
                 this.mid +
-                this.moid;
+                this.moid +
+                this.price;
+
+        this.hashData = AesAnDesUtil.encodeSha(hashData);
     }
 }

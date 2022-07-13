@@ -66,4 +66,5 @@ public class PayInfo {
         this.mbrEmail = memberReq.getMbrEmail();
         this.mbrPhoneNo = memberReq.getMbrPhoneNo();
     }
+
 }

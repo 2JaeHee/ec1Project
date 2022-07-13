@@ -5,8 +5,7 @@
 <mapper namespace="com.plateer.ec1.payment.mapper.PaymentTrxMapper">
     <insert id="savePayInfo" parameterType="com.plateer.ec1.common.model.order.OpPayInfo">
         INSERT INTO op_pay_info (
-              pay_no
-            , ord_no
+              ord_no
             , clm_no
             , pay_mn_cd
             , pay_ccd
@@ -28,8 +27,7 @@
             , sys_modr_id
 
         ) VALUES (
-            #{payNo}
-            , #{ordNo}
+            #{ordNo}
             , #{clmNo}
             , #{payMnCd}
             , #{payCcd}

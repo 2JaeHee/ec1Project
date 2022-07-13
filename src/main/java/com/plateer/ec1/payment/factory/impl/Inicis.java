@@ -1,30 +1,40 @@
 package com.plateer.ec1.payment.factory.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.plateer.ec1.common.model.order.OpPayInfo;
+import com.plateer.ec1.common.utils.HttpUtil;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.factory.Payment;
 import com.plateer.ec1.payment.mapper.PaymentTrxMapper;
 import com.plateer.ec1.payment.vo.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class Inicis implements Payment {
     private final PaymentTrxMapper paymentMapper;
+    private static final String url = "https://iniapi.inicis.com/api/v1/formpay";
+
     @Override
     @Transactional
     public ApproveResVO approvePay(PayInfo payInfo) {
-        log.info("[Inicis.approve] Inicis 승인");
         //가상계좌 채번
-        InicisApproveReq inicisApproveReq = InicisApproveReq.of(payInfo);
-        InicisApproveRes inicisApproveRes = inicisApproveCall(inicisApproveReq);
+        InicisApproveRes inicisApproveRes = inicisApproveCall(InicisApproveReq.of(payInfo));
         //주문결제 insert
-        savePayInfo(payInfo, inicisApproveRes);
-        return ApproveResVO.builder().build();
+        String SUCCESS_CODE = "00";
+        if (SUCCESS_CODE.equals(inicisApproveRes.getResultCode())) {
+            savePayInfo(payInfo, inicisApproveRes);
+        }
+        return ApproveResVO.of(inicisApproveRes);
     }
 
     @Transactional
@@ -39,7 +49,6 @@ public class Inicis implements Payment {
     public void cancelPay(CancelReq cancelReq) {
         //환불요청
         InicisCancelReq inicisCancelReq = new InicisCancelReq();
-
         inicisCancelCall(inicisCancelReq);
         //입금완료처리
 
@@ -56,10 +65,20 @@ public class Inicis implements Payment {
     }
 
     private InicisApproveRes inicisApproveCall(InicisApproveReq req){
-        //외부인터페이스 사용 시 로그추가
-        log.info("[Inicis.approve] 이니시스 승인 api call");
+
+        RestTemplate restTemplate = new RestTemplate();
+        String response = restTemplate.postForEntity(url, HttpUtil.httpEntityMultiValueMap(req), String.class).getBody();
+
+        ObjectMapper mapper = new ObjectMapper();
+        InicisApproveRes inicisApproveRes = new InicisApproveRes();
+        try {
+            inicisApproveRes = mapper.readValue(response, InicisApproveRes.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         //외부인터페이스 사용 후 로그에 결과값 업데이트
-        return InicisApproveRes.builder().build();
+        return inicisApproveRes;
     }
 
     private InicisCancelRes inicisCancelCall(InicisCancelReq inicisCancelReq){

@@ -1,44 +1,54 @@
 package com.plateer.ec1.payment;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.plateer.ec1.common.utils.HttpUtil;
 import com.plateer.ec1.payment.enums.BankCode;
 import com.plateer.ec1.payment.enums.PaymentType;
-import com.plateer.ec1.payment.service.PaymentService;
+import com.plateer.ec1.payment.vo.InicisApproveReq;
+import com.plateer.ec1.payment.vo.InicisApproveRes;
 import com.plateer.ec1.payment.vo.PayInfo;
 import com.plateer.ec1.payment.vo.franchisee.FranchiseeReq;
 import com.plateer.ec1.payment.vo.member.MemberReq;
 import com.plateer.ec1.payment.vo.order.OrderReq;
-import org.junit.jupiter.api.DisplayName;
+import lombok.Setter;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.io.DataInput;
+import java.util.HashMap;
+import java.util.Map;
 
-@SpringBootTest
-public class InicisParameterTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    @Autowired
-    private PaymentService paymentService;
-
+public class InicisCallTest {
+    private static final String url = "https://iniapi.inicis.com/api/v1/formpay";
     @Test
-    @DisplayName("INICIS approve")
-    void approve_inicis(){
+    void callTest() throws JsonProcessingException {
         PayInfo payInfo = PayInfo.builder()
                 .paymentType(PaymentType.INICIS)
                 .payMnCd("10")
                 .payCcd("10")
                 .payPrgsScd("10")
                 .build();
+
         setDefaultData(payInfo);
-        paymentService.approve(payInfo);
+        InicisApproveReq req = InicisApproveReq.of(payInfo);
+
+        RestTemplate restTemplate = new RestTemplate();
+        String response = restTemplate.postForEntity(url, HttpUtil.httpEntityMultiValueMap(req), String.class).getBody();
+
+        ObjectMapper mapper = new ObjectMapper();
+        InicisApproveRes inicisApproveRes = mapper.readValue(response, InicisApproveRes.class);
+        assertThat(inicisApproveRes.getResultCode()).isEqualTo("00");
     }
 
     private void setDefaultData(PayInfo payInfo) {

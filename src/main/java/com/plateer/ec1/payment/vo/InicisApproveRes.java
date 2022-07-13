@@ -4,9 +4,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Builder
+import java.io.Serializable;
+
 @Getter
-public class InicisApproveRes {
+@Setter
+public class InicisApproveRes implements Serializable {
     private String resultCode;
     private String resultMsg;
     private String tid;
@@ -19,9 +21,13 @@ public class InicisApproveRes {
     private String validTime;   //가상계좌 입금예정시간
     private Long price;       //결제금액
 
-    public static ApproveResVO build(InicisApproveRes inicisApproveRes){
-        return ApproveResVO.builder()
-                .resultCd(inicisApproveRes.resultCode)
-                .build();
-    }
+    private String inputName;
+    private String refundAcct;
+    private String refundBankCode;
+    private String refundAcctName;
+//    public static ApproveResVO build(InicisApproveRes inicisApproveRes){
+//        return ApproveResVO.builder()
+//                .resultCd(inicisApproveRes.resultCode)
+//                .build();
+//    }
 }
