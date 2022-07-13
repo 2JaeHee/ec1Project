@@ -9,6 +9,8 @@ public interface Payment {
 
     ApproveResVO approvePay(PayInfo payInfo);
 
+    void completePay(PayInfo payInfo);
+
     void cancelPay(CancelReq cancelReq);
 
     void netCancel(CancelReq cancelReq);

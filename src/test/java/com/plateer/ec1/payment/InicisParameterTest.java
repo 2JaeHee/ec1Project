@@ -33,7 +33,7 @@ public class InicisParameterTest {
     void approve_inicis(){
         PayInfo payInfo = PayInfo.builder()
                 .paymentType(PaymentType.INICIS)
-                .payMnCd("10")
+                .payMnCd("10")      //TODO 코드 뺄거임!!
                 .payCcd("10")
                 .payPrgsScd("10")
                 .build();

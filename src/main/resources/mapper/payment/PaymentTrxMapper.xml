@@ -49,4 +49,13 @@
             , #{sysModrId}
         )
     </insert>
+
+    <update id="modifyPayInfo" parameterType="com.plateer.ec1.common.model.order.OpPayInfo">
+        UPDATE op_pay_info
+        SET pay_cmt_dtime = NOW()
+            , pay_prgs_scd = #{payPrgsScd}
+            , sys_modr_id = #{sysModrId}
+            , sys_mod_dtime = NOW()
+        WHERE pay_no = #{payNo}
+    </update>
 </mapper>

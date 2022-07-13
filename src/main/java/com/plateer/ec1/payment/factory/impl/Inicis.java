@@ -37,6 +37,17 @@ public class Inicis implements Payment {
         return ApproveResVO.of(inicisApproveRes);
     }
 
+    //가상계좌 입금완료
+    @Override
+    public void completePay(PayInfo payInfo) {
+        OpPayInfo opPayInfo = OpPayInfo.builder()
+                .payNo(payInfo.getPayNo())
+                .payPrgsScd("20")       //TODO 코드뺄것!!
+                .build();
+        paymentMapper.modifyPayInfo(opPayInfo);
+    }
+
+
     @Transactional
     public void savePayInfo(PayInfo payInfo, InicisApproveRes res) {
         OpPayInfo basePayInfo = OpPayInfo.of(payInfo);

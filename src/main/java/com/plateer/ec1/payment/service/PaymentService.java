@@ -7,6 +7,8 @@ import com.plateer.ec1.payment.vo.PayInfo;
 public interface PaymentService {
     ApproveResVO approve(PayInfo payInfo);
 
+    void completePay(PayInfo payInfo);
+
     void cancel(CancelReq cancelReq);
 
     void netCancel(CancelReq cancelReq);

@@ -23,6 +23,10 @@ public class Point implements Payment {
     }
 
     @Override
+    public void completePay(PayInfo payInfo) {
+    }
+
+    @Override
     public void cancelPay(CancelReq cancelReq) {
         //포인트취소
         log.info("[Point.cancel] Point 취소");

@@ -17,6 +17,7 @@ import java.lang.reflect.Member;
 @Getter
 @Setter
 public class PayInfo {
+    private String payNo;
     @ValidEnum(enumClass = PaymentType.class)
     private PaymentType paymentType;
     //상품가맹점정보

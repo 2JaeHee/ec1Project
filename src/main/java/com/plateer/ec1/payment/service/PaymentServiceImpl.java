@@ -25,6 +25,16 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     /**
+     * 결제 완료
+     * @param payInfo
+     */
+    @Override
+    public void completePay(PayInfo payInfo) {
+        Payment factory = paymentFactory.getPaymentFactory(payInfo.getPaymentType());
+        factory.completePay(payInfo);
+    }
+
+    /**
      * 결제취소
      * @param cancelReq
      */
