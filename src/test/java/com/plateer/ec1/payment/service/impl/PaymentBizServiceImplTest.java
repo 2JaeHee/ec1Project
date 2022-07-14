@@ -1,7 +1,9 @@
 package com.plateer.ec1.payment.service.impl;
 
+import com.plateer.ec1.common.code.order.OPT0011Enum;
 import com.plateer.ec1.common.model.order.OpPayInfo;
 import com.plateer.ec1.payment.mapper.PaymentMapper;
+import com.plateer.ec1.payment.mapper.PaymentTrxMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ class PaymentBizServiceImplTest {
 
     @Autowired
     PaymentMapper paymentMapper;
+    @Autowired
+    PaymentTrxMapper paymentTrxMapper;
 
     @Value("${inicis.apikey}")
     private String apikey;
@@ -27,7 +31,19 @@ class PaymentBizServiceImplTest {
     }
 
     @Test
-    void test() {
-        System.out.println(apikey);
+    void completePay() {
+        String trsnId = "INIAPIVBNKINIpayTest20220714132712822142";
+        OpPayInfo getPayInfo = paymentMapper.getPayInfo(trsnId);
+
+        OpPayInfo opPayInfo = OpPayInfo.builder()
+                .payNo(getPayInfo.getPayNo())
+                .rfndAvlAmt(getPayInfo.getPayAmt())
+                .payPrgsScd(OPT0011Enum.COMPLETE.getCode())
+                .build();
+        paymentTrxMapper.modifyPayInfo(opPayInfo);
+
+        OpPayInfo result = paymentMapper.getPayInfo(trsnId);
+        Assertions.assertThat(result.getPayCmtDtime()).isNotNull();
+
     }
 }
