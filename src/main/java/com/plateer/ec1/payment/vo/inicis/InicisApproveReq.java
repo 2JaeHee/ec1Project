@@ -1,10 +1,16 @@
-package com.plateer.ec1.payment.vo;
+package com.plateer.ec1.payment.vo.inicis;
 
 import com.plateer.ec1.common.utils.AesAnDesUtil;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
+import com.plateer.ec1.order.enums.inicis.InicisPayType;
+import com.plateer.ec1.order.enums.inicis.InicisPaymethod;
+import com.plateer.ec1.payment.vo.PayApproveReq;
+import lombok.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -15,10 +21,9 @@ import java.time.format.DateTimeFormatter;
 @Getter
 @Setter
 public class InicisApproveReq {
-    private static final String PAY_CODE = "Pay";
-    private static final String VACCT_CODE = "Vacct";
+    private static String apikey = "ItEQKi3rY7uvDS8l";
+
     private static final int INPUT_HOUR = 24;
-    private static final String API_KEY = "ItEQKi3rY7uvDS8l";
     private static final String CURRENCY_CODE = "WON";
 
     public static final DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
@@ -65,11 +70,10 @@ public class InicisApproveReq {
     @NotEmpty
     private String hashData;    //전문위변조 HASH (hash(INIAPIKey+type+paymethod+timestamp+clientIp+mid+moid+price)))
 
-
-    public static InicisApproveReq of(@NonNull PayInfo payInfo) {
+    public static InicisApproveReq of(@NonNull PayApproveReq payInfo) {
         InicisApproveReq inicisApproveReq = InicisApproveReq.builder()
-                .type(PAY_CODE)
-                .paymethod(VACCT_CODE)
+                .type(InicisPayType.PAY.getCode())
+                .paymethod(InicisPaymethod.VACCT.getCode())
                 .timestamp(LocalDateTime.now().format(df))
                 .clientIp(payInfo.getClientIp())
                 .mid(payInfo.getMid())
@@ -98,8 +102,8 @@ public class InicisApproveReq {
         this.tmInput = inputTime.format(DateTimeFormatter.ofPattern("HHmm"));
     }
 
-    private void setHashData() {
-        String hashData = API_KEY +
+    public void setHashData() {
+        String hashData = apikey +
                 this.type +
                 this.paymethod +
                 this.timestamp +
@@ -107,7 +111,6 @@ public class InicisApproveReq {
                 this.mid +
                 this.moid +
                 this.price;
-
         this.hashData = AesAnDesUtil.encodeSha(hashData);
     }
 }

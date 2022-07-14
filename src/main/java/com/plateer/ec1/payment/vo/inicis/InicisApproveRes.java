@@ -1,4 +1,4 @@
-package com.plateer.ec1.payment.vo;
+package com.plateer.ec1.payment.vo.inicis;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -25,9 +25,4 @@ public class InicisApproveRes implements Serializable {
     private String refundAcct;
     private String refundBankCode;
     private String refundAcctName;
-//    public static ApproveResVO build(InicisApproveRes inicisApproveRes){
-//        return ApproveResVO.builder()
-//                .resultCd(inicisApproveRes.resultCode)
-//                .build();
-//    }
 }

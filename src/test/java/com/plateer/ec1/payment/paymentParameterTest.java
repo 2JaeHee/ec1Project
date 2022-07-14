@@ -2,7 +2,7 @@ package com.plateer.ec1.payment;
 
 import com.plateer.ec1.payment.enums.BankCode;
 import com.plateer.ec1.payment.enums.PaymentType;
-import com.plateer.ec1.payment.vo.PayInfo;
+import com.plateer.ec1.payment.vo.PayApproveReq;
 import com.plateer.ec1.payment.vo.franchisee.FranchiseeReq;
 import com.plateer.ec1.payment.vo.member.MemberReq;
 import com.plateer.ec1.payment.vo.order.OrderReq;
@@ -128,7 +128,7 @@ public class paymentParameterTest {
                 .mbrPhoneNo("01011112222")
                 .build();
 
-        PayInfo payInfo = PayInfo.builder()
+        PayApproveReq payInfo = PayApproveReq.builder()
                 .paymentType(PaymentType.INICIS)
                 .build();
 
@@ -136,7 +136,7 @@ public class paymentParameterTest {
         payInfo.setOrderInfo(orderReq);
         payInfo.setMemberInfo(memberReq);
 
-        Set<ConstraintViolation<PayInfo>> violations = validator.validate(payInfo);
+        Set<ConstraintViolation<PayApproveReq>> violations = validator.validate(payInfo);
         assertTrue(violations.isEmpty());
     }
 }

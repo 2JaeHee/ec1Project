@@ -1,8 +1,8 @@
 package com.plateer.ec1.common.model.order;
 
 import com.plateer.ec1.common.code.promotion.PromotionConstants;
-import com.plateer.ec1.payment.vo.InicisApproveRes;
-import com.plateer.ec1.payment.vo.PayInfo;
+import com.plateer.ec1.payment.vo.inicis.InicisApproveRes;
+import com.plateer.ec1.payment.vo.PayApproveReq;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -35,22 +35,17 @@ public class OpPayInfo {
     private String vrValDt;
     private String vrValTt;
 
-    public static OpPayInfo of(PayInfo payInfo) {
+    public static OpPayInfo of(PayApproveReq payInfo) {
         return OpPayInfo.builder()
                 .ordNo(payInfo.getOrdNo())
                 .payAmt(payInfo.getPrc())
-                .payMnCd(payInfo.getPayMnCd())
-                .payCcd(payInfo.getPayCcd())
-                .payPrgsScd(payInfo.getPayPrgsScd())
+                .payMnCd(payInfo.getPayMnCd().getCode())
+                .payCcd(payInfo.getPayCcd().getCode())
+                .payPrgsScd(payInfo.getPayPrgsScd().getCode())
                 .build();
     }
-    /*
-    public void setPayStatus(PayInfo payInfo) {
-        this.payCcd = payInfo.getPayCcd();
-        this.payPrgsScd = payInfo.getPayPrgsScd();
-    }
-    */
     public void setInicisRes(InicisApproveRes res) {
+        this.trsnId = res.getTid();
         this.payAmt = res.getPrice();
         this.vrAcct = res.getVacct();
         this.vrAcctNm = res.getVacctName();

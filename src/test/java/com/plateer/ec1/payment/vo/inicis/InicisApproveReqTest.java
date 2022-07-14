@@ -1,44 +1,47 @@
-package com.plateer.ec1.payment;
+package com.plateer.ec1.payment.vo.inicis;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.plateer.ec1.common.code.order.OPT0009Enum;
 import com.plateer.ec1.common.code.order.OPT0010Enum;
 import com.plateer.ec1.common.code.order.OPT0011Enum;
-import com.plateer.ec1.common.utils.HttpUtil;
 import com.plateer.ec1.payment.enums.BankCode;
 import com.plateer.ec1.payment.enums.PaymentType;
-import com.plateer.ec1.payment.vo.inicis.InicisApproveReq;
-import com.plateer.ec1.payment.vo.inicis.InicisApproveRes;
 import com.plateer.ec1.payment.vo.PayApproveReq;
 import com.plateer.ec1.payment.vo.franchisee.FranchiseeReq;
 import com.plateer.ec1.payment.vo.member.MemberReq;
 import com.plateer.ec1.payment.vo.order.OrderReq;
+import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class InicisCallTest {
-    private static final String url = "https://iniapi.inicis.com/api/v1/formpay";
+@Slf4j
+@SpringBootTest
+class InicisApproveReqTest {
+    @Value("${inicis.apikey}")
+    private String apikey;
+
     @Test
-    void callTest() throws JsonProcessingException {
+    void test() {
+        log.info("apikey : {}", apikey);
+    }
+
+    @Test
+    void setHashData() {
         PayApproveReq payInfo = PayApproveReq.builder()
                 .paymentType(PaymentType.INICIS)
                 .payMnCd(OPT0009Enum.VIRTUAL_ACCOUNT)
                 .payCcd(OPT0010Enum.PAY)
                 .payPrgsScd(OPT0011Enum.REQUEST)
                 .build();
-
         setDefaultData(payInfo);
-        InicisApproveReq req = InicisApproveReq.of(payInfo);
 
-        RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.postForEntity(url, HttpUtil.httpEntityMultiValueMap(req), String.class).getBody();
+        InicisApproveReq inicisApproveReq = InicisApproveReq.of(payInfo);
+        inicisApproveReq.setHashData();
 
-        ObjectMapper mapper = new ObjectMapper();
-        InicisApproveRes inicisApproveRes = mapper.readValue(response, InicisApproveRes.class);
-        assertThat(inicisApproveRes.getResultCode()).isEqualTo("00");
+        log.info("test : {} ", inicisApproveReq.getHashData());
     }
 
     private void setDefaultData(PayApproveReq payInfo) {
@@ -50,7 +53,7 @@ public class InicisCallTest {
                 .build();
         //주문 정보
         OrderReq orderReq = OrderReq.builder()
-                .ordNo("O202207120002")
+                .ordNo("O202207120001")
                 .goodsNm("양말")
                 .prc(1000L)
                 .bankCode(BankCode.IBK)

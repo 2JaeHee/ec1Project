@@ -3,13 +3,14 @@ package com.plateer.ec1.payment.factory;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.vo.ApproveResVO;
 import com.plateer.ec1.payment.vo.CancelReq;
-import com.plateer.ec1.payment.vo.PayInfo;
+import com.plateer.ec1.payment.vo.PayApproveReq;
+import com.plateer.ec1.payment.vo.PayCompleteReq;
 
 public interface Payment {
 
-    ApproveResVO approvePay(PayInfo payInfo);
+    ApproveResVO approvePay(PayApproveReq payInfo);
 
-    void completePay(PayInfo payInfo);
+    void completePay(PayCompleteReq payInfo);
 
     void cancelPay(CancelReq cancelReq);
 

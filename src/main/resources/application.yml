@@ -24,3 +24,5 @@ logging:
         transaction:
           interceptor: trace
 
+inicis:
+  apikey: ItEQKi3rY7uvDS8l

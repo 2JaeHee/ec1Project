@@ -2,7 +2,7 @@ package com.plateer.ec1.order.vo;
 
 import com.plateer.ec1.order.enums.OrderType;
 import com.plateer.ec1.order.enums.SystemType;
-import com.plateer.ec1.payment.vo.PayInfo;
+import com.plateer.ec1.payment.vo.PayApproveReq;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,5 +13,5 @@ public class OrderRequest {
     private SystemType systemType;
     private OrderType orderType;
 
-    private PayInfo payInfo;
+    private PayApproveReq payInfo;
 }

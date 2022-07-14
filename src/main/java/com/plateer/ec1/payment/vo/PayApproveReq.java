@@ -1,5 +1,8 @@
 package com.plateer.ec1.payment.vo;
 
+import com.plateer.ec1.common.code.order.OPT0009Enum;
+import com.plateer.ec1.common.code.order.OPT0010Enum;
+import com.plateer.ec1.common.code.order.OPT0011Enum;
 import com.plateer.ec1.common.validator.ValidEnum;
 import com.plateer.ec1.payment.enums.BankCode;
 import com.plateer.ec1.payment.enums.PaymentType;
@@ -12,11 +15,11 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.lang.reflect.Member;
+
 @Builder
 @Getter
 @Setter
-public class PayInfo {
+public class PayApproveReq {
     private String payNo;
     @ValidEnum(enumClass = PaymentType.class)
     private PaymentType paymentType;
@@ -45,9 +48,9 @@ public class PayInfo {
     private String mbrPhoneNo;
 
     //결제정보코드
-    private String payMnCd;     //결제수단
-    private String payCcd;      //결제구분코드
-    private String payPrgsScd;  //결제진행상태코드
+    private OPT0009Enum payMnCd;     //결제수단
+    private OPT0010Enum payCcd;      //결제구분코드
+    private OPT0011Enum payPrgsScd;  //결제진행상태코드
 
     public void setFranchiseeInfo(FranchiseeReq franchiseeReq) {
         this.clientIp = franchiseeReq.getClientIp();

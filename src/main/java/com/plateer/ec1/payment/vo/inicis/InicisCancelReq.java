@@ -1,4 +1,4 @@
-package com.plateer.ec1.payment.vo;
+package com.plateer.ec1.payment.vo.inicis;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,10 +1,12 @@
 package com.plateer.ec1.payment;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.plateer.ec1.common.code.order.OPT0009Enum;
+import com.plateer.ec1.common.code.order.OPT0010Enum;
+import com.plateer.ec1.common.code.order.OPT0011Enum;
 import com.plateer.ec1.payment.enums.BankCode;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.service.PaymentService;
-import com.plateer.ec1.payment.vo.PayInfo;
+import com.plateer.ec1.payment.vo.PayApproveReq;
 import com.plateer.ec1.payment.vo.franchisee.FranchiseeReq;
 import com.plateer.ec1.payment.vo.member.MemberReq;
 import com.plateer.ec1.payment.vo.order.OrderReq;
@@ -12,15 +14,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @SpringBootTest
 public class InicisParameterTest {
@@ -31,17 +24,17 @@ public class InicisParameterTest {
     @Test
     @DisplayName("INICIS approve")
     void approve_inicis(){
-        PayInfo payInfo = PayInfo.builder()
+        PayApproveReq payInfo = PayApproveReq.builder()
                 .paymentType(PaymentType.INICIS)
-                .payMnCd("10")      //TODO 코드 뺄거임!!
-                .payCcd("10")
-                .payPrgsScd("10")
+                .payMnCd(OPT0009Enum.VIRTUAL_ACCOUNT)
+                .payCcd(OPT0010Enum.PAY)
+                .payPrgsScd(OPT0011Enum.REQUEST)
                 .build();
         setDefaultData(payInfo);
         paymentService.approve(payInfo);
     }
 
-    private void setDefaultData(PayInfo payInfo) {
+    private void setDefaultData(PayApproveReq payInfo) {
         //상품 가맹점 정보
         FranchiseeReq franchiseeReq = FranchiseeReq.builder()
                 .clientIp("127.0.0.1")

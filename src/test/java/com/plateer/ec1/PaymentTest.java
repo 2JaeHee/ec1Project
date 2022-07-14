@@ -4,7 +4,7 @@ package com.plateer.ec1;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.service.PaymentService;
 import com.plateer.ec1.payment.vo.CancelReq;
-import com.plateer.ec1.payment.vo.PayInfo;
+import com.plateer.ec1.payment.vo.PayApproveReq;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +18,14 @@ public class PaymentTest {
     @Test
     @DisplayName("INICIS approve")
     void approve_inicis(){
-        PayInfo payInfo = PayInfo.builder().build();
+        PayApproveReq payInfo = PayApproveReq.builder().build();
         payInfo.setPaymentType(PaymentType.INICIS);
         paymentService.approve(payInfo);
     }
     @Test
     @DisplayName("POINT approve")
     void approve_point(){
-        PayInfo payInfo = PayInfo.builder().build();
+        PayApproveReq payInfo = PayApproveReq.builder().build();
         payInfo.setPaymentType(PaymentType.POINT);
         paymentService.approve(payInfo);
     }

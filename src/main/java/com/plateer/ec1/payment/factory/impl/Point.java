@@ -4,7 +4,8 @@ import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.factory.Payment;
 import com.plateer.ec1.payment.vo.ApproveResVO;
 import com.plateer.ec1.payment.vo.CancelReq;
-import com.plateer.ec1.payment.vo.PayInfo;
+import com.plateer.ec1.payment.vo.PayApproveReq;
+import com.plateer.ec1.payment.vo.PayCompleteReq;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class Point implements Payment {
     private final String Y = "Y";
     @Override
-    public ApproveResVO approvePay(PayInfo payInfo) {
+    public ApproveResVO approvePay(PayApproveReq payInfo) {
 
         //포인트사용
         log.info("[Point.approve] Point 사용");
@@ -23,7 +24,7 @@ public class Point implements Payment {
     }
 
     @Override
-    public void completePay(PayInfo payInfo) {
+    public void completePay(PayCompleteReq payInfo) {
     }
 
     @Override

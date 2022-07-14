@@ -4,8 +4,6 @@ import com.plateer.ec1.common.model.order.OpPayInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface PaymentTrxMapper {
-    void savePayInfo(OpPayInfo basePayInfo);
-
-    void modifyPayInfo(OpPayInfo opPayInfo);
+public interface PaymentMapper {
+    OpPayInfo getPayInfo(String trsnId);
 }

@@ -2,17 +2,20 @@ package com.plateer.ec1.payment.factory.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.plateer.ec1.common.code.order.OPT0011Enum;
 import com.plateer.ec1.common.model.order.OpPayInfo;
 import com.plateer.ec1.common.utils.HttpUtil;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.factory.Payment;
 import com.plateer.ec1.payment.mapper.PaymentTrxMapper;
+import com.plateer.ec1.payment.service.PaymentBizService;
 import com.plateer.ec1.payment.vo.*;
+import com.plateer.ec1.payment.vo.inicis.InicisApproveReq;
+import com.plateer.ec1.payment.vo.inicis.InicisApproveRes;
+import com.plateer.ec1.payment.vo.inicis.InicisCancelReq;
+import com.plateer.ec1.payment.vo.inicis.InicisCancelRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -21,12 +24,12 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @RequiredArgsConstructor
 public class Inicis implements Payment {
-    private final PaymentTrxMapper paymentMapper;
+    private final PaymentBizService paymentBizService;
     private static final String url = "https://iniapi.inicis.com/api/v1/formpay";
 
     @Override
     @Transactional
-    public ApproveResVO approvePay(PayInfo payInfo) {
+    public ApproveResVO approvePay(PayApproveReq payInfo) {
         //가상계좌 채번
         InicisApproveRes inicisApproveRes = inicisApproveCall(InicisApproveReq.of(payInfo));
         //주문결제 insert
@@ -37,23 +40,25 @@ public class Inicis implements Payment {
         return ApproveResVO.of(inicisApproveRes);
     }
 
-    //가상계좌 입금완료
     @Override
-    public void completePay(PayInfo payInfo) {
+    @Transactional
+    public void completePay(PayCompleteReq req) {
+        OpPayInfo getPayInfo = paymentBizService.getPayInfo(req.getTrsnId());
+
         OpPayInfo opPayInfo = OpPayInfo.builder()
-                .payNo(payInfo.getPayNo())
-                .payPrgsScd("20")       //TODO 코드뺄것!!
+                .payNo(getPayInfo.getPayNo())
+                .rfndAvlAmt(getPayInfo.getPayAmt())
+                .payPrgsScd(OPT0011Enum.COMPLETE.getCode())
                 .build();
-        paymentMapper.modifyPayInfo(opPayInfo);
+        paymentBizService.modifyPayInfo(opPayInfo);
     }
 
 
     @Transactional
-    public void savePayInfo(PayInfo payInfo, InicisApproveRes res) {
+    public void savePayInfo(PayApproveReq payInfo, InicisApproveRes res) {
         OpPayInfo basePayInfo = OpPayInfo.of(payInfo);
         basePayInfo.setInicisRes(res);
-        //주문결제테이블 save
-        paymentMapper.savePayInfo(basePayInfo);
+        paymentBizService.savePayInfo(basePayInfo);
     }
 
     @Override
