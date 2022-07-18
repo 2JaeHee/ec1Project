@@ -7,6 +7,7 @@ import com.plateer.ec1.payment.vo.PayCompleteReq;
 import com.plateer.ec1.payment.vo.inicis.InicisCompleteReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class PaymentController {
     private final PaymentService paymentService;
 
-    @RequestMapping(value = "/approveComplete", method = RequestMethod.POST)
+    @PostMapping(value = "/approveComplete", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public void approveComplete(InicisCompleteReq req){
         //IP 체크
         String SUCCESS_CODE = "0200";

@@ -9,4 +9,6 @@ import lombok.Setter;
 public class CancelReq {
     private PaymentType paymentType;
     private String ordNo;
+    private String clmNo;
+    private long cancelAmt;
 }

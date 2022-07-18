@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -17,6 +20,7 @@ public class HttpUtil {
     public static <T> HttpEntity<MultiValueMap<String, String>> httpEntityMultiValueMap(T parameter) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        httpHeaders.setAccept(Collections.singletonList(MediaType.ALL));
 
         ObjectMapper reqMapper = new ObjectMapper();
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();

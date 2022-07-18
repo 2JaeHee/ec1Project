@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class InicisCallTest {
     private static final String url = "https://iniapi.inicis.com/api/v1/formpay";
     @Test
-    void callTest() throws JsonProcessingException {
+    void callTest() {
         PayApproveReq payInfo = PayApproveReq.builder()
                 .paymentType(PaymentType.INICIS)
                 .payMnCd(OPT0009Enum.VIRTUAL_ACCOUNT)
@@ -34,10 +34,8 @@ public class InicisCallTest {
         InicisApproveReq req = InicisApproveReq.of(payInfo);
 
         RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.postForEntity(url, HttpUtil.httpEntityMultiValueMap(req), String.class).getBody();
-
-        ObjectMapper mapper = new ObjectMapper();
-        InicisApproveRes inicisApproveRes = mapper.readValue(response, InicisApproveRes.class);
+        InicisApproveRes inicisApproveRes = restTemplate.postForEntity(url, HttpUtil.httpEntityMultiValueMap(req), InicisApproveRes.class).getBody();
+        assert inicisApproveRes != null;
         assertThat(inicisApproveRes.getResultCode()).isEqualTo("00");
     }
 

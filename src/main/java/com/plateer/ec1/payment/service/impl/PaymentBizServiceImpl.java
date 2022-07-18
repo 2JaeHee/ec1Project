@@ -27,4 +27,14 @@ public class PaymentBizServiceImpl implements PaymentBizService {
     public OpPayInfo getPayInfo(String trsnId) {
         return paymentMapper.getPayInfo(trsnId);
     }
+
+    @Override
+    public OpPayInfo getOrderPayInfo(String ordNo) {
+        return paymentMapper.getOrderPayInfo(ordNo);
+    }
+
+    @Override
+    public void modifyPayRefundAmt(OpPayInfo opPayInfo) {
+        paymentTrxMapper.modifyPayRefundAmt(opPayInfo);
+    }
 }

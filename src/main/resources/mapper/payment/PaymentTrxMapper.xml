@@ -59,4 +59,13 @@
             , sys_mod_dtime = NOW()
         WHERE pay_no = #{payNo}
     </update>
+
+    <update id="modifyPayRefundAmt" parameterType="com.plateer.ec1.common.model.order.OpPayInfo">
+        UPDATE op_pay_info
+        SET cncl_amt = #{cnclAmt}
+          , rfnd_avl_amt = #{rfndAvlAmt}
+          , sys_modr_id = #{sysModrId}
+          , sys_mod_dtime = NOW()
+        WHERE pay_no = #{payNo}
+    </update>
 </mapper>

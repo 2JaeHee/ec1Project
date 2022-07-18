@@ -15,7 +15,6 @@ public class Point implements Payment {
     private final String Y = "Y";
     @Override
     public ApproveResVO approvePay(PayApproveReq payInfo) {
-
         //포인트사용
         log.info("[Point.approve] Point 사용");
 
@@ -25,6 +24,11 @@ public class Point implements Payment {
 
     @Override
     public void completePay(PayCompleteReq payInfo) {
+    }
+
+    @Override
+    public void cancelData(CancelReq cancelReq) {
+
     }
 
     @Override

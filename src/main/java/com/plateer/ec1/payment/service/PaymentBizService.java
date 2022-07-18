@@ -22,4 +22,8 @@ public interface PaymentBizService {
      * @return
      */
     OpPayInfo getPayInfo(String trsnId);
+
+    OpPayInfo getOrderPayInfo(String ordNo);
+
+    void modifyPayRefundAmt(OpPayInfo opPayInfo);
 }
