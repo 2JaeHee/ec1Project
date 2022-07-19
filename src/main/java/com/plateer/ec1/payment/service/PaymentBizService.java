@@ -2,6 +2,7 @@ package com.plateer.ec1.payment.service;
 
 import com.plateer.ec1.common.model.order.OpPayInfo;
 import com.plateer.ec1.payment.mapper.PaymentTrxMapper;
+import com.plateer.ec1.payment.vo.OrderPayInfo;
 
 public interface PaymentBizService {
     /**
@@ -23,7 +24,7 @@ public interface PaymentBizService {
      */
     OpPayInfo getPayInfo(String trsnId);
 
-    OpPayInfo getOrderPayInfo(String ordNo);
+    OrderPayInfo getOrderPayInfo(String ordNo);
 
     void modifyPayRefundAmt(OpPayInfo opPayInfo);
 }

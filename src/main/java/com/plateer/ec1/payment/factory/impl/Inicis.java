@@ -1,19 +1,15 @@
 package com.plateer.ec1.payment.factory.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.plateer.ec1.common.code.order.OPT0011Enum;
 import com.plateer.ec1.common.model.order.OpPayInfo;
 import com.plateer.ec1.common.utils.HttpUtil;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.factory.Payment;
-import com.plateer.ec1.payment.mapper.PaymentTrxMapper;
 import com.plateer.ec1.payment.service.PaymentBizService;
 import com.plateer.ec1.payment.vo.*;
-import com.plateer.ec1.payment.vo.inicis.InicisApproveReq;
-import com.plateer.ec1.payment.vo.inicis.InicisApproveRes;
-import com.plateer.ec1.payment.vo.inicis.InicisCancelReq;
-import com.plateer.ec1.payment.vo.inicis.InicisCancelRes;
+import com.plateer.ec1.payment.vo.franchisee.FranchiseeReq;
+import com.plateer.ec1.payment.vo.inicis.*;
+import com.plateer.ec1.payment.vo.order.OrderReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +22,16 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class Inicis implements Payment {
     private final PaymentBizService paymentBizService;
-    private static final String url = "https://iniapi.inicis.com/api/v1/formpay";
+    //이니시스 승인 url
+    private static final String APPROVE_URL = "https://iniapi.inicis.com/api/v1/formpay";
 
+    //이니시스 가상계좌환불 url
+    private static final String REFUND_URL = "https://iniapi.inicis.com/api/v1/refund";
+
+    @Override
+    public PaymentType getType() {
+        return PaymentType.INICIS;
+    }
     /**
      * 이니시스 가상계좌 채번
      * @param payInfo
@@ -35,7 +39,7 @@ public class Inicis implements Payment {
      */
     @Override
     @Transactional
-    public ApproveResVO approvePay(PayApproveReq payInfo) {
+    public ApproveRes approvePay(PayApproveReq payInfo) {
         //가상계좌 채번
         InicisApproveRes inicisApproveRes = inicisApproveCall(InicisApproveReq.of(payInfo));
         //주문결제 insert
@@ -43,7 +47,7 @@ public class Inicis implements Payment {
         if (SUCCESS_CODE.equals(inicisApproveRes.getResultCode())) {
             savePayInfo(payInfo, inicisApproveRes);
         }
-        return ApproveResVO.of(inicisApproveRes);
+        return ApproveRes.of(inicisApproveRes);
     }
 
     /**
@@ -54,12 +58,7 @@ public class Inicis implements Payment {
     @Transactional
     public void completePay(PayCompleteReq req) {
         OpPayInfo getPayInfo = paymentBizService.getPayInfo(req.getTrsnId());
-        OpPayInfo opPayInfo = OpPayInfo.builder()
-                .payNo(getPayInfo.getPayNo())
-                .rfndAvlAmt(getPayInfo.getPayAmt())
-                .payPrgsScd(OPT0011Enum.COMPLETE.getCode())
-                .build();
-        paymentBizService.modifyPayInfo(opPayInfo);
+        paymentBizService.modifyPayInfo(OpPayInfo.completeOf(getPayInfo));
     }
 
     /**
@@ -69,7 +68,7 @@ public class Inicis implements Payment {
     @Override
     @Transactional
     public void cancelData(CancelReq cancelReq) {
-        OpPayInfo orderPayInfo = paymentBizService.getOrderPayInfo(cancelReq.getOrdNo());
+        OrderPayInfo orderPayInfo = paymentBizService.getOrderPayInfo(cancelReq.getOrdNo());
         long rfndAvlAmt = orderPayInfo.getPayAmt() - cancelReq.getCancelAmt();
         //해당 데이터에 취소금액 환불금액 update
         OpPayInfo setModifyData = OpPayInfo.builder().payNo(orderPayInfo.getPayNo()).cnclAmt(cancelReq.getCancelAmt()).rfndAvlAmt(rfndAvlAmt).build();
@@ -81,14 +80,31 @@ public class Inicis implements Payment {
      */
     @Override
     public void cancelPay(CancelReq cancelReq) {
-        InicisCancelReq inicisCancelReq = new InicisCancelReq();
-        inicisCancelCall(inicisCancelReq);
+        OrderPayInfo orderPayInfo = paymentBizService.getOrderPayInfo(cancelReq.getOrdNo());
+        if (OPT0011Enum.REQUEST.getCode().equals(orderPayInfo.getPayPrgsScd())){    //입금전
+            //전체환불 API 호출
+            InicisRefundRes res = inicisRefundCall(InicisRefundReq.setInicisRefundReq(cancelReq, orderPayInfo));
+
+            if (orderPayInfo.getRfndAvlAmt() > cancelReq.getCancelAmt()) {
+                //남은금액에 대해 결제 요청 API 호출
+
+
+            }
+
+        } else if (OPT0011Enum.COMPLETE.getCode().equals(orderPayInfo.getPayPrgsScd())) {   //입금후
+            if (orderPayInfo.getRfndAvlAmt() == cancelReq.getCancelAmt()) {
+                //전체환불 API 호출
+                InicisRefundRes res = inicisRefundCall(InicisRefundReq.setInicisRefundReq(cancelReq, orderPayInfo));
+            } else {
+                InicisPartialRefundRes res = inicisPartialRefundCall(InicisPartialRefundReq.setInicisPartialRefundReq(cancelReq, orderPayInfo));
+            }
+        }
     }
 
+    //TODO 수정예정 - transactional / try - catch
     @Transactional
     public void savePayInfo(PayApproveReq payInfo, InicisApproveRes res) {
-        OpPayInfo basePayInfo = OpPayInfo.of(payInfo);
-        basePayInfo.setInicisRes(res);
+        OpPayInfo basePayInfo = OpPayInfo.of(payInfo, res);
         paymentBizService.savePayInfo(basePayInfo);
     }
 
@@ -98,25 +114,22 @@ public class Inicis implements Payment {
         log.info("[Inicis.netCancel] Inicis 망취소");
     }
 
-    @Override
-    public PaymentType getType() {
-        return PaymentType.INICIS;
-    }
-
     private InicisApproveRes inicisApproveCall(InicisApproveReq req) {
-
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<InicisApproveRes> res = restTemplate.postForEntity(url, HttpUtil.httpEntityMultiValueMap(req), InicisApproveRes.class);
-        //외부인터페이스 사용 후 로그에 결과값 업데이트
+        ResponseEntity<InicisApproveRes> res = restTemplate.postForEntity(APPROVE_URL, HttpUtil.httpEntityMultiValueMap(req), InicisApproveRes.class);
         return res.getBody();
     }
 
-    private InicisCancelRes inicisCancelCall(InicisCancelReq inicisCancelReq){
-        //외부인터페이스 사용 시 로그추가
-        log.info("[Inicis.cancel] 이니시스 취소 api call");
-        InicisCancelRes res = new InicisCancelRes();
-        //외부인터페이스 사용 후 로그에 결과값 업데이트
-        return res;
+    private InicisRefundRes inicisRefundCall(InicisRefundReq req){
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<InicisRefundRes> res = restTemplate.postForEntity(REFUND_URL, HttpUtil.httpEntityMultiValueMap(req), InicisRefundRes.class);
+        return res.getBody();
+    }
+
+    private InicisPartialRefundRes inicisPartialRefundCall(InicisPartialRefundReq req){
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<InicisPartialRefundRes> res = restTemplate.postForEntity(REFUND_URL, HttpUtil.httpEntityMultiValueMap(req), InicisPartialRefundRes.class);
+        return res.getBody();
     }
 
 }

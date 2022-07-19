@@ -5,6 +5,7 @@ import com.plateer.ec1.common.model.order.OpPayInfo;
 import com.plateer.ec1.payment.mapper.PaymentMapper;
 import com.plateer.ec1.payment.mapper.PaymentTrxMapper;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,10 +21,8 @@ class PaymentBizServiceImplTest {
     @Autowired
     PaymentTrxMapper paymentTrxMapper;
 
-    @Value("${inicis.apikey}")
-    private String apikey;
-
     @Test
+    @DisplayName("transId로 결제정보 조회")
     void getPayInfo() {
         String trsnId = "INIAPIVBNKINIpayTest20220714132544122179";
         OpPayInfo payInfo = paymentMapper.getPayInfo(trsnId);
@@ -31,6 +30,7 @@ class PaymentBizServiceImplTest {
     }
 
     @Test
+    @DisplayName("transId로 결제정보 조회 후 결제데이터 수정 - 입금통보 데이터")
     void completePay() {
         String trsnId = "INIAPIVBNKINIpayTest20220714132712822142";
         OpPayInfo getPayInfo = paymentMapper.getPayInfo(trsnId);

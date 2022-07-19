@@ -3,7 +3,7 @@ package com.plateer.ec1.payment.service.impl;
 import com.plateer.ec1.payment.factory.Payment;
 import com.plateer.ec1.payment.factory.PaymentFactory;
 import com.plateer.ec1.payment.service.PaymentService;
-import com.plateer.ec1.payment.vo.ApproveResVO;
+import com.plateer.ec1.payment.vo.ApproveRes;
 import com.plateer.ec1.payment.vo.CancelReq;
 import com.plateer.ec1.payment.vo.PayApproveReq;
 import com.plateer.ec1.payment.vo.PayCompleteReq;
@@ -21,7 +21,7 @@ public class PaymentServiceImpl implements PaymentService {
      * @return ApproveResVO
      */
     @Override
-    public ApproveResVO approve(PayApproveReq payInfo) {
+    public ApproveRes approve(PayApproveReq payInfo) {
         Payment factory = paymentFactory.getPaymentFactory(payInfo.getPaymentType());
         return factory.approvePay(payInfo);
     }

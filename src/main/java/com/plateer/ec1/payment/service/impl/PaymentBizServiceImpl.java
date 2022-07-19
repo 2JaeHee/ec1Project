@@ -4,6 +4,7 @@ import com.plateer.ec1.common.model.order.OpPayInfo;
 import com.plateer.ec1.payment.mapper.PaymentMapper;
 import com.plateer.ec1.payment.mapper.PaymentTrxMapper;
 import com.plateer.ec1.payment.service.PaymentBizService;
+import com.plateer.ec1.payment.vo.OrderPayInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class PaymentBizServiceImpl implements PaymentBizService {
     }
 
     @Override
-    public OpPayInfo getOrderPayInfo(String ordNo) {
+    public OrderPayInfo getOrderPayInfo(String ordNo) {
         return paymentMapper.getOrderPayInfo(ordNo);
     }
 

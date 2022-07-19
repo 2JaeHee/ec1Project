@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.plateer.ec1.order.mapper.OrderTrxMapper">
+    <insert id="saveOrderBaseInfo" parameterType="com.plateer.ec1.common.model.order.OpOrdBase">
+        INSERT INTO op_ord_base (
+              ord_no
+            , mbr_no
+            , ord_tp_cd
+            , ord_sys_ccd
+            , ord_req_dtime
+            , ord_cmt_dtime
+            , ord_nm
+            , ord_sell_no
+            , ord_addr
+            , ord_addr_dtl
+            , rfnd_bnk_ck
+            , rfnd_acct_no
+            , rfnd_acct_own_nm
+            , sys_regr_id
+            , sys_reg_dtime
+            , sys_modr_id
+            , sys_mod_dtime
+        ) VALUES (
+             #{ordNo}
+             , #{mbrNo}
+             , #{ordTpCd}
+             , #{ordSysCcd}
+             , #{ordReqDtime}
+             , #{ordCmtDtime}
+             , #{ordNm}
+             , #{ordSellNo}
+             , #{ordAddr}
+             , #{ordAddrDtl}
+             , #{rfndBnkCk}
+             , #{rfndAcctNo}
+             , #{rfndAcctOwnNm}
+             , #{sysRegrId}
+             , NOW()
+             , #{sysModrId}
+             , NOW()
+         )
+    </insert>
+</mapper>

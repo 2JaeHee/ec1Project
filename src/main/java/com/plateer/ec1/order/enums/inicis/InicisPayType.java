@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 public enum InicisPayType {
     //Type  결제구분코드
     PAY("Pay", "결제"),
-    REFUND("Refund", "취소")
+    REFUND("Refund", "가상계좌환불"),
+    PARTIAL_REFUND("PartialRefund", "가상계좌 부분환불")
     ;
 
     @Getter

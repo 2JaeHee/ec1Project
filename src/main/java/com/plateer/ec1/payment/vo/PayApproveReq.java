@@ -52,23 +52,22 @@ public class PayApproveReq {
     private OPT0010Enum payCcd;      //결제구분코드
     private OPT0011Enum payPrgsScd;  //결제진행상태코드
 
-    public void setFranchiseeInfo(FranchiseeReq franchiseeReq) {
-        this.clientIp = franchiseeReq.getClientIp();
-        this.mid = franchiseeReq.getMid();
-        this.url = franchiseeReq.getUrl();
+    public static PayApproveReq inicisApproveOf(FranchiseeReq franchiseeReq, OrderReq orderReq, MemberReq memberReq) {
+        return PayApproveReq.builder()
+                .paymentType(PaymentType.INICIS)
+                .payMnCd(OPT0009Enum.VIRTUAL_ACCOUNT)
+                .payCcd(OPT0010Enum.PAY)
+                .payPrgsScd(OPT0011Enum.REQUEST)
+                .clientIp(franchiseeReq.getClientIp())
+                .mid(franchiseeReq.getMid())
+                .url(franchiseeReq.getUrl())
+                .ordNo(orderReq.getOrdNo())
+                .goodsNm(orderReq.getGoodsNm())
+                .prc(orderReq.getPrc())
+                .bankCode(orderReq.getBankCode())
+                .mbrNm(memberReq.getMbrNm())
+                .mbrEmail(memberReq.getMbrEmail())
+                .mbrPhoneNo(memberReq.getMbrPhoneNo())
+                .build();
     }
-
-    public void setOrderInfo(OrderReq orderReq) {
-        this.ordNo = orderReq.getOrdNo();
-        this.goodsNm = orderReq.getGoodsNm();
-        this.prc = orderReq.getPrc();
-        this.bankCode = orderReq.getBankCode();
-    }
-
-    public void setMemberInfo(MemberReq memberReq) {
-        this.mbrNm = memberReq.getMbrNm();
-        this.mbrEmail = memberReq.getMbrEmail();
-        this.mbrPhoneNo = memberReq.getMbrPhoneNo();
-    }
-
 }

@@ -1,5 +1,6 @@
 package com.plateer.ec1.payment.vo.inicis;
 
+import com.plateer.ec1.common.code.payment.PaymentConfigValue;
 import com.plateer.ec1.common.utils.AesAnDesUtil;
 import com.plateer.ec1.order.enums.inicis.InicisPayType;
 import com.plateer.ec1.order.enums.inicis.InicisPaymethod;
@@ -21,7 +22,6 @@ import java.time.format.DateTimeFormatter;
 @Getter
 @Setter
 public class InicisApproveReq {
-    private static String apikey = "ItEQKi3rY7uvDS8l";
 
     private static final int INPUT_HOUR = 24;
     private static final String CURRENCY_CODE = "WON";
@@ -103,7 +103,7 @@ public class InicisApproveReq {
     }
 
     public void setHashData() {
-        String hashData = apikey +
+        String hashData = PaymentConfigValue.inicisApikey +
                 this.type +
                 this.paymethod +
                 this.timestamp +

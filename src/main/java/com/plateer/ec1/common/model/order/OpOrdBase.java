@@ -1,7 +1,13 @@
 package com.plateer.ec1.common.model.order;
 
+import com.plateer.ec1.common.code.promotion.PromotionConstants;
+import lombok.Builder;
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
+@Builder
+@Getter
 public class OpOrdBase {
     private String ordNo;
     private String mbrNo;
@@ -16,9 +22,10 @@ public class OpOrdBase {
     private String rfndBnkCk;
     private String rfndAcctNo;
     private String rfndAcctOwnNm;
-    private LocalDateTime sysRegDtime;
-    private String sysRegrId;
-    private String sysModrId;
+    @Builder.Default
+    private String sysRegrId = PromotionConstants.ADMIN;
     private LocalDateTime sysModDtime;
+    @Builder.Default
+    private String sysModrId= PromotionConstants.ADMIN;
 
 }

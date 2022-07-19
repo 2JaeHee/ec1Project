@@ -1,5 +1,6 @@
 package com.plateer.ec1.common.model.order;
 
+import com.plateer.ec1.common.code.order.OPT0011Enum;
 import com.plateer.ec1.common.code.promotion.PromotionConstants;
 import com.plateer.ec1.payment.vo.inicis.InicisApproveRes;
 import com.plateer.ec1.payment.vo.PayApproveReq;
@@ -35,22 +36,29 @@ public class OpPayInfo {
     private String vrValDt;
     private String vrValTt;
 
-    public static OpPayInfo of(PayApproveReq payInfo) {
+    //이니시스 승인
+    public static OpPayInfo of(PayApproveReq payInfo, InicisApproveRes res) {
         return OpPayInfo.builder()
                 .ordNo(payInfo.getOrdNo())
                 .payAmt(payInfo.getPrc())
                 .payMnCd(payInfo.getPayMnCd().getCode())
                 .payCcd(payInfo.getPayCcd().getCode())
                 .payPrgsScd(payInfo.getPayPrgsScd().getCode())
+                .trsnId(res.getTid())
+                .payAmt(res.getPrice())
+                .vrAcct(res.getVacct())
+                .vrAcctNm(res.getVacctName())
+                .vrBnkCd(res.getVacctBankCode())
+                .vrValDt(res.getValidDate())
+                .vrValTt(res.getValidTime())
                 .build();
     }
-    public void setInicisRes(InicisApproveRes res) {
-        this.trsnId = res.getTid();
-        this.payAmt = res.getPrice();
-        this.vrAcct = res.getVacct();
-        this.vrAcctNm = res.getVacctName();
-        this.vrBnkCd = res.getVacctBankCode();
-        this.vrValDt = res.getValidDate();
-        this.vrValTt = res.getValidTime();
+    //이니시스 결제 완료
+    public static OpPayInfo completeOf(OpPayInfo opPayInfo) {
+        return OpPayInfo.builder()
+                .payNo(opPayInfo.getPayNo())
+                .rfndAvlAmt(opPayInfo.getPayAmt())
+                .payPrgsScd(OPT0011Enum.COMPLETE.getCode())
+                .build();
     }
 }

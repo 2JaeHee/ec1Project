@@ -29,31 +29,36 @@
          WHERE trsn_id = #{trsnId}
     </select>
 
-    <select id="getOrderPayInfo" parameterType="String" resultType="com.plateer.ec1.common.model.order.OpPayInfo">
-        SELECT pay_no
-             , ord_no
-             , clm_no
-             , pay_mn_cd
-             , pay_ccd
-             , pay_prgs_scd
-             , pay_amt
-             , cncl_amt
-             , rfnd_avl_amt
-             , trsn_id
-             , pay_cmt_dtime
-             , sys_reg_dtime
-             , sys_regr_id
-             , sys_mod_dtime
-             , sys_modr_id
-             , org_pay_no
-             , vr_acct
-             , vr_acct_nm
-             , vr_bnk_cd
-             , vr_val_dt
-             , vr_val_tt
-        FROM op_pay_info
-        WHERE ord_no = #{ordNo}
-          AND pay_ccd = '10'    --결제구분코드 결제
-          AND ( pay_amt - cncl_amt > 0 )
+    <select id="getOrderPayInfo" parameterType="String" resultType="com.plateer.ec1.payment.vo.OrderPayInfo">
+        SELECT opi.pay_no
+             , opi.ord_no
+             , opi.clm_no
+             , opi.pay_mn_cd
+             , opi.pay_ccd
+             , opi.pay_prgs_scd
+             , opi.pay_amt
+             , opi.cncl_amt
+             , CASE
+                 WHEN opi.pay_prgs_scd = '10' THEN opi.pay_amt
+                 WHEN opi.pay_prgs_scd = '20' THEN opi.rfnd_avl_amt
+                END as rfnd_avl_amt
+             , opi.trsn_id
+             , opi.pay_cmt_dtime
+             , opi.org_pay_no
+             , opi.vr_acct
+             , opi.vr_acct_nm
+             , opi.vr_bnk_cd
+             , opi.vr_val_dt
+             , opi.vr_val_tt
+             , oob.rfnd_bnk_ck
+             , oob.rfnd_acct_no
+             , oob.rfnd_acct_own_nm
+          FROM op_ord_base oob
+         INNER JOIN op_pay_info opi
+            ON oob.ord_no = opi.ord_no
+         WHERE 1=1
+           AND oob.ord_no = #{ordNo}
+           AND opi.pay_ccd = '10'    --결제구분코드 결제
+           AND ( opi.pay_amt - opi.cncl_amt > 0 )
     </select>
 </mapper>
