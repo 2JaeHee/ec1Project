@@ -17,6 +17,6 @@ public interface PointService {
      * @param pointReqVo
      * @param accumulate
      */
-    void savePointInfo(PointReqVo pointReqVo, PRM0011Enum accumulate) throws Exception;
+    void savePointInfo(PointReqVo pointReqVo, PRM0011Enum accumulate);
 
 }

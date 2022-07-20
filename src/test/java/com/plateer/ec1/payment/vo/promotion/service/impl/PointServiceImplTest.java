@@ -17,16 +17,34 @@ class PointServiceImplTest {
     @Autowired
     PointTrxMapper pointTrxMapper;
 
-    private final String mbrNo = "test01";
+    @Test
+    void mainSavePointInfo_ACCUMULATE() {
+        String mbrNo = "test02";
+        double amt = 20000;
+        PointReqVo pointReqVo = PointReqVo.builder().mbrNo(mbrNo).pntBlc(amt).build();
+    } @Test
+    void mainSavePointInfo_USE() {
+        String mbrNo = "test02";
+        double amt = 1000;
+        String ordNo = "O22207200001";
+        String payNo = "1";
+    } @Test
+    void mainSavePointInfo_CANCEL() {
+        String mbrNo = "test02";
+        double amt = 1000;
+        String ordNo = "O22207200001";
+        String payNo = "1";
+    }
 
     @Test
     void getPointInfo() {
+        String mbrNo = "test01";
         CcMbrPntModel pointInfo = pointService.getPointInfo(mbrNo);
     }
 
-
     @Test
     void savePointInfo() throws Exception {
+        String mbrNo = "test01";
         double amt = 10000;
         PointReqVo pointReqVo = PointReqVo.builder().mbrNo(mbrNo).pntBlc(amt).build();
         pointService.savePointInfo(pointReqVo, PRM0011Enum.ACCUMULATE);
@@ -34,6 +52,7 @@ class PointServiceImplTest {
 
     @Test
     void usePoint() {
+        String mbrNo = "test01";
         double amt = 1000;
         String ordNo = "O22207200001";
         String payNo = "1";
@@ -52,6 +71,7 @@ class PointServiceImplTest {
 
     @Test
     void cancelPoint() {
+        String mbrNo = "test01";
         double amt = 1000;
         String ordNo = "O22207200001";
         String payNo = "2";
@@ -66,4 +86,5 @@ class PointServiceImplTest {
                 .build();
         pointTrxMapper.savePointInfo(ccMbrPntModel);
     }
+
 }

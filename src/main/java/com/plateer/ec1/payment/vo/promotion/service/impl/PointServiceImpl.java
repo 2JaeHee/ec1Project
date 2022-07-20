@@ -7,9 +7,11 @@ import com.plateer.ec1.payment.vo.promotion.mapper.PointTrxMapper;
 import com.plateer.ec1.payment.vo.promotion.service.PointService;
 import com.plateer.ec1.payment.vo.promotion.vo.req.PointReqVo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class PointServiceImpl implements PointService {
@@ -23,22 +25,24 @@ public class PointServiceImpl implements PointService {
 
     @Override
     @Transactional
-    public void savePointInfo(PointReqVo pointReqVo, PRM0011Enum accumulate) throws IllegalArgumentException {
+    public void savePointInfo(PointReqVo pointReqVo, PRM0011Enum accumulate)  {
         CcMbrPntModel ccMbrPntModel = CcMbrPntModel.builder().build();
+        CcMbrPntModel getPointInfo = getPointInfo(pointReqVo.getMbrNo());
 
         switch (accumulate) {
             case ACCUMULATE:
-                ccMbrPntModel = CcMbrPntModel.accumulate(pointReqVo);
+                ccMbrPntModel = CcMbrPntModel.accumulate(pointReqVo, getPointInfo);
                 break;
             case USE:
-                ccMbrPntModel = CcMbrPntModel.use(pointReqVo, getPointInfo(pointReqVo.getMbrNo()));
+                ccMbrPntModel = CcMbrPntModel.use(pointReqVo, getPointInfo);
                 break;
             case CANCEL:
-                ccMbrPntModel = CcMbrPntModel.cancel(pointReqVo, getPointInfo(pointReqVo.getMbrNo()));
+                ccMbrPntModel = CcMbrPntModel.cancel(pointReqVo, getPointInfo);
                 break;
             default:
                 throw new IllegalArgumentException();
         }
+
         pointTrxMapper.savePointInfo(ccMbrPntModel);
     }
 }

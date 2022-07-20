@@ -5,9 +5,10 @@ import com.plateer.ec1.common.code.promotion.PromotionConstants;
 import com.plateer.ec1.payment.vo.promotion.vo.req.PointReqVo;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Builder
 @Getter
@@ -27,32 +28,32 @@ public class CcMbrPntModel {
     private String sysModrId = PromotionConstants.ADMIN;
 
     //적립
-    public static CcMbrPntModel accumulate(PointReqVo pointReqVo) {
+    public static CcMbrPntModel accumulate(PointReqVo pointReqVo, CcMbrPntModel getPointInfo) {
         return CcMbrPntModel.builder()
                 .mbrNo(pointReqVo.getMbrNo())
                 .svUseCcd(PRM0011Enum.ACCUMULATE.getCode())
-                .svUseAmt(pointReqVo.getPntBlc())
+                .svUseAmt(ObjectUtils.isEmpty(getPointInfo)? pointReqVo.getPntBlc() : getPointInfo.pntBlc + pointReqVo.getPntBlc())
                 .pntBlc(pointReqVo.getPntBlc())
                 .build();
     }
     //사용
-    public static CcMbrPntModel use(PointReqVo pointReqVo, CcMbrPntModel pointInfo) {
+    public static CcMbrPntModel use(PointReqVo pointReqVo, CcMbrPntModel getPointInfo) {
         return CcMbrPntModel.builder()
                 .mbrNo(pointReqVo.getMbrNo())
                 .svUseCcd(PRM0011Enum.USE.getCode())
                 .svUseAmt(pointReqVo.getPntBlc())
-                .pntBlc(pointInfo.getPntBlc() - pointReqVo.getPntBlc())
+                .pntBlc(getPointInfo.getPntBlc() - pointReqVo.getPntBlc())
                 .ordNo(pointReqVo.getOrdNo())
                 .payNo(pointReqVo.getPayNo())
                 .build();
     }
     //취소
-    public static CcMbrPntModel cancel(PointReqVo pointReqVo, CcMbrPntModel pointInfo) {
+    public static CcMbrPntModel cancel(PointReqVo pointReqVo, CcMbrPntModel getPointInfo) {
         return CcMbrPntModel.builder()
                 .mbrNo(pointReqVo.getMbrNo())
                 .svUseCcd(PRM0011Enum.ACCUMULATE.getCode())
                 .svUseAmt(pointReqVo.getPntBlc())
-                .pntBlc(pointInfo.getPntBlc() + pointReqVo.getPntBlc())
+                .pntBlc(getPointInfo.getPntBlc() + pointReqVo.getPntBlc())
                 .ordNo(pointReqVo.getOrdNo())
                 .payNo(pointReqVo.getPayNo())
                 .build();
