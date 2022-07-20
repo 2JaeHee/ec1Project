@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.plateer.ec1.payment.vo.promotion.mapper.PointTrxMapper">
+    <insert id="savePointInfo" parameterType="com.plateer.ec1.common.model.promotion.CcMbrPntModel" >
+        /** 회원 별 포인트 조회 */
+        INSERT INTO cc_mbr_pnt (
+            mbr_no
+            , sv_use_ccd
+            , sv_use_amt
+            , pnt_blc
+            , ord_no
+            , pay_no
+            , sys_reg_dtime
+            , sys_regr_id
+            , sys_mod_dtime
+            , sys_modr_id
+        ) VALUES (
+             #{mbrNo}
+             , #{svUseCcd}
+             , #{svUseAmt}
+             , #{pntBlc}
+             , #{ordNo}
+             , #{payNo}
+             , NOW()
+             , #{sysRegrId}
+             , NOW()
+             , #{sysModrId}
+        )
+    </insert>
+</mapper>
+
+
+
+
+

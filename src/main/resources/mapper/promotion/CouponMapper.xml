@@ -20,8 +20,8 @@
                 , dwl_avl_plc
                 , iss_way_ccd
                 , cert_cd
-                , our_chrg_rt
-                , entr_chrg_rt
+                , our_chrg_rt::double precision
+                , entr_chrg_rt::double precision
           FROM cc_cpn_base
          WHERE prm_no = #{prmNo}
     </select>

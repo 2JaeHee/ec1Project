@@ -20,18 +20,14 @@ public class CcCpnBaseModel {
     private String entChnGb;    //PRM0007 진입채널구분(NONE, MAIL, SMS, PUSH, HOMEPAGE)
     private String dwlAvlStrtDd;
     private String dwlAvlEndDd;
-    private int dwlStdDd;
-    private int dwlPsbCnt;
-    private int psnDwlPsbCnt;
+    private Integer dwlStdDd;
+    private Integer dwlPsbCnt;
+    private Integer psnDwlPsbCnt;
     private String dwlAvlPlc;   //PRM0008 다운로드가능공간(상품상세, 쿠폰북, 장바구니)
     private String issWayCcd;   //PRM0009 발급방식구분코드(다운로드, 자동발급)
     private String certCd;
-    private double ourChrgRt;
-    private double entrChrgRt;
-    private Timestamp sysRegDtime;
-    private String sysRegrId;
-    private Timestamp sysModDtime;
-    private String sysModrId;
+    private Double ourChrgRt;
+    private Double entrChrgRt;
 
 
 
