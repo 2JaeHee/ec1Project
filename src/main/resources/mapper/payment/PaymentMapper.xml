@@ -53,6 +53,11 @@
              , oob.rfnd_bnk_ck
              , oob.rfnd_acct_no
              , oob.rfnd_acct_own_nm
+             , (SELECT goods_nm FROM op_goods_info ogi WHERE ogi.ord_no = oob.ord_no LIMIT 1) as goods_nm
+             , oob.ord_nm
+             , oob.ord_sell_no
+             , oob.ord_addr
+             , oob.ord_addr_dtl
           FROM op_ord_base oob
          INNER JOIN op_pay_info opi
             ON oob.ord_no = opi.ord_no

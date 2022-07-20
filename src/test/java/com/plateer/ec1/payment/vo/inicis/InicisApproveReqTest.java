@@ -30,13 +30,8 @@ class InicisApproveReqTest {
 
     @Test
     void setHashData() {
-        PayApproveReq payInfo = PayApproveReq.builder()
-                .paymentType(PaymentType.INICIS)
-                .payMnCd(OPT0009Enum.VIRTUAL_ACCOUNT)
-                .payCcd(OPT0010Enum.PAY)
-                .payPrgsScd(OPT0011Enum.REQUEST)
-                .build();
-        setDefaultData(payInfo);
+        PayApproveReq payInfo = setDefaultData();
+
 
         InicisApproveReq inicisApproveReq = InicisApproveReq.of(payInfo);
         inicisApproveReq.setHashData();
@@ -44,7 +39,7 @@ class InicisApproveReqTest {
         log.info("test : {} ", inicisApproveReq.getHashData());
     }
 
-    private void setDefaultData(PayApproveReq payInfo) {
+    private PayApproveReq setDefaultData() {
         //상품 가맹점 정보
         FranchiseeReq franchiseeReq = FranchiseeReq.builder()
                 .clientIp("127.0.0.1")
@@ -65,9 +60,6 @@ class InicisApproveReqTest {
                 .mbrEmail("oBack@plateer.com")
                 .mbrPhoneNo("01011112222")
                 .build();
-
-        payInfo.setFranchiseeInfo(franchiseeReq);
-        payInfo.setOrderInfo(orderReq);
-        payInfo.setMemberInfo(memberReq);
+        return PayApproveReq.inicisApproveOf(franchiseeReq, orderReq, memberReq);
     }
 }

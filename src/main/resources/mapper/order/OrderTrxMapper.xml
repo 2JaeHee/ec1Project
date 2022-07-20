@@ -3,7 +3,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.plateer.ec1.order.mapper.OrderTrxMapper">
-    <insert id="saveOrderBaseInfo" parameterType="com.plateer.ec1.common.model.order.OpOrdBase">
+    <insert id="saveOpOrdBase" parameterType="com.plateer.ec1.common.model.order.OpOrdBase">
+        /** 주문 기본 정보 등록 */
         INSERT INTO op_ord_base (
               ord_no
             , mbr_no
@@ -41,5 +42,38 @@
              , #{sysModrId}
              , NOW()
          )
+    </insert>
+
+    <insert id="saveOpGoodsInfo" parameterType="com.plateer.ec1.common.model.order.OpGoodsInfo">
+        /** 주문 상품 정보 등록 */
+        INSERT INTO op_goods_info (
+            ord_no
+            , ord_goods_no
+            , ord_item_no
+            , goods_sell_tp_cd
+            , goods_dlv_tp_cd
+            , goods_nm
+            , item_nm
+            , sell_amt
+            , sell_dc_amt
+            , sys_reg_dtime
+            , sys_regr_id
+            , sys_mod_dtime
+            , sys_modr_id
+        ) VALUES (
+            #{ordNo}
+             , #{ordGoodsNo}
+             , #{ordItemNo}
+             , #{goodsSellTpCd}
+             , #{goodsDlvTpCd}
+             , #{goodsNm}
+             , #{itemNm}
+             , #{sellAmt}
+             , #{sellDcAmt}
+             , NOW()
+             , #{sysRegrId}
+             , NOW()
+             , #{sysModrId}
+        )
     </insert>
 </mapper>

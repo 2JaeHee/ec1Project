@@ -3,8 +3,13 @@ package com.plateer.ec1.payment.enums;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-@RequiredArgsConstructor
+
 public enum BankCode {
     IBK("03", "기업은행"),
     KB("04", "국민은행"),
@@ -14,13 +19,21 @@ public enum BankCode {
     SC("23", "SC은행"),
     ;
 
+    private static final Map<String, String> CODE_MAP = Collections.unmodifiableMap(Stream.of(values())
+            .collect(Collectors.toMap(BankCode::getCode, BankCode::name)));
+
     @Getter
-    String code;
+    private final String code;
     @Getter
-    String codeNm;
+    private final String codeNm;
 
     BankCode(String code, String codeNm) {
         this.code = code;
         this.codeNm = codeNm;
+    }
+
+
+    public static BankCode of(String code) {
+        return BankCode.valueOf(CODE_MAP.get(code));
     }
 }

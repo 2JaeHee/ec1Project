@@ -1,11 +1,9 @@
 package com.plateer.ec1.payment.vo.inicis;
 
-import com.plateer.ec1.common.code.payment.PaymentConfigValue;
-import com.plateer.ec1.common.model.order.OpPayInfo;
+import com.plateer.ec1.common.code.PaymentConfigValue;
 import com.plateer.ec1.common.utils.AesAnDesUtil;
 import com.plateer.ec1.order.enums.inicis.InicisPayType;
 import com.plateer.ec1.order.enums.inicis.InicisPaymethod;
-import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.vo.CancelReq;
 import com.plateer.ec1.payment.vo.OrderPayInfo;
 import lombok.Builder;

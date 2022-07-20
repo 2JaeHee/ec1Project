@@ -29,4 +29,10 @@ public class OrderPayInfo {
     private String rfndBnkCk;
     private String rfndAcctNo;
     private String rfndAcctOwnNm;
+    private String goodsNm;
+    private String ordNm;
+    private String ordSellNo;
+    private String ordAddr;
+    private String ordAddrDtl;
+
 }

@@ -3,26 +3,4 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.plateer.ec1.product.mapper.ProductMapper">
-    <select id="getGoodsBaseInfo" parameterType="java.util.List" resultType="com.plateer.ec1.payment.vo.promotion.vo.Product">
-        SELECT pgb.goods_no
-                , pgb.goods_nm
-                , pgb.goods_tp_cd
-                , case when prm_prc <![CDATA[<=]]> sale_prc
-                        then prm_prc
-                        when prm_prc <![CDATA[>]]> sale_prc
-                        then sale_prc
-                    end prc
-                , pgb.prm_prc
-                , pgb.prgs_stat_cd
-                , cpat.prm_no
-          FROM pr_goods_base pgb
-         INNER JOIN cc_prm_aply_tgt cpat
-            ON pgb.goods_no = cpat.aply_tgt_no
-         WHERE 1=1
-           AND prgs_stat_cd = '20'
-           AND pgb.goods_no IN
-        <foreach collection="list" item="item" open="(" separator="," close=")">
-            #{item.goodsNo}
-        </foreach>
-    </select>
 </mapper>

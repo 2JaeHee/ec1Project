@@ -128,13 +128,7 @@ public class paymentParameterTest {
                 .mbrPhoneNo("01011112222")
                 .build();
 
-        PayApproveReq payInfo = PayApproveReq.builder()
-                .paymentType(PaymentType.INICIS)
-                .build();
-
-        payInfo.setFranchiseeInfo(franchiseeReq);
-        payInfo.setOrderInfo(orderReq);
-        payInfo.setMemberInfo(memberReq);
+        PayApproveReq payInfo = PayApproveReq.inicisApproveOf(franchiseeReq, orderReq, memberReq);
 
         Set<ConstraintViolation<PayApproveReq>> violations = validator.validate(payInfo);
         assertTrue(violations.isEmpty());

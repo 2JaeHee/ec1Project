@@ -1,4 +1,4 @@
-package com.plateer.ec1.common.code.payment;
+package com.plateer.ec1.common.code;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

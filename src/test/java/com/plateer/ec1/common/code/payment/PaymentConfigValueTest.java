@@ -1,5 +1,6 @@
 package com.plateer.ec1.common.code.payment;
 
+import com.plateer.ec1.common.code.PaymentConfigValue;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

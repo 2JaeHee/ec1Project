@@ -54,7 +54,7 @@ public class PayApproveReq {
 
     public static PayApproveReq inicisApproveOf(FranchiseeReq franchiseeReq, OrderReq orderReq, MemberReq memberReq) {
         return PayApproveReq.builder()
-                .paymentType(PaymentType.INICIS)
+                .paymentType(PaymentType.INICIS)        //parameter로 변경해야함
                 .payMnCd(OPT0009Enum.VIRTUAL_ACCOUNT)
                 .payCcd(OPT0010Enum.PAY)
                 .payPrgsScd(OPT0011Enum.REQUEST)

@@ -3,12 +3,14 @@ package com.plateer.ec1.payment.factory.impl;
 import com.plateer.ec1.common.code.order.OPT0011Enum;
 import com.plateer.ec1.common.model.order.OpPayInfo;
 import com.plateer.ec1.common.utils.HttpUtil;
+import com.plateer.ec1.payment.enums.BankCode;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.factory.Payment;
 import com.plateer.ec1.payment.service.PaymentBizService;
 import com.plateer.ec1.payment.vo.*;
 import com.plateer.ec1.payment.vo.franchisee.FranchiseeReq;
 import com.plateer.ec1.payment.vo.inicis.*;
+import com.plateer.ec1.payment.vo.member.MemberReq;
 import com.plateer.ec1.payment.vo.order.OrderReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -85,10 +87,11 @@ public class Inicis implements Payment {
             //전체환불 API 호출
             InicisRefundRes res = inicisRefundCall(InicisRefundReq.setInicisRefundReq(cancelReq, orderPayInfo));
 
-            if (orderPayInfo.getRfndAvlAmt() > cancelReq.getCancelAmt()) {
+            long rfndAvlAmt = orderPayInfo.getRfndAvlAmt() - cancelReq.getCancelAmt();
+            if (rfndAvlAmt > 0) {
                 //남은금액에 대해 결제 요청 API 호출
-
-
+                PayApproveReq payInfo = setApprovePayInfo(cancelReq, orderPayInfo, rfndAvlAmt);
+                approvePay(payInfo);
             }
 
         } else if (OPT0011Enum.COMPLETE.getCode().equals(orderPayInfo.getPayPrgsScd())) {   //입금후
@@ -132,4 +135,23 @@ public class Inicis implements Payment {
         return res.getBody();
     }
 
+    private PayApproveReq setApprovePayInfo(CancelReq cancelReq, OrderPayInfo orderPayInfo, long rfndAvlAmt) {
+        FranchiseeReq franchiseeReq = FranchiseeReq.builder()
+                .clientIp(cancelReq.getClientIp())
+                .mid(cancelReq.getMid())
+                .url(cancelReq.getUrl())
+                .build();
+        OrderReq orderReq = OrderReq.builder()
+                .ordNo(orderPayInfo.getOrdNo())
+                .goodsNm(orderPayInfo.getGoodsNm())
+                .prc(rfndAvlAmt)
+                .bankCode(BankCode.of(orderPayInfo.getRfndBnkCk()))
+                .build();
+        MemberReq memberReq = MemberReq.builder()
+                .mbrNm(orderPayInfo.getOrdNm())
+                .mbrEmail("oBack@plateer.com")      //메일정보 보관안함 -> DB추가필요
+                .mbrPhoneNo(orderPayInfo.getOrdSellNo())
+                .build();
+        return PayApproveReq.inicisApproveOf(franchiseeReq, orderReq, memberReq);
+    }
 }

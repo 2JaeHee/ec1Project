@@ -1,17 +1,11 @@
 package com.plateer.ec1.payment.vo.inicis;
 
-import com.plateer.ec1.common.code.payment.PaymentConfigValue;
+import com.plateer.ec1.common.code.PaymentConfigValue;
 import com.plateer.ec1.common.utils.AesAnDesUtil;
 import com.plateer.ec1.order.enums.inicis.InicisPayType;
 import com.plateer.ec1.order.enums.inicis.InicisPaymethod;
 import com.plateer.ec1.payment.vo.PayApproveReq;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConstructorBinding;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
