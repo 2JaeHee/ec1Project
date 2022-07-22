@@ -1,12 +1,12 @@
 package com.plateer.ec1.promotion;
 
 import com.plateer.ec1.common.model.promotion.CcCpnIssueModel;
-import com.plateer.ec1.payment.vo.promotion.controller.PromotionController;
-import com.plateer.ec1.payment.vo.promotion.factory.impl.CartCouponCalculation;
-import com.plateer.ec1.payment.vo.promotion.service.PromotionExternalService;
-import com.plateer.ec1.payment.vo.promotion.vo.Product;
-import com.plateer.ec1.payment.vo.promotion.vo.req.RequestCouponIssueVo;
-import com.plateer.ec1.payment.vo.promotion.vo.req.RequestPromotionVo;
+import com.plateer.ec1.promotion.controller.PromotionController;
+import com.plateer.ec1.promotion.factory.impl.CartCouponCalculation;
+import com.plateer.ec1.promotion.service.PromotionExternalService;
+import com.plateer.ec1.promotion.vo.Product;
+import com.plateer.ec1.promotion.vo.req.RequestCouponIssueVo;
+import com.plateer.ec1.promotion.vo.req.RequestPromotionVo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

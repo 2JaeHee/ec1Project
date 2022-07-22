@@ -11,7 +11,5 @@ public interface PaymentService {
     void completePay(PayCompleteReq payInfo);
 
     void cancel(CancelReq cancelReq);
-
-    void netCancel(CancelReq cancelReq);
 }
 

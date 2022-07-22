@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class PayApproveReq {
-    private String payNo;
+//    private String payNo;
     @ValidEnum(enumClass = PaymentType.class)
     private PaymentType paymentType;
     //상품가맹점정보
@@ -40,6 +40,7 @@ public class PayApproveReq {
     @ValidEnum(enumClass = BankCode.class)
     private BankCode bankCode;        //은행코드 enum 필요
     //회원정보
+    private String mbrNo;   //포인트 시 필요
     @NotEmpty
     private String mbrNm;
     @NotEmpty

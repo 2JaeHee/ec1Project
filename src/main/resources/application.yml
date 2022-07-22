@@ -26,3 +26,9 @@ logging:
 
 inicis:
   apikey: ItEQKi3rY7uvDS8l
+  mid: INIpayTest
+  iv: HYb3yQ4f65QL89==
+  approve:
+    url: https://iniapi.inicis.com/api/v1/formpay
+  refund:
+    url: https://iniapi.inicis.com/api/v1/refund

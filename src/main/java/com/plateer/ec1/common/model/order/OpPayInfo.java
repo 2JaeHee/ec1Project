@@ -1,16 +1,21 @@
 package com.plateer.ec1.common.model.order;
 
+import com.plateer.ec1.common.code.order.OPT0010Enum;
 import com.plateer.ec1.common.code.order.OPT0011Enum;
 import com.plateer.ec1.common.code.promotion.PromotionConstants;
+import com.plateer.ec1.payment.vo.CancelReq;
+import com.plateer.ec1.payment.vo.OrderPayInfoRes;
 import com.plateer.ec1.payment.vo.inicis.InicisApproveRes;
 import com.plateer.ec1.payment.vo.PayApproveReq;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Builder
 @Getter
+@Setter
 public class OpPayInfo {
     private String payNo;
     private String ordNo;
@@ -60,5 +65,23 @@ public class OpPayInfo {
                 .rfndAvlAmt(opPayInfo.getPayAmt())
                 .payPrgsScd(OPT0011Enum.COMPLETE.getCode())
                 .build();
+    }
+
+    //이니시스 취소
+    public static OpPayInfo cancel(OrderPayInfoRes orderPayInfo, Long cancelAmt) {
+        return OpPayInfo.builder()
+                .payNo(orderPayInfo.getPayNo())
+                .cnclAmt(cancelAmt)
+                .rfndAvlAmt(orderPayInfo.getPayAmt() - cancelAmt)
+                .build();
+    }
+
+    //이니시스 취소
+    public void cancelComplete(CancelReq cancelReq) {
+        this.clmNo = cancelReq.getClmNo();
+        this.payCcd = OPT0010Enum.CANCEL.getCode();
+        this.orgPayNo = this.payNo;
+        this.payCcd = OPT0010Enum.CANCEL.getCode();
+        this.payPrgsScd = OPT0011Enum.REFUND.getCode();
     }
 }

@@ -5,7 +5,7 @@ import com.plateer.ec1.common.utils.AesAnDesUtil;
 import com.plateer.ec1.order.enums.inicis.InicisPayType;
 import com.plateer.ec1.order.enums.inicis.InicisPaymethod;
 import com.plateer.ec1.payment.vo.CancelReq;
-import com.plateer.ec1.payment.vo.OrderPayInfo;
+import com.plateer.ec1.payment.vo.OrderPayInfoRes;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,8 +30,8 @@ public class InicisRefundReq {
     private String refundAcctName;
     private String hashData;    //hash(INIAPIKey+type+paymethod+timestamp+clientIp+mid+tid+refundAcctNum)
 
-    public static InicisRefundReq of(CancelReq cancelReq, OrderPayInfo orderPayInfo) {
-        return InicisRefundReq.builder()
+    public static InicisRefundReq of(CancelReq cancelReq, OrderPayInfoRes orderPayInfo) {
+        InicisRefundReq refundReq = InicisRefundReq.builder()
                 .type(InicisPayType.REFUND.getCode())
                 .paymethod(InicisPaymethod.VACCT.getCode())
                 .timestamp(LocalDateTime.now().format(df))
@@ -39,10 +39,13 @@ public class InicisRefundReq {
                 .mid(cancelReq.getMid())
                 .tid(orderPayInfo.getTrsnId())
                 .msg(cancelReq.getCancelMsg())
-                .refundAcctNum(orderPayInfo.getRfndAcctNo())
+                .refundAcctNum(setRfndAcctNo(orderPayInfo.getRfndAcctNo()))
                 .refundBankCode(orderPayInfo.getRfndBnkCk())
                 .refundAcctName(orderPayInfo.getRfndAcctOwnNm())
                 .build();
+
+        refundReq.setHashData();
+        return refundReq;
     }
 
     public void setHashData() {
@@ -56,9 +59,8 @@ public class InicisRefundReq {
                 this.refundAcctNum;
         this.hashData = AesAnDesUtil.encodeSha(hashData);
     }
-    public static InicisRefundReq setInicisRefundReq(CancelReq cancelReq, OrderPayInfo orderPayInfo) {
-        InicisRefundReq refundReq = InicisRefundReq.of(cancelReq, orderPayInfo);
-        refundReq.setHashData();
-        return refundReq;
+
+    private static String setRfndAcctNo(String rfndAcctNo) {
+        return AesAnDesUtil.encryptAes(rfndAcctNo, PaymentConfigValue.inicisApikey, PaymentConfigValue.inicisIv);
     }
 }

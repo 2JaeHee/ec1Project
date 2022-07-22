@@ -22,4 +22,6 @@ public interface PaymentTrxMapper {
      * @param setModifyData
      */
     void modifyPayRefundAmt(OpPayInfo setModifyData);
+
+    void modifyPayPrgsScd(OpPayInfo opPayInfo);
 }

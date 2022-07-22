@@ -16,7 +16,5 @@ public interface Payment {
 
     void cancelPay(CancelReq cancelReq);
 
-    void netCancel(CancelReq cancelReq);
-
     PaymentType getType();
 }

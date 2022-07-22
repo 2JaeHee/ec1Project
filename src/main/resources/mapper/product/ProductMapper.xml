@@ -3,4 +3,23 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.plateer.ec1.product.mapper.ProductMapper">
+    <select id="getPrGoodsBaseInfo" parameterType="String" resultType="com.plateer.ec1.product.vo.PrGoodsBaseVo">
+        SELECT goods_no
+                , goods_nm
+                , goods_tp_cd
+                , CASE
+                      WHEN sale_prc <![CDATA[>=]]> prm_prc THEN prm_prc
+                      WHEN sale_prc <![CDATA[<]]> prm_prc THEN sale_prc
+                 END as prc
+                , sale_prc
+                , prm_prc
+                , prgs_stat_cd
+                , goods_dlv_tp_cd
+                , sys_reg_dtime
+                , sys_mod_dtime
+                , sys_regr_id
+                , sys_modr_id
+          FROM pr_goods_base
+        WHERE goods_no = #{goodsNo}
+    </select>
 </mapper>

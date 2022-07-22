@@ -2,9 +2,9 @@ package com.plateer.ec1.payment.vo.promotion.service.impl;
 
 import com.plateer.ec1.common.code.promotion.PRM0011Enum;
 import com.plateer.ec1.common.model.promotion.CcMbrPntModel;
-import com.plateer.ec1.payment.vo.promotion.mapper.PointTrxMapper;
-import com.plateer.ec1.payment.vo.promotion.service.PointService;
-import com.plateer.ec1.payment.vo.promotion.vo.req.PointReqVo;
+import com.plateer.ec1.promotion.mapper.PointTrxMapper;
+import com.plateer.ec1.promotion.service.PointService;
+import com.plateer.ec1.promotion.vo.req.PointReqVo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,20 +20,35 @@ class PointServiceImplTest {
     @Test
     void mainSavePointInfo_ACCUMULATE() {
         String mbrNo = "test02";
-        double amt = 20000;
+        double amt = 2000;
         PointReqVo pointReqVo = PointReqVo.builder().mbrNo(mbrNo).pntBlc(amt).build();
+        pointService.savePointInfo(pointReqVo, PRM0011Enum.ACCUMULATE);
     } @Test
     void mainSavePointInfo_USE() {
         String mbrNo = "test02";
-        double amt = 1000;
-        String ordNo = "O22207200001";
-        String payNo = "1";
+        double amt = 4000;
+        String ordNo = "O22207200002";
+        String payNo = "2";
+        PointReqVo pointReqVo = PointReqVo.builder()
+                .mbrNo(mbrNo)
+                .pntBlc(amt)
+                .ordNo(ordNo)
+                .payNo(payNo)
+                .build();
+        pointService.savePointInfo(pointReqVo, PRM0011Enum.USE);
     } @Test
     void mainSavePointInfo_CANCEL() {
         String mbrNo = "test02";
         double amt = 1000;
         String ordNo = "O22207200001";
         String payNo = "1";
+        PointReqVo pointReqVo = PointReqVo.builder()
+                .mbrNo(mbrNo)
+                .pntBlc(amt)
+                .ordNo(ordNo)
+                .payNo(payNo)
+                .build();
+        pointService.savePointInfo(pointReqVo, PRM0011Enum.CANCEL);
     }
 
     @Test

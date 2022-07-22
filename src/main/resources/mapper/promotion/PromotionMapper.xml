@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.plateer.ec1.payment.vo.promotion.mapper.PromotionMapper">
+<mapper namespace="com.plateer.ec1.promotion.mapper.PromotionMapper">
     <!-- 프로모션 기본 정보 조회 -->
     <select id="getPrmBaseInfo" parameterType="long" resultType="com.plateer.ec1.common.model.promotion.CcPrmBaseModel">
         SELECT prm_no
@@ -24,7 +24,7 @@
            AND use_yn = 'Y'
     </select>
 
-    <select id="getPrmAplyTgtList" parameterType="com.plateer.ec1.payment.vo.promotion.vo.req.PromotionApplyTargetVo" resultType="com.plateer.ec1.payment.vo.promotion.vo.Promotion">
+    <select id="getPrmAplyTgtList" parameterType="com.plateer.ec1.promotion.vo.req.PromotionApplyTargetVo" resultType="com.plateer.ec1.promotion.vo.Promotion">
         /* 상품 별 프로모션 적용 대상 조회 */
         SELECT ccb.prm_no
                 , cpb.prm_nm

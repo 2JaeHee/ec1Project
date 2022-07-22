@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.plateer.ec1.payment.vo.promotion.mapper.PointMapper">
+<mapper namespace="com.plateer.ec1.promotion.mapper.PointMapper">
     <select id="getPointInfo" parameterType="String" resultType="com.plateer.ec1.common.model.promotion.CcMbrPntModel">
         /** 회원 별 포인트 조회 */
         SELECT pnt_hst_seq

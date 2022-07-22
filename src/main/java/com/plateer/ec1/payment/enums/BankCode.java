@@ -9,7 +9,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-
+@RequiredArgsConstructor
 public enum BankCode {
     IBK("03", "기업은행"),
     KB("04", "국민은행"),
@@ -26,12 +26,6 @@ public enum BankCode {
     private final String code;
     @Getter
     private final String codeNm;
-
-    BankCode(String code, String codeNm) {
-        this.code = code;
-        this.codeNm = codeNm;
-    }
-
 
     public static BankCode of(String code) {
         return BankCode.valueOf(CODE_MAP.get(code));

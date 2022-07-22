@@ -6,7 +6,8 @@ import com.plateer.ec1.common.code.order.OPT0011Enum;
 import com.plateer.ec1.common.model.order.OpPayInfo;
 import com.plateer.ec1.payment.mapper.PaymentMapper;
 import com.plateer.ec1.payment.mapper.PaymentTrxMapper;
-import com.plateer.ec1.payment.vo.OrderPayInfo;
+import com.plateer.ec1.payment.vo.OrderPayInfoReq;
+import com.plateer.ec1.payment.vo.OrderPayInfoRes;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +29,7 @@ public class InicisCancelGubunTest {
         String ordNo = "O202207120002";
         long cncl = 500;
 
-        OrderPayInfo orderPayInfo = paymentMapper.getOrderPayInfo(ordNo);
+        OrderPayInfoRes orderPayInfo = paymentMapper.getOrderPayInfo(OrderPayInfoReq.inicis(ordNo));
         long rfndAvlAmt = orderPayInfo.getPayAmt() - cncl;
         //해당 데이터에 취소금액 환불금액 update
         OpPayInfo setModifyData = OpPayInfo.builder().payNo(orderPayInfo.getPayNo()).cnclAmt(cncl).rfndAvlAmt(rfndAvlAmt).build();
@@ -44,7 +45,7 @@ public class InicisCancelGubunTest {
         String climNo = "1234";
         long cncl = 500;
 
-        OrderPayInfo orderPayInfo = paymentMapper.getOrderPayInfo(ordNo);
+        OrderPayInfoRes orderPayInfo = paymentMapper.getOrderPayInfo(OrderPayInfoReq.inicis(ordNo));
 
         String gubunCode = "TEST";
         if (OPT0011Enum.REQUEST.getCode().equals(orderPayInfo.getPayPrgsScd())){
@@ -80,7 +81,7 @@ public class InicisCancelGubunTest {
         String climNo = "1234";
         long cncl = 500;
 
-        OrderPayInfo orderPayInfo = paymentMapper.getOrderPayInfo(ordNo);
+        OrderPayInfoRes orderPayInfo = paymentMapper.getOrderPayInfo(OrderPayInfoReq.inicis(ordNo));
         //취소 API call
         //결과값
         String trsnId = "1234";

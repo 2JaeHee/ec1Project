@@ -46,15 +46,5 @@ public class PaymentServiceImpl implements PaymentService {
         factory.cancelPay(cancelReq);
     }
 
-    /**
-     * 결제망취소
-     * @param cancelReq
-     */
-    @Override
-    public void netCancel(CancelReq cancelReq) {
-        Payment factory = paymentFactory.getPaymentFactory(cancelReq.getPaymentType());
-        factory.netCancel(cancelReq);
-    }
-
 
 }

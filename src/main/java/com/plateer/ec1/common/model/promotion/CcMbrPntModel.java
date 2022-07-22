@@ -2,13 +2,12 @@ package com.plateer.ec1.common.model.promotion;
 
 import com.plateer.ec1.common.code.promotion.PRM0011Enum;
 import com.plateer.ec1.common.code.promotion.PromotionConstants;
-import com.plateer.ec1.payment.vo.promotion.vo.req.PointReqVo;
+import com.plateer.ec1.promotion.vo.req.PointReqVo;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Builder
 @Getter
@@ -32,8 +31,8 @@ public class CcMbrPntModel {
         return CcMbrPntModel.builder()
                 .mbrNo(pointReqVo.getMbrNo())
                 .svUseCcd(PRM0011Enum.ACCUMULATE.getCode())
-                .svUseAmt(ObjectUtils.isEmpty(getPointInfo)? pointReqVo.getPntBlc() : getPointInfo.pntBlc + pointReqVo.getPntBlc())
-                .pntBlc(pointReqVo.getPntBlc())
+                .svUseAmt(pointReqVo.getPntBlc())
+                .pntBlc(ObjectUtils.isEmpty(getPointInfo)? pointReqVo.getPntBlc() : getPointInfo.pntBlc + pointReqVo.getPntBlc())
                 .build();
     }
     //사용

@@ -5,7 +5,7 @@ import com.plateer.ec1.common.utils.AesAnDesUtil;
 import com.plateer.ec1.order.enums.inicis.InicisPayType;
 import com.plateer.ec1.order.enums.inicis.InicisPaymethod;
 import com.plateer.ec1.payment.vo.CancelReq;
-import com.plateer.ec1.payment.vo.OrderPayInfo;
+import com.plateer.ec1.payment.vo.OrderPayInfoRes;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +33,7 @@ public class InicisPartialRefundReq {
     private String refundAcctName;
     private String hashData;       //hash(INIAPIKey+type+paymethod+timestamp+clientIp+mid+tid+price+confirmPrice+refundAcctNum)
 
-    public static InicisPartialRefundReq of(CancelReq cancelReq, OrderPayInfo orderPayInfo) {
+    public static InicisPartialRefundReq of(CancelReq cancelReq, OrderPayInfoRes orderPayInfo) {
         return InicisPartialRefundReq.builder()
                 .type(InicisPayType.PARTIAL_REFUND.getCode())
                 .paymethod(InicisPaymethod.VACCT.getCode())
@@ -63,7 +63,7 @@ public class InicisPartialRefundReq {
         this.hashData = AesAnDesUtil.encodeSha(hashData);
     }
 
-    public static InicisPartialRefundReq setInicisPartialRefundReq(CancelReq cancelReq, OrderPayInfo orderPayInfo) {
+    public static InicisPartialRefundReq setInicisPartialRefundReq(CancelReq cancelReq, OrderPayInfoRes orderPayInfo) {
         InicisPartialRefundReq partialRefundReq = InicisPartialRefundReq.of(cancelReq, orderPayInfo);
         partialRefundReq.setHashData();
         return partialRefundReq;

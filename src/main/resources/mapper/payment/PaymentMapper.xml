@@ -29,7 +29,7 @@
          WHERE trsn_id = #{trsnId}
     </select>
 
-    <select id="getOrderPayInfo" parameterType="String" resultType="com.plateer.ec1.payment.vo.OrderPayInfo">
+    <select id="getOrderPayInfo" parameterType="com.plateer.ec1.payment.vo.OrderPayInfoReq" resultType="com.plateer.ec1.payment.vo.OrderPayInfoRes">
         SELECT opi.pay_no
              , opi.ord_no
              , opi.clm_no
@@ -54,6 +54,7 @@
              , oob.rfnd_acct_no
              , oob.rfnd_acct_own_nm
              , (SELECT goods_nm FROM op_goods_info ogi WHERE ogi.ord_no = oob.ord_no LIMIT 1) as goods_nm
+             , oob.mbr_no
              , oob.ord_nm
              , oob.ord_sell_no
              , oob.ord_addr
@@ -63,7 +64,16 @@
             ON oob.ord_no = opi.ord_no
          WHERE 1=1
            AND oob.ord_no = #{ordNo}
-           AND opi.pay_ccd = '10'    --결제구분코드 결제
+        <if test="!@org.springframework.util.ObjectUtils@isEmpty(payMnCd)">
+            AND opi.pay_mn_cd = #{payMnCd} --포인트 가상계좌
+        </if>
+        <if test="!@org.springframework.util.ObjectUtils@isEmpty(payCcd)">
+            AND opi.pay_ccd = #{payCcd}    --결제구분코드 결제
+        </if>
+<!--        <if test="!@org.springframework.util.ObjectUtils@isEmpty(payPrgsScd)">-->
+<!--            AND opi.pay_prgs_scd = #{payPrgsScd}    &#45;&#45;결제요청코드 -->
+<!--        </if>-->
            AND ( opi.pay_amt - opi.cncl_amt > 0 )
+           AND opi.pay_prgs_scd IN ('10', '20')
     </select>
 </mapper>
