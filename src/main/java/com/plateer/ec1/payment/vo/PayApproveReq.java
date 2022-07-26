@@ -23,7 +23,7 @@ public class PayApproveReq {
 //    private String payNo;
     @ValidEnum(enumClass = PaymentType.class)
     private PaymentType paymentType;
-    //상품가맹점정보
+    //상품가맹점정보   - 설정정보에 고정
     @NotEmpty
     private String clientIp;    //가맹점 요청 서버IP
     @NotEmpty

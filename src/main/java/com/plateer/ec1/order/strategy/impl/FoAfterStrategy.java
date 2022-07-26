@@ -1,9 +1,9 @@
 package com.plateer.ec1.order.strategy.impl;
 
-import com.plateer.ec1.order.enums.SystemType;
+import com.plateer.ec1.common.code.order.OPT0002Enum;
 import com.plateer.ec1.order.strategy.AfterStrategy;
 import com.plateer.ec1.order.vo.OrderDto;
-import com.plateer.ec1.order.vo.OrderRequest;
+import com.plateer.ec1.order.vo.OrderReq;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class FoAfterStrategy implements AfterStrategy {
     @Override
-    public void call(OrderRequest orderRequest, OrderDto orderDto) {
+    public void call(OrderReq orderRequest, OrderDto orderDto) {
         log.info("[FoAfterStrategy.call] - FO주문 후처리");
     }
 
     @Override
-    public SystemType getType() {
-        return SystemType.FO;
+    public OPT0002Enum getType() {
+        return OPT0002Enum.FO;
     }
 }

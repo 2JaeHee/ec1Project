@@ -1,12 +1,12 @@
 package com.plateer.ec1.order.strategy;
 
-import com.plateer.ec1.order.enums.SystemType;
+import com.plateer.ec1.common.code.order.OPT0002Enum;
 import com.plateer.ec1.order.vo.OrderDto;
-import com.plateer.ec1.order.vo.OrderRequest;
+import com.plateer.ec1.order.vo.OrderReq;
 
 public interface AfterStrategy {
 
-    void call(OrderRequest orderRequest, OrderDto orderDto);
+    void call(OrderReq orderRequest, OrderDto orderDto);
 
-    SystemType getType();
+    OPT0002Enum getType();
 }

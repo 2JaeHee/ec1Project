@@ -1,0 +1,63 @@
+{
+  "orderNo": "O202206201000001",
+  "opOrdBase": {
+    "mbrNo": "M001",
+    "ordTpCd": "10",
+    "ordSysCcd": "10",
+    "ordNm": "홍길동",
+    "ordSellNo": "01012345678",
+    "ordAddr": "송파구백제고분로",
+    "ordAddrDtl": "에이치비지니스파크6층"
+  },
+  "ordGoodsInfoReqList": [
+    {
+      "ordGoodsNo": "P001",
+      "ordItemNo": "1",
+      "goodsSellTpCd": "10",
+      "ordCnt": 1,
+      "ordBnfInfoReqList": [
+        {
+          "prmNo": "1",
+          "cpnKindCd": "10",
+          "cpnIssNo": "1",
+          "degrCcd": "1"
+        }
+      ]
+    }
+  ],
+  "ordBnfInfoReqList": [
+    {
+      "prmNo": "P124",
+      "cpnKindCd": "30",
+      "cpnIssNo": "C124",
+      "degrCcd": "3",
+      "ordGoodsInfoReqs": [
+        {
+          "ordGoodsNo": "P001",
+          "ordItemNo": "1"
+        }
+      ]
+    }
+  ],
+  "ordDvpAreaInfoReqList": [
+    {
+      "dvpSeq": 1,
+      "rmtiNm": "홍길동",
+      "rmtiHpNo": "01011112222",
+      "rmtiAddr": "송파구백제고분로r",
+      "rmtiAddrDtl": "에이치비지니스파크6층r",
+      "SumDvpAreaInfoReq": [
+        {
+          "sumDvpSeq": 1,
+          "ordGoodsInfoReqList": [
+            {
+              "ordGoodsNo": "P111",
+              "ordItemNo": "I111"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "opPayInfo": {}
+}

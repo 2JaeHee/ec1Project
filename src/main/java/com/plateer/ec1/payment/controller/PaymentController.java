@@ -1,16 +1,15 @@
 package com.plateer.ec1.payment.controller;
 
-import com.plateer.ec1.common.model.order.OpPayInfo;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.service.PaymentService;
 import com.plateer.ec1.payment.vo.PayCompleteReq;
 import com.plateer.ec1.payment.vo.inicis.InicisCompleteReq;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/payment")

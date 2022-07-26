@@ -2,7 +2,7 @@ package com.plateer.ec1.order.validator;
 
 import com.plateer.ec1.order.enums.OrderType;
 import com.plateer.ec1.order.enums.SystemType;
-import com.plateer.ec1.order.vo.OrderRequest;
+import com.plateer.ec1.order.vo.OrderReq;
 import com.plateer.ec1.order.vo.OrderValidationDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public enum OrderValidator {
     }
 
     //유형 별 enum get
-    public static OrderValidator get(OrderRequest request) {
+    public static OrderValidator get(OrderReq request) {
         log.info("[OrderValidator.get] - validator enum 시스템 / 주문유형 별 validation get");
         return Arrays.stream(OrderValidator.values()).filter((e) -> e.systemType.equals(request.getSystemType()) && e.orderType.equals(request.getOrderType()))
                 .findFirst()

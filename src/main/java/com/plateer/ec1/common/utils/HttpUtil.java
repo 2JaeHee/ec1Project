@@ -2,12 +2,15 @@ package com.plateer.ec1.common.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.plateer.ec1.payment.vo.inicis.InicisApproveRes;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,4 +32,5 @@ public class HttpUtil {
 
         return new HttpEntity<>(multiValueMap, httpHeaders);
     }
+
 }

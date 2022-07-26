@@ -74,7 +74,6 @@ public class Inicis implements Payment {
     @Override
     @Transactional(rollbackFor=Exception.class)
     public void cancelData(CancelReq cancelReq) {
-
         OrderPayInfoRes orderPayInfo = paymentMapper.getOrderPayInfo(OrderPayInfoReq.inicis(cancelReq.getOrdNo()));
         paymentTrxMapper.modifyPayRefundAmt(OpPayInfo.cancel(orderPayInfo, cancelReq.getCancelAmt()));
     }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.plateer.ec1.order.mapper.OrderMapper">
+    <select id="getOrdNo" resultType="String">
+        /** 주문번호조회 */
+        SELECT CONCAT('O', TO_CHAR(NOW(),'YYMMDDHH24'), NEXTVAL('nextval_ord_no'))
+    </select>
+</mapper>
